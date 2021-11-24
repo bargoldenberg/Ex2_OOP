@@ -41,6 +41,7 @@ public class Point3D implements GeoLocation {
     }
 
     public String toString() {
-        return "("+"x: "+this.x+", "+"y: "+this.y+", "+"z: "+this.z+")";
+        return "("+"x: "+this.x+", "+"y: "+
+                this.y+", "+"z: "+this.z+")";
     }
 }

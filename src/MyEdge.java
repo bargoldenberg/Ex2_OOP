@@ -23,7 +23,7 @@ public class MyEdge implements EdgeData {
         this.Weight=Weight;
         this.Dest=Dest;
         key=new Vector<Integer>(2);
-        int x = (int) (Math.pow(Src,2) + Math.pow(Dest,2));
+        int x = (int) (Math.pow(Src,2) - Math.pow(Dest,2));
         int y= 2*Src*Dest;
         key.add(x);
         key.add(y);
@@ -65,6 +65,7 @@ public class MyEdge implements EdgeData {
     }
 
     public String toString() {
-        return "["+"Source: "+this.Src+", Destination: "+this.Dest+", Weight: "+this.Weight+"]";
+        return "["+"Source: "+this.Src+", Destination: "+
+                this.Dest+", Weight: "+this.Weight+"]";
     }
 }

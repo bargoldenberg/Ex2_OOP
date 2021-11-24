@@ -74,7 +74,10 @@ public class MyNode implements NodeData {
     }
 
     public String toString(){
-        return "["+"Location: "+this.Location+", "+"Weight: "+this.Weight+", "+"Key: "+this.Key+", "+"Info: "+this.Info+", "+"Tag: "+this.Tag+"]";
+        return "["+"Location: "+this.Location+", "+
+                "Weight: "+this.Weight+", "+"Key: "+
+                this.Key+", "+"Info: "+this.Info+", "
+                +"Tag: "+this.Tag+"]";
     }
 
 }

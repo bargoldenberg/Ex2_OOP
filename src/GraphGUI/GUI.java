@@ -5,7 +5,9 @@ import javax.swing.*;
 import java.awt.*;
 
 class GUI{
-    public GUI(DirectedWeightedGraph g){
+    public GUI(){
+    }
+    public void runGUI(DirectedWeightedGraph g){
         JFrame frame = new JFrame("My First GUI");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
