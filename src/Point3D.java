@@ -1,4 +1,4 @@
-package src.api;
+package src;
 
 import api.GeoLocation;
 
