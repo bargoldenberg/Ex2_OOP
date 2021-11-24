@@ -1,8 +1,7 @@
-package src;
 
 import api.GeoLocation;
 
-public class Point3D implements api.GeoLocation {
+public class Point3D implements GeoLocation {
 
     private double x;
     private double y;

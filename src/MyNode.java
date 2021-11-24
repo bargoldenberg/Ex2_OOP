@@ -1,6 +1,7 @@
-package src;
+import api.GeoLocation;
+import api.NodeData;
 
-public class MyNode implements api.NodeData {
+public class MyNode implements NodeData {
 
     @Override
     public int getKey() {
