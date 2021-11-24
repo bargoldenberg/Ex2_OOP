@@ -18,6 +18,9 @@ public class MyNode implements NodeData {
     public MyNode(Point3D Location, int Key){
         this.Location= Location;
         this.Key = Key;
+        this.Weight=0;
+        this.Info="";
+        this.Tag = 0;
     }
 
     public MyNode(NodeData n){
@@ -69,4 +72,9 @@ public class MyNode implements NodeData {
     public void setTag(int t) {
         this.Tag=t;
     }
+
+    public String toString(){
+        return "["+"Location: "+this.Location+", "+"Weight: "+this.Weight+", "+"Key: "+this.Key+", "+"Info: "+this.Info+", "+"Tag: "+this.Tag+"]";
+    }
+
 }

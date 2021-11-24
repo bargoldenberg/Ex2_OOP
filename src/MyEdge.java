@@ -15,6 +15,7 @@ public class MyEdge implements EdgeData {
         this.Dest=0;
         this.Weight=0;
         this.Info="";
+        this.key=null;
     }
 
     public MyEdge(int Src,double Weight,int Dest){
@@ -26,6 +27,7 @@ public class MyEdge implements EdgeData {
         int y= 2*Src*Dest;
         key.add(x);
         key.add(y);
+        this.key=key;
     }
     @Override
     public int getSrc() {
@@ -60,5 +62,9 @@ public class MyEdge implements EdgeData {
     @Override
     public void setTag(int t) {
         this.Tag=t;
+    }
+
+    public String toString() {
+        return "["+"Source: "+this.Src+", Destination: "+this.Dest+", Weight: "+this.Weight+"]";
     }
 }

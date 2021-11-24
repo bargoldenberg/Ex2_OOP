@@ -39,4 +39,8 @@ public class Point3D implements GeoLocation {
         double dz = g.z()-this.z();
         return Math.sqrt(dx*dx+dy*dy+dz*dz);
     }
+
+    public String toString() {
+        return "("+"x: "+this.x+", "+"y: "+this.y+", "+"z: "+this.z+")";
+    }
 }

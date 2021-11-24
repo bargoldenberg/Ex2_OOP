@@ -146,4 +146,19 @@ public class MyDWG implements DirectedWeightedGraph {
     public int getMC() {
         return this.MC;
     }
+    public String toString(){
+        String vertices = "Vertecies: ";
+        String edges ="Edges: ";
+        for (Integer node: V.keySet()) {
+            String value = V.get(node).toString();
+            vertices += value+",";
+        }
+        vertices=vertices.substring(0,vertices.length()-1);
+        for (Vector<Integer> edge: E.keySet()) {
+            String value = E.get(edge).toString();
+            edges += value+",";
+        }
+        edges=edges.substring(0,edges.length()-1);
+        return "("+"{"+vertices+"}, {"+edges+"}"+")";
+    }
 }
