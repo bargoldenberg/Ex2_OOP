@@ -11,6 +11,7 @@ import java.util.Vector;
 public class MyDWG implements DirectedWeightedGraph {
     HashMap<Integer,MyNode> V;
     HashMap<Vector<Integer>,MyEdge> E;
+    int iter = 0;
 
     public MyDWG(){
         V = new HashMap<Integer,MyNode>();
@@ -77,8 +78,18 @@ public class MyDWG implements DirectedWeightedGraph {
     }
 
     @Override
-    public Iterator<EdgeData> edgeIter() {
-        return null;
+    public Iterator<EdgeData> edgeIter() throws Exception {
+        if(this.iter != 0){
+            Exception e = new RuntimeException();
+            throw e;
+        }
+        else{
+            this.iter = this.MC;
+            Set edgeSet = this.E.entrySet();
+            Iterator it = edgeSet.iterator();
+            return it;;
+        }
+
     }
 
     @Override
