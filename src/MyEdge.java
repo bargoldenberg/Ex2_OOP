@@ -1,21 +1,31 @@
 import api.EdgeData;
 
+import java.util.Vector;
+
 public class MyEdge implements EdgeData {
     int Src;
     int Dest;
-    int Weight;
+    double Weight;
     String Info;
     int Tag;
+    Vector<Integer> key;
+
     public MyEdge(){
         this.Src=0;
         this.Dest=0;
         this.Weight=0;
         this.Info="";
     }
-    public MyEdge(int Src,int Weight,int Dest){
+
+    public MyEdge(int Src,double Weight,int Dest){
         this.Src=Src;
         this.Weight=Weight;
         this.Dest=Dest;
+        key=new Vector<Integer>(2);
+        int x = (int) (Math.pow(Src,2) + Math.pow(Dest,2));
+        int y= 2*Src*Dest;
+        key.add(x);
+        key.add(y);
     }
     @Override
     public int getSrc() {

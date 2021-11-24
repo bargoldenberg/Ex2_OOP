@@ -20,6 +20,11 @@ public class MyNode implements NodeData {
         this.Key = Key;
     }
 
+    public MyNode(NodeData n){
+        this.Location= (Point3D)n.getLocation();
+        this.Key = n.getKey();
+    }
+
     @Override
     public int getKey() {
         return this.Key;
