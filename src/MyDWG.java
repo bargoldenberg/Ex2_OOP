@@ -3,10 +3,7 @@ import api.EdgeData;
 import api.NodeData;
 
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 
 public class MyDWG implements DirectedWeightedGraph {
     HashMap<Integer,MyNode> V;
@@ -106,7 +103,14 @@ public class MyDWG implements DirectedWeightedGraph {
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
-        return null;
+        ArrayList<MyEdge> EdgesFromNode = new ArrayList<MyEdge>();
+        for(Map.Entry<Vector<Integer>,MyEdge> node: E.entrySet()){
+            if(node.getValue().Src==node_id){
+                EdgesFromNode.add(node.getValue());
+            }
+        }
+        Iterator it = EdgesFromNode.iterator();
+        return it;
     }
 
     @Override
