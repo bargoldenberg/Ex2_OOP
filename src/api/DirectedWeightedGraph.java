@@ -55,7 +55,7 @@ public interface DirectedWeightedGraph {
      *
      * @return Iterator<node_data>
      */
-    public Iterator<NodeData> nodeIter();
+    public Iterator<NodeData> nodeIter() throws Exception;
 
     /**
      * This method returns an Iterator for all the edges in this graph.

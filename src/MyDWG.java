@@ -11,11 +11,15 @@ import java.util.Vector;
 public class MyDWG implements DirectedWeightedGraph {
     HashMap<Integer,MyNode> V;
     HashMap<Vector<Integer>,MyEdge> E;
-    int iter = 0;
-
+    int nodeiter;
+    int edgeiter;
+    int MC ;
     public MyDWG(){
         V = new HashMap<Integer,MyNode>();
         E = new HashMap<Vector<Integer>,MyEdge>();
+        this.nodeiter=0;
+        this.edgeiter=0;
+        this.MC=0;
     }
 
 
@@ -55,6 +59,7 @@ public class MyDWG implements DirectedWeightedGraph {
     public void addNode(NodeData n) {
         MyNode nw = new MyNode(n);
         this.V.put(n.getKey(),nw);
+        this.MC++;
     }
 
     /**
@@ -67,27 +72,34 @@ public class MyDWG implements DirectedWeightedGraph {
     public void connect(int src, int dest, double w) {
         MyEdge edge = new MyEdge(src,w,dest);
         E.put(edge.key,edge);
+        this.MC++;
     }
 
 
     @Override
-    public Iterator<NodeData> nodeIter() {
-        Set nodeSet = this.V.entrySet();
-        Iterator it = nodeSet.iterator();
-        return it;
+    public Iterator<NodeData> nodeIter() throws Exception {
+        if(this.nodeiter!=0){
+            Exception e = new RuntimeException();
+            throw e;
+        }else {
+            this.nodeiter=this.MC;
+            Set nodeSet = this.V.entrySet();
+            Iterator it = nodeSet.iterator();
+            return it;
+        }
     }
 
     @Override
     public Iterator<EdgeData> edgeIter() throws Exception {
-        if(this.iter != 0){
+        if(this.edgeiter != 0){
             Exception e = new RuntimeException();
             throw e;
         }
         else{
-            this.iter = this.MC;
+            this.edgeiter = this.MC;
             Set edgeSet = this.E.entrySet();
             Iterator it = edgeSet.iterator();
-            return it;;
+            return it;
         }
 
     }
@@ -99,7 +111,9 @@ public class MyDWG implements DirectedWeightedGraph {
 
     @Override
     public NodeData removeNode(int key) {
+        this.MC++;
         return V.remove(key);
+
     }
 
     @Override
@@ -109,7 +123,9 @@ public class MyDWG implements DirectedWeightedGraph {
         int y= 2*src*dest;
         key.add(x);
         key.add(y);
+        this.MC++;
         return E.remove(key);
+
     }
 
     @Override
@@ -124,6 +140,6 @@ public class MyDWG implements DirectedWeightedGraph {
 
     @Override
     public int getMC() {
-        return 0;
+        return this.MC;
     }
 }
