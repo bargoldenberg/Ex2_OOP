@@ -1,5 +1,8 @@
+import api.EdgeData;
 import api.GeoLocation;
 import api.NodeData;
+
+import java.util.ArrayList;
 
 public class MyNode implements NodeData {
     Point3D Location;
@@ -7,6 +10,7 @@ public class MyNode implements NodeData {
     double Weight;
     String Info;
     int Tag;
+    ArrayList<EdgeData> edgelist = new ArrayList<EdgeData>();
 
     public MyNode(){
         this.Location= null;
