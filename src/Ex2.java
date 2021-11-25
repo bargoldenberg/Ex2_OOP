@@ -1,6 +1,15 @@
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
 
+//import java.io.FileNotFoundException;
+//import java.io.FileReader;
+//import java.io.IOException;
+//import java.util.Iterator;
+//import org.json.simple.JSONArray;
+//import org.json.simple.JSONObject;
+//import org.json.simple.parser.JSONParser;
+//import org.json.simple.parser.ParseException;
+
 /**
  * This class is the main class for Ex2 - your implementation will be tested using this class.
  */
@@ -12,10 +21,10 @@ public class Ex2 {
      * @return
      */
     public static DirectedWeightedGraph getGrapg(String json_file) {
-        DirectedWeightedGraph ans = null;
-        // ****** Add your code here ******
-        //
-        // ********************************
+        DirectedWeightedGraph ans = new MyDWG();
+//        JSON parser object to parse read file
+//        JSONParser jsonParser = new JSONParser();
+
         return ans;
     }
 

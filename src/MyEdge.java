@@ -29,6 +29,7 @@ public class MyEdge implements EdgeData {
         key.add(y);
         this.key=key;
     }
+
     @Override
     public int getSrc() {
         return this.Src;
