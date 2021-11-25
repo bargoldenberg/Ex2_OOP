@@ -1,18 +1,16 @@
 import api.DirectedWeightedGraph;
 import api.EdgeData;
 import api.NodeData;
-
-
 import java.util.*;
 
 public class MyDWG implements DirectedWeightedGraph {
-    HashMap<Integer,MyNode> V;
+    HashMap<Integer,NodeData> V;
     HashMap<Vector<Integer>,EdgeData> E;
     int nodeiter;
     int edgeiter;
     int MC ;
     public MyDWG(){
-        V = new HashMap<Integer,MyNode>();
+        V = new HashMap<Integer,NodeData>();
         E = new HashMap<Vector<Integer>,EdgeData>();
         this.nodeiter=0;
         this.edgeiter=0;
@@ -77,11 +75,7 @@ public class MyDWG implements DirectedWeightedGraph {
     public Iterator<NodeData> nodeIter() throws Exception {
         if(this.nodeiter == 0){
             this.nodeiter = this.MC;
-            ArrayList<NodeData> Nodes = new ArrayList<NodeData>();
-            for(Map.Entry<Integer,MyNode> node: V.entrySet()){
-                Nodes.add(node.getValue());
-            }
-            Iterator<NodeData> it = Nodes.iterator();
+            Iterator<NodeData> it = this.V.values().iterator();
             return it;
 
         }
@@ -89,12 +83,7 @@ public class MyDWG implements DirectedWeightedGraph {
             Exception e = new RuntimeException();
             throw e;
         }else {
-            this.nodeiter = this.MC;
-            ArrayList<NodeData> Nodes = new ArrayList<NodeData>();
-            for(Map.Entry<Integer,MyNode> node: V.entrySet()){
-                Nodes.add(node.getValue());
-            }
-            Iterator<NodeData> it = Nodes.iterator();
+            Iterator<NodeData> it = this.V.values().iterator();
             return it;
         }
     }
@@ -103,20 +92,15 @@ public class MyDWG implements DirectedWeightedGraph {
     public Iterator<EdgeData> edgeIter() throws Exception {
         if(this.edgeiter == 0){
             this.edgeiter = this.MC;
-            this.edgeiter = this.MC;
-            Iterator<EdgeData> it2 = this.E.values().iterator();
-            return it2;
+            Iterator<EdgeData> it = this.E.values().iterator();
+            return it;
         }
         else if(this.MC != this.edgeiter){
             Exception e = new RuntimeException();
             throw e;
         }
         else{
-            ArrayList<EdgeData> Edges = new ArrayList<EdgeData>();
-            for(Map.Entry<Vector<Integer>,EdgeData> node: E.entrySet()){
-                Edges.add(node.getValue());
-            }
-            Iterator<EdgeData> it = Edges.iterator();
+            Iterator<EdgeData> it = this.E.values().iterator();
             return it;
         }
 
