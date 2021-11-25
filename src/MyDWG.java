@@ -7,13 +7,13 @@ import java.util.*;
 
 public class MyDWG implements DirectedWeightedGraph {
     HashMap<Integer,MyNode> V;
-    HashMap<Vector<Integer>,MyEdge> E;
+    HashMap<Vector<Integer>,EdgeData> E;
     int nodeiter;
     int edgeiter;
-    int MC;
+    int MC ;
     public MyDWG(){
         V = new HashMap<Integer,MyNode>();
-        E = new HashMap<Vector<Integer>,MyEdge>();
+        E = new HashMap<Vector<Integer>,EdgeData>();
         this.nodeiter=0;
         this.edgeiter=0;
         this.MC=0;
@@ -89,6 +89,7 @@ public class MyDWG implements DirectedWeightedGraph {
             Exception e = new RuntimeException();
             throw e;
         }else {
+            this.nodeiter = this.MC;
             ArrayList<NodeData> Nodes = new ArrayList<NodeData>();
             for(Map.Entry<Integer,MyNode> node: V.entrySet()){
                 Nodes.add(node.getValue());
@@ -102,12 +103,9 @@ public class MyDWG implements DirectedWeightedGraph {
     public Iterator<EdgeData> edgeIter() throws Exception {
         if(this.edgeiter == 0){
             this.edgeiter = this.MC;
-            ArrayList<EdgeData> Edges = new ArrayList<EdgeData>();
-            for(Map.Entry<Vector<Integer>,MyEdge> node: E.entrySet()){
-                Edges.add(node.getValue());
-            }
-            Iterator<EdgeData> it = Edges.iterator();
-            return it;
+            this.edgeiter = this.MC;
+            Iterator<EdgeData> it2 = this.E.values().iterator();
+            return it2;
         }
         else if(this.MC != this.edgeiter){
             Exception e = new RuntimeException();
@@ -115,7 +113,7 @@ public class MyDWG implements DirectedWeightedGraph {
         }
         else{
             ArrayList<EdgeData> Edges = new ArrayList<EdgeData>();
-            for(Map.Entry<Vector<Integer>,MyEdge> node: E.entrySet()){
+            for(Map.Entry<Vector<Integer>,EdgeData> node: E.entrySet()){
                 Edges.add(node.getValue());
             }
             Iterator<EdgeData> it = Edges.iterator();
@@ -127,8 +125,8 @@ public class MyDWG implements DirectedWeightedGraph {
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
         ArrayList<EdgeData> EdgesFromNode = new ArrayList<EdgeData>();
-        for(Map.Entry<Vector<Integer>,MyEdge> node: E.entrySet()){
-            if(node.getValue().Src==node_id){
+        for(Map.Entry<Vector<Integer>,EdgeData> node: E.entrySet()){
+            if(node.getValue().getSrc()==node_id){
                 EdgesFromNode.add(node.getValue());
             }
         }
@@ -137,9 +135,10 @@ public class MyDWG implements DirectedWeightedGraph {
     }
 
     @Override
-    public NodeData removeNode(int key){
+    public NodeData removeNode(int key) {
         this.MC++;
         return V.remove(key);
+
     }
 
     @Override

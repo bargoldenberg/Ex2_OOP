@@ -12,6 +12,16 @@ class MyDWGTest {
 
     @Test
     void getEdge() {
+        Point3D p1 = new Point3D(1,2,0);
+        Point3D p2 = new Point3D(2,1,0);
+        MyDWG g= new MyDWG();
+        MyNode n1 = new MyNode(p1,0);
+        MyNode n2 = new MyNode(p2,1);
+        MyEdge e1 = new MyEdge(0,2,1);
+        g.addNode(n1);
+        g.addNode(n2);
+        g.connect(n1.Key,n2.Key,2);
+        System.out.println(g.getEdge(n1.Key,n2.Key));
     }
 
     @Test
@@ -29,9 +39,9 @@ class MyDWGTest {
         g.addNode(n1);
         g.addNode(n2);
         g.connect(n1.Key,n2.Key,2);
-        assertEquals(g.E.get(e1.key).Src,e1.Src);
-        assertEquals(g.E.get(e1.key).Dest,e1.Dest);
-        assertEquals(g.E.get(e1.key).Weight,e1.Weight);
+        assertEquals(g.E.get(e1.key).getSrc(),e1.Src);
+        assertEquals(g.E.get(e1.key).getDest(),e1.Dest);
+        assertEquals(g.E.get(e1.key).getWeight(),e1.Weight);
     }
 
     @Test
