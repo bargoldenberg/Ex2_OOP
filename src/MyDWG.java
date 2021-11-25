@@ -39,11 +39,9 @@ public class MyDWG implements DirectedWeightedGraph {
      */
     @Override
     public EdgeData getEdge(int src, int dest) {
-        int x = (int) (Math.pow(src,2) - Math.pow(dest,2));
-        int y= 2*src*dest;
         Vector<Integer> key =new Vector<Integer>(2);
-        key.add(x);
-        key.add(y);
+        key.add(src);
+        key.add(dest);
         return E.get(key);
     }
 
@@ -128,10 +126,8 @@ public class MyDWG implements DirectedWeightedGraph {
     @Override
     public EdgeData removeEdge(int src, int dest) {
         Vector<Integer> key=new Vector<Integer>(2);
-        int x = (int) (Math.pow(src,2) - Math.pow(dest,2));
-        int y= 2*src*dest;
-        key.add(x);
-        key.add(y);
+        key.add(src);
+        key.add(dest);
         this.MC++;
         return E.remove(key);
 
