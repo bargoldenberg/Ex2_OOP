@@ -64,6 +64,7 @@ public class MyDWG implements DirectedWeightedGraph {
     @Override
     public void connect(int src, int dest, double w) {
         MyEdge edge = new MyEdge(src,w,dest);
+        V.get(src);
         E.put(edge.key,edge);
         this.MC++;
     }

@@ -5,12 +5,12 @@ import api.NodeData;
 import java.util.ArrayList;
 
 public class MyNode implements NodeData {
-    Point3D Location;
-    int Key;
-    double Weight;
-    String Info;
-    int Tag;
-    ArrayList<EdgeData> edgelist = new ArrayList<EdgeData>();
+    private Point3D Location;
+    private int Key;
+    private double Weight;
+    private String Info;
+    private int Tag;
+    private ArrayList<EdgeData> edgelist;
 
     public MyNode(){
         this.Location= null;
@@ -18,6 +18,7 @@ public class MyNode implements NodeData {
         this.Weight=0;
         this.Info="";
         this.Tag = 0;
+        this.edgelist = new ArrayList<EdgeData>();
     }
     public MyNode(Point3D Location, int Key){
         this.Location= Location;
@@ -25,6 +26,7 @@ public class MyNode implements NodeData {
         this.Weight=0;
         this.Info="";
         this.Tag = 0;
+        this.edgelist = new ArrayList<EdgeData>();
     }
 
     public MyNode(NodeData n){
@@ -75,6 +77,18 @@ public class MyNode implements NodeData {
     @Override
     public void setTag(int t) {
         this.Tag=t;
+    }
+
+    public ArrayList<EdgeData> getEdgelist() {
+        return this.edgelist;
+    }
+
+    public void addEdgelist(EdgeData edge) {
+        this.edgelist.add(edge);
+    }
+
+    public void removeEdgelist(EdgeData edge) {
+        this.edgelist.remove(edge);
     }
 
     public String toString(){
