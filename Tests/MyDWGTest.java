@@ -20,8 +20,8 @@ class MyDWGTest {
         MyEdge e1 = new MyEdge(0,2,1);
         g.addNode(n1);
         g.addNode(n2);
-        g.connect(n1.Key,n2.Key,2);
-        System.out.println(g.getEdge(n1.Key,n2.Key));
+        g.connect(n1.getKey(),n2.getKey(),2);
+        System.out.println(g.getEdge(n1.getKey(),n2.getKey()));
     }
 
     @Test
@@ -38,7 +38,7 @@ class MyDWGTest {
         MyEdge e1 = new MyEdge(0,2,1);
         g.addNode(n1);
         g.addNode(n2);
-        g.connect(n1.Key,n2.Key,2);
+        g.connect(n1.getKey(),n2.getKey(),2);
         assertEquals(g.E.get(e1.key).getSrc(),e1.Src);
         assertEquals(g.E.get(e1.key).getDest(),e1.Dest);
         assertEquals(g.E.get(e1.key).getWeight(),e1.Weight);
@@ -59,8 +59,8 @@ class MyDWGTest {
         MyEdge e2 = new MyEdge(1,1,0);
         g.addNode(n1);
         g.addNode(n2);
-        g.connect(n1.Key,n2.Key,2);
-        g.connect(n2.Key,n1.Key,1);
+        g.connect(n1.getKey(),n2.getKey(),2);
+        g.connect(n2.getKey(),n1.getKey(),1);
         try {
             Iterator it = g.edgeIter();
         assertEquals(it.next().toString(),e2.toString());
