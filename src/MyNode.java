@@ -38,6 +38,11 @@ public class MyNode implements NodeData {
     public MyNode(NodeData n){
         this.Location= (Point3D)n.getLocation();
         this.Key = n.getKey();
+        this.Weight= n.getWeight();
+        this.Info=n.getInfo();
+        this.Tag = n.getTag();
+        this.edgeInList = new HashMap<Vector<Integer>,MyEdge>();
+        this.edgeOutList = new HashMap<Vector<Integer>,MyEdge>();
     }
 
     @Override
