@@ -62,9 +62,9 @@ class MyDWGTest {
         g.connect(n1.getKey(),n2.getKey(),2);
         g.connect(n2.getKey(),n1.getKey(),1);
         try {
-          //  Iterator it = g.edgeIter();
-          //  assertEquals(it.next().toString(),e2.toString());
-          //  assertEquals(it.next().toString(),e1.toString());
+            Iterator it = g.edgeIter();
+            assertEquals(it.next().toString(),e2.toString());
+            assertEquals(it.next().toString(),e1.toString());
         }catch(Exception e){
             System.out.println("The Graph was changed");
         }
