@@ -73,18 +73,49 @@ public class MyDWG implements DirectedWeightedGraph {
 
     @Override
     public Iterator<NodeData> nodeIter() throws Exception {
-        return null;
+        if(this.nodeiter == 0){
+            this.nodeiter = this.MC;
+            Iterator<MyNode> it = this.V.values().iterator();
+            return it;
+
+        }
+        else if(this.nodeiter != this.MC){
+            Exception e = new RuntimeException();
+            throw e;
+        }else {
+            Iterator<MyNode> it = this.V.values().iterator();
+            return it;
+        }
     }
 
     @Override
     public Iterator<EdgeData> edgeIter() throws Exception {
-        return null;
+        if(this.edgeiter == 0){
+            this.edgeiter = this.MC;
+            Iterator<MyEdge> it = this.E.values().iterator();
+            return it;
+        }
+        else if(this.MC != this.edgeiter){
+            Exception e = new RuntimeException();
+            throw e;
+        }
+        else{
+            Iterator<MyEdge> it = this.E.values().iterator();
+            return it;
+        }
+
     }
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
-        HashMap<Vector<Integer>,MyEdge> rdgeIn = V.get(node_id).getEdgeInList();
-        return null;
+        ArrayList<MyEdge> EdgesFromNode = new ArrayList<MyEdge>();
+        for(Map.Entry<Vector<Integer>,MyEdge> node: E.entrySet()){
+            if(node.getValue().getSrc()==node_id){
+                EdgesFromNode.add(node.getValue());
+            }
+        }
+        Iterator<MyEdge> it = EdgesFromNode.iterator();
+        return it;
     }
 
     @Override
