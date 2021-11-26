@@ -2,6 +2,8 @@ import api.EdgeData;
 import api.GeoLocation;
 import api.NodeData;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Vector;
 
 public class MyNode implements NodeData {
     private Point3D Location;
@@ -9,7 +11,9 @@ public class MyNode implements NodeData {
     private double Weight;
     private String Info;
     private int Tag;
-    private ArrayList<EdgeData> edgelist;
+    private HashMap<Vector<Integer>,MyEdge> edgeInList;
+    private HashMap<Vector<Integer>,MyEdge> edgeOutList;
+
 
     public MyNode(){
         this.Location= null;
@@ -17,15 +21,18 @@ public class MyNode implements NodeData {
         this.Weight=0;
         this.Info="";
         this.Tag = 0;
-        this.edgelist = new ArrayList<EdgeData>();
+        this.edgeInList = new HashMap<Vector<Integer>,MyEdge>();
+        this.edgeOutList = new HashMap<Vector<Integer>,MyEdge>();
     }
+
     public MyNode(Point3D Location, int Key){
         this.Location= Location;
         this.Key = Key;
         this.Weight=0;
         this.Info="";
         this.Tag = 0;
-        this.edgelist = new ArrayList<EdgeData>();
+        this.edgeInList = new HashMap<Vector<Integer>,MyEdge>();
+        this.edgeOutList = new HashMap<Vector<Integer>,MyEdge>();
     }
 
     public MyNode(NodeData n){
@@ -78,18 +85,52 @@ public class MyNode implements NodeData {
         this.Tag=t;
     }
 
-    public ArrayList<EdgeData> getEdgelist() {
-        return this.edgelist;
+    public HashMap<Vector<Integer>,MyEdge> getEdgeInList() {
+        return this.edgeInList;
     }
 
-    public boolean addEdgelist(EdgeData edge) {
-        this.edgelist.add(edge);
-        return true;
+    public HashMap<Vector<Integer>,MyEdge> getEdgeOutList() {
+        return this.edgeOutList;
     }
 
-    public boolean removeEdgelist(EdgeData edge) {
-        this.edgelist.remove(edge);
-        return true;
+    public boolean addEdgelist(MyEdge edge) {
+        if(edge.Src == this.Key){
+            Vector<Integer> key = new Vector<Integer>();
+            key.add(edge.Src);
+            key.add(edge.Dest);
+            this.edgeOutList.put(key,edge);
+            return true;
+        }
+        else if(edge.Dest == this.Key){
+            Vector<Integer> key = new Vector<Integer>();
+            key.add(edge.Src);
+            key.add(edge.Dest);
+            this.edgeInList.put(key,edge);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean removeEdgelist(MyEdge edge) {
+        if(edge.Src == this.Key){
+            Vector<Integer> key = new Vector<Integer>();
+            key.add(edge.Src);
+            key.add(edge.Dest);
+            this.edgeOutList.remove(key);
+            return true;
+        }
+        else if(edge.Dest == this.Key){
+            Vector<Integer> key = new Vector<Integer>();
+            key.add(edge.Src);
+            key.add(edge.Dest);
+            this.edgeInList.remove(key);
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public String toString(){
@@ -98,5 +139,4 @@ public class MyNode implements NodeData {
                 this.Key+", "+"Info: "+this.Info+", "
                 +"Tag: "+this.Tag+"]";
     }
-
 }

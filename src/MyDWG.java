@@ -64,6 +64,8 @@ public class MyDWG implements DirectedWeightedGraph {
     @Override
     public void connect(int src, int dest, double w) {
         MyEdge edge = new MyEdge(src,w,dest);
+        V.get(src).addEdgelist(edge);
+        V.get(dest).addEdgelist(edge);
         E.put(edge.key,edge);
         this.MC++;
     }
@@ -81,14 +83,20 @@ public class MyDWG implements DirectedWeightedGraph {
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
+        HashMap<Vector<Integer>,MyEdge> rdgeIn = V.get(node_id).getEdgeInList();
         return null;
     }
 
     @Override
     public NodeData removeNode(int key) {
+        for(Map.Entry<Vector<Integer>,MyEdge> removableEdge: V.get(key).getEdgeOutList().entrySet()){
+            removeEdge(removableEdge.getValue().getSrc(),removableEdge.getValue().getDest());
+        }
+        for(Map.Entry<Vector<Integer>,MyEdge> removableEdge: V.get(key).getEdgeInList().entrySet()){
+            removeEdge(removableEdge.getValue().getSrc(),removableEdge.getValue().getDest());
+        }
         this.MC++;
         return V.remove(key);
-
     }
 
     @Override
@@ -97,8 +105,9 @@ public class MyDWG implements DirectedWeightedGraph {
         key.add(src);
         key.add(dest);
         this.MC++;
+        V.get(src).removeEdgelist(E.get(key));
+        V.get(dest).removeEdgelist(E.get(key));
         return E.remove(key);
-
     }
 
     @Override
