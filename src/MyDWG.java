@@ -64,7 +64,6 @@ public class MyDWG implements DirectedWeightedGraph {
     @Override
     public void connect(int src, int dest, double w) {
         MyEdge edge = new MyEdge(src,w,dest);
-        V.get(src);
         E.put(edge.key,edge);
         this.MC++;
     }
@@ -72,49 +71,17 @@ public class MyDWG implements DirectedWeightedGraph {
 
     @Override
     public Iterator<NodeData> nodeIter() throws Exception {
-        if(this.nodeiter == 0){
-            this.nodeiter = this.MC;
-            Iterator<NodeData> it = this.V.values().iterator();
-            return it;
-
-        }
-        else if(this.nodeiter != this.MC){
-            Exception e = new RuntimeException();
-            throw e;
-        }else {
-            Iterator<NodeData> it = this.V.values().iterator();
-            return it;
-        }
+        return null;
     }
 
     @Override
     public Iterator<EdgeData> edgeIter() throws Exception {
-        if(this.edgeiter == 0){
-            this.edgeiter = this.MC;
-            Iterator<EdgeData> it = this.E.values().iterator();
-            return it;
-        }
-        else if(this.MC != this.edgeiter){
-            Exception e = new RuntimeException();
-            throw e;
-        }
-        else{
-            Iterator<EdgeData> it = this.E.values().iterator();
-            return it;
-        }
-
+        return null;
     }
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
-        ArrayList<EdgeData> EdgesFromNode = new ArrayList<EdgeData>();
-        for(Map.Entry<Vector<Integer>,EdgeData> node: E.entrySet()){
-            if(node.getValue().getSrc()==node_id){
-                EdgesFromNode.add(node.getValue());
-            }
-        }
-        Iterator<EdgeData> it = EdgesFromNode.iterator();
-        return it;
+        return null;
     }
 
     @Override

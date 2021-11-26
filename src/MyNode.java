@@ -1,7 +1,6 @@
 import api.EdgeData;
 import api.GeoLocation;
 import api.NodeData;
-
 import java.util.ArrayList;
 
 public class MyNode implements NodeData {
@@ -83,12 +82,14 @@ public class MyNode implements NodeData {
         return this.edgelist;
     }
 
-    public void addEdgelist(EdgeData edge) {
+    public boolean addEdgelist(EdgeData edge) {
         this.edgelist.add(edge);
+        return true;
     }
 
-    public void removeEdgelist(EdgeData edge) {
+    public boolean removeEdgelist(EdgeData edge) {
         this.edgelist.remove(edge);
+        return true;
     }
 
     public String toString(){
