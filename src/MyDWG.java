@@ -80,21 +80,10 @@ public class MyDWG implements DirectedWeightedGraph {
 
     @Override
     public Iterator<NodeData> nodeIter() throws Exception {
-        if(this.nodeiter == 0){
-            this.nodeiter = this.MC;
-            HashMap<Integer,NodeData> a = (HashMap<Integer,NodeData> ) this.V.clone();
-            Iterator<NodeData> it = a.values().iterator();
-            return it;
-
-        }
-        else if(this.nodeiter != this.MC){
-            Exception e = new RuntimeException();
-            throw e;
-        }else {
-            HashMap<Integer,NodeData> a = (HashMap<Integer,NodeData> ) this.V.clone();
-            Iterator<NodeData> it = a.values().iterator();
-            return it;
-        }
+        this.nodeiter = this.MC;
+        HashMap<Integer,NodeData> a = (HashMap<Integer,NodeData> ) this.V.clone();
+        Iterator<NodeData> it = a.values().iterator();
+        return it;
     }
 
     @Override
