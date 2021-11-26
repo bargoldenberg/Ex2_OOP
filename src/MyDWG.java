@@ -75,7 +75,8 @@ public class MyDWG implements DirectedWeightedGraph {
     public Iterator<NodeData> nodeIter() throws Exception {
         if(this.nodeiter == 0){
             this.nodeiter = this.MC;
-            Iterator<MyNode> it = this.V.values().iterator();
+            HashMap<Integer,NodeData> a = (HashMap<Integer,NodeData> ) this.V.clone();
+            Iterator<NodeData> it = a.values().iterator();
             return it;
 
         }
@@ -83,16 +84,19 @@ public class MyDWG implements DirectedWeightedGraph {
             Exception e = new RuntimeException();
             throw e;
         }else {
-            Iterator<MyNode> it = this.V.values().iterator();
+            HashMap<Integer,NodeData> a = (HashMap<Integer,NodeData> ) this.V.clone();
+            Iterator<NodeData> it = a.values().iterator();
             return it;
         }
     }
+
 
     @Override
     public Iterator<EdgeData> edgeIter() throws Exception {
         if(this.edgeiter == 0){
             this.edgeiter = this.MC;
-            Iterator<MyEdge> it = this.E.values().iterator();
+            HashMap<Vector<Integer>,EdgeData> a = (HashMap<Vector<Integer>,EdgeData> ) this.E.clone();
+            Iterator<EdgeData> it = a.values().iterator();
             return it;
         }
         else if(this.MC != this.edgeiter){
@@ -100,21 +104,24 @@ public class MyDWG implements DirectedWeightedGraph {
             throw e;
         }
         else{
-            Iterator<MyEdge> it = this.E.values().iterator();
+            HashMap<Vector<Integer>,EdgeData> a = (HashMap<Vector<Integer>,EdgeData> ) this.E.clone();
+            Iterator<EdgeData> it = a.values().iterator();
             return it;
         }
 
     }
 
+
+
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
-        ArrayList<MyEdge> EdgesFromNode = new ArrayList<MyEdge>();
+        ArrayList<EdgeData> EdgesFromNode = new ArrayList<EdgeData>();
         for(Map.Entry<Vector<Integer>,MyEdge> node: E.entrySet()){
             if(node.getValue().getSrc()==node_id){
                 EdgesFromNode.add(node.getValue());
             }
         }
-        Iterator<MyEdge> it = EdgesFromNode.iterator();
+        Iterator<EdgeData> it = EdgesFromNode.iterator();
         return it;
     }
 

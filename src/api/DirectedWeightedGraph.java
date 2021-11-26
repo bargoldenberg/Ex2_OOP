@@ -63,7 +63,7 @@ public interface DirectedWeightedGraph {
      *
      * @return Iterator<EdgeData>
      */
-    public Iterator<MyEdge> edgeIter() throws Exception;
+    public Iterator<EdgeData> edgeIter() throws Exception;
 
     /**
      * This method returns an Iterator for edges getting out of the given node (all the edges starting (source) at the given node).
