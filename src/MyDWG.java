@@ -17,7 +17,6 @@ public class MyDWG implements DirectedWeightedGraph {
         this.MC=0;
     }
 
-
     /**
      * This function simply returns a Node according to the i.d.(key);
      */
@@ -70,7 +69,6 @@ public class MyDWG implements DirectedWeightedGraph {
         this.MC++;
     }
 
-
     @Override
     public Iterator<NodeData> nodeIter() throws Exception {
         if(this.nodeiter == 0){
@@ -89,7 +87,6 @@ public class MyDWG implements DirectedWeightedGraph {
             return it;
         }
     }
-
 
     @Override
     public Iterator<EdgeData> edgeIter() throws Exception {
@@ -110,8 +107,6 @@ public class MyDWG implements DirectedWeightedGraph {
         }
 
     }
-
-
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
@@ -162,6 +157,7 @@ public class MyDWG implements DirectedWeightedGraph {
     public int getMC() {
         return this.MC;
     }
+
     public String toString(){
         String vertices = "Vertecies: ";
         String edges ="Edges: ";
