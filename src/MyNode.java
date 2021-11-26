@@ -94,7 +94,11 @@ public class MyNode implements NodeData {
     }
 
     public boolean addEdgelist(MyEdge edge) {
+
         if(edge.Src == this.Key){
+            if(this.edgeOutList == null){
+                this.edgeOutList = new HashMap<Vector<Integer>,MyEdge>();
+            }
             Vector<Integer> key = new Vector<Integer>();
             key.add(edge.Src);
             key.add(edge.Dest);
@@ -102,6 +106,9 @@ public class MyNode implements NodeData {
             return true;
         }
         else if(edge.Dest == this.Key){
+            if(this.edgeInList == null){
+                this.edgeInList = new HashMap<Vector<Integer>,MyEdge>();
+            }
             Vector<Integer> key = new Vector<Integer>();
             key.add(edge.Src);
             key.add(edge.Dest);
