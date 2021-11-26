@@ -17,6 +17,15 @@ public class MyDWG implements DirectedWeightedGraph {
         this.MC=0;
     }
 
+    public  MyDWG(MyDWG g){
+        this.E = (HashMap<Vector<Integer>, MyEdge>) g.E.clone();
+        this.V = (HashMap<Integer, MyNode>) g.V.clone();
+        this.edgeiter = g.edgeiter;
+        this.nodeiter =g.nodeiter;
+        this.MC = g.MC;
+    }
+
+
     /**
      * This function simply returns a Node according to the i.d.(key);
      */
