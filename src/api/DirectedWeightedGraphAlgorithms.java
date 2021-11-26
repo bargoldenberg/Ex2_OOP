@@ -46,7 +46,7 @@ public interface DirectedWeightedGraphAlgorithms {
      *
      * @return
      */
-    public boolean isConnected();
+    public boolean isConnected() throws Exception;
 
     /**
      * Computes the length of the shortest path between src to dest
