@@ -50,6 +50,8 @@ class MyDWG_AlgoTest {
         MyDWG_Algo ga = new MyDWG_Algo();
         ga.init(g);
         assertTrue(ga.isConnected());
+        g.removeEdge(1,0);
+        assertFalse(ga.isConnected());
     }
 
     @Test
