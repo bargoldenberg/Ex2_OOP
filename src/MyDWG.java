@@ -4,14 +4,14 @@ import api.NodeData;
 import java.util.*;
 
 public class MyDWG implements DirectedWeightedGraph {
-    HashMap<Integer,NodeData> V;
-    HashMap<Vector<Integer>,EdgeData> E;
+    HashMap<Integer,MyNode> V;
+    HashMap<Vector<Integer>,MyEdge> E;
     int nodeiter;
     int edgeiter;
     int MC ;
     public MyDWG(){
-        V = new HashMap<Integer,NodeData>();
-        E = new HashMap<Vector<Integer>,EdgeData>();
+        V = new HashMap<Integer,MyNode>();
+        E = new HashMap<Vector<Integer>,MyEdge>();
         this.nodeiter=0;
         this.edgeiter=0;
         this.MC=0;
