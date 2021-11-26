@@ -5,20 +5,21 @@ import api.NodeData;
 import java.util.List;
 
 public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
-
+    MyDWG g;
     @Override
     public void init(DirectedWeightedGraph g) {
-
+        this.g = new MyDWG((MyDWG)g);
     }
 
     @Override
     public DirectedWeightedGraph getGraph() {
-        return null;
+        return this.g;
     }
 
     @Override
     public DirectedWeightedGraph copy() {
-        return null;
+        MyDWG cop = new MyDWG(this.g);
+        return cop;
     }
 
     @Override
