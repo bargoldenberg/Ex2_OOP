@@ -194,8 +194,65 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
-        return null;
+        /**
+         * Implementing with Greedy Algorithm.
+         */
+        List<NodeData> rightOrder = new ArrayList<NodeData>();
+        int curr =0, tmp = 0,counter =0;
+        double[] distance = new double[cities.size()];
+        NodeData ptr = cities.get(curr);    ///__ FOR NOW WE START WITH 0, NEXT WE WILL FIND THE OPTIMAL STARTING POINT__
+        rightOrder.add(ptr);
+
+        while(counter < cities.size()){
+            ptr = cities.get(curr);
+            tmp = curr;
+            for(int i=0;i<cities.size();i++){
+                if(ptr.getKey() != cities.get(i).getKey()){
+                    distance[i] = shortestPathDist(ptr.getKey(),cities.get(i).getKey());
+                }
+                else{
+                    distance[i] = Double.MAX_VALUE;
+                }
+            }
+            while(curr == tmp){
+                int smallest = smallestDist(distance); /// smallest is the index of the smallest number in the array.
+                if(!rightOrder.contains(cities.get(smallest))){
+                    rightOrder.add(cities.get(smallest));
+                    curr = smallest;
+                    counter++;
+                }
+                else if(rightOrder.size() != cities.size()){
+                    distance[smallest] = Double.MAX_VALUE;
+                }
+                else{
+                    break;
+                }
+            }
+            if(rightOrder.size() == cities.size()){
+                break;
+            }
+        }
+        return rightOrder;
     }
+
+    /**
+     * Helper for tcp, return the smallest number (index) from array.
+     * @param arr - array
+     * @return index of the smallest number.
+     */
+    private int smallestDist(double[] arr){
+        int smallest =0;
+        double check = arr[0];
+        for(int i=1;i<arr.length;i++){
+            if(arr[i]<check){
+                check = arr[i];
+                smallest = i;
+            }
+        }
+        return smallest;
+    }
+
+
 
     @Override
     public boolean save(String file) {
