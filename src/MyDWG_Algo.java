@@ -188,8 +188,34 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     }
 
     @Override
-    public NodeData center() {
-        return null;
+    public NodeData center() throws Exception {
+        Iterator<NodeData> it1 = this.g.nodeIter();
+
+        double sum=0;
+        ArrayList<double[]> sumofdistance = new ArrayList<>();
+        while(it1.hasNext()){
+            NodeData a = it1.next();
+            Iterator<NodeData> it2 = this.g.nodeIter();
+            sum=0;
+            while(it2.hasNext()){
+                NodeData b = it2.next();
+                if(a.getKey()==b.getKey()){
+                    continue;
+                }
+                sum+=this.shortestPathDist(a.getKey(),b.getKey())*1/this.g.nodeSize();
+            }
+            double [] arr = {sum,a.getKey()};
+            sumofdistance.add(arr);
+        }
+        double min = Double.MAX_VALUE;
+        int key = Integer.MAX_VALUE;
+        for(int i =0;i<sumofdistance.size();i++){
+            if(sumofdistance.get(i)[0]<min){
+                min=sumofdistance.get(i)[0];
+                key=(int)sumofdistance.get(i)[1];
+            }
+        }
+        return this.getGraph().getNode(key);
     }
 
     @Override

@@ -76,7 +76,7 @@ public interface DirectedWeightedGraphAlgorithms {
      *
      * @return the Node data to which the max shortest path to all the other nodes is minimized.
      */
-    public NodeData center();
+    public NodeData center() throws Exception;
 
     /**
      * Computes a list of consecutive nodes which go over all the nodes in cities.
