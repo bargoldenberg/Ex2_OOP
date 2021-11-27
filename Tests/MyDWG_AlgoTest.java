@@ -52,9 +52,9 @@ class MyDWG_AlgoTest {
         g.connect(n2.getKey(),n1.getKey(),1);
         MyDWG_Algo ga = new MyDWG_Algo();
         ga.init(g);
-       // assertTrue(ga.isConnected());
-        g.removeEdge(1,0);
-       // assertFalse(ga.isConnected());
+        assertTrue(ga.isConnected());
+        ga.getGraph().removeEdge(1,0);
+        assertFalse(ga.isConnected());
         ///
         Point3D a = new Point3D(0,0,0);
         Point3D b = new Point3D(1,3,0);
@@ -82,7 +82,8 @@ class MyDWG_AlgoTest {
         MyDWG_Algo g1 = new MyDWG_Algo();
         g1.init(testGraph);
         assertTrue(g1.isConnected());
-        g1.getGraph().removeEdge(3,0);
+        testGraph.removeEdge(3,0);
+        g1.init(testGraph);
         assertFalse(g1.isConnected());
     }
 

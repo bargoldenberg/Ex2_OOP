@@ -1,7 +1,14 @@
 import api.DirectedWeightedGraph;
 import api.EdgeData;
 import api.NodeData;
+
+import java.lang.reflect.Type;
 import java.util.*;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.stream.Collectors;
+
 
 public class MyDWG implements DirectedWeightedGraph {
     HashMap<Integer,MyNode> V;
@@ -18,8 +25,16 @@ public class MyDWG implements DirectedWeightedGraph {
     }
 
     public  MyDWG(MyDWG g){
-        this.E = (HashMap<Vector<Integer>, MyEdge>) g.E.clone();
-        this.V = (HashMap<Integer, MyNode>) g.V.clone();
+        this.E = new HashMap<>();
+        this.V = new HashMap<>();
+        for (Map.Entry<Vector<Integer>, MyEdge> entry: g.E.entrySet()) {
+            this.E.put(entry.getKey(), new MyEdge(entry.getValue()));
+        }
+        for (Map.Entry<Integer, MyNode> entry: g.V.entrySet()) {
+            this.V.put(entry.getKey(), new MyNode(entry.getValue()));
+            this.V.get(entry.getKey()).getEdgeOutList().putAll(g.V.get(entry.getKey()).getEdgeOutList());
+            this.V.get(entry.getKey()).getEdgeInList().putAll(g.V.get(entry.getKey()).getEdgeInList());
+        }
         this.edgeiter = g.edgeiter;
         this.nodeiter =g.nodeiter;
         this.MC = g.MC;

@@ -27,6 +27,16 @@ public class MyEdge implements EdgeData {
         key.add(Dest);
         this.key=key;
     }
+    public MyEdge(MyEdge ot){
+        this.Src=ot.Src;
+        this.Weight=ot.Weight;
+        this.Dest=ot.Dest;
+        key =new Vector<Integer>(2);
+        key.add(this.Src);
+        key.add(this.Dest);
+        this.key = key;
+
+    }
 
     @Override
     public int getSrc() {
