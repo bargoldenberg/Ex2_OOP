@@ -94,6 +94,14 @@ public class MyNode implements NodeData {
         return this.edgeInList;
     }
 
+    public void setEdgeInList(HashMap<Vector<Integer>,MyEdge> ot) {
+        this.edgeInList.putAll(ot);
+    }
+
+    public void setEdgeOutList(HashMap<Vector<Integer>,MyEdge> ot) {
+        this.edgeOutList.putAll(ot);
+    }
+
     public HashMap<Vector<Integer>,MyEdge> getEdgeOutList() {
         return this.edgeOutList;
     }
