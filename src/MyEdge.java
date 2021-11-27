@@ -18,6 +18,7 @@ public class MyEdge implements EdgeData {
         this.key=null;
     }
 
+
     public MyEdge(int Src,double Weight,int Dest){
         this.Src=Src;
         this.Weight=Weight;

@@ -23,6 +23,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         MyDWG cop = new MyDWG(this.g);
         return cop;
     }
+
     private void DFS (DirectedWeightedGraph g,int node, boolean[] visited) throws Exception {
         visited[node] =true;
         Iterator<EdgeData> it = g.edgeIter(node);
@@ -120,7 +121,14 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
                 }
             }
         }
-        return distance.get(dest);
+        if(distance.get(dest) == Double.MAX_VALUE){
+            return -1;
+        }
+        else{
+            return distance.get(dest);
+        }
+
+
     }
 
     @Override
@@ -170,7 +178,13 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
                 }
             }
         }
-        return path;
+        if(path.size() > 0){
+            return path;
+        }
+        else{
+            return null;
+        }
+
     }
 
     @Override

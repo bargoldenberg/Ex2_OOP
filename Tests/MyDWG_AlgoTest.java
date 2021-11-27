@@ -131,7 +131,9 @@ class MyDWG_AlgoTest {
         assertEquals(1,testGraphAlgo.shortestPathDist(0,1));
         assertEquals(10,testGraphAlgo.shortestPathDist(0,6));
         assertEquals(12,testGraphAlgo.shortestPathDist(5,6));
-
+        assertEquals(-1,testGraphAlgo.shortestPathDist(0,5));
+        assertEquals(-1,testGraphAlgo.shortestPathDist(2,0));
+        assertEquals(-1,testGraphAlgo.shortestPathDist(1,0));
     }
 
     @Test
@@ -176,7 +178,8 @@ class MyDWG_AlgoTest {
         testGraphAlgo.init(g);
         List<NodeData> l1 = testGraphAlgo.shortestPath(2,4);
         List<NodeData> l2 = testGraphAlgo.shortestPath(0,6);
-        List<NodeData> l3 = testGraphAlgo.shortestPath(2,4);
+        List<NodeData> l3 = testGraphAlgo.shortestPath(2,0);
+        List<NodeData> l4 = testGraphAlgo.shortestPath(0,5);
 
         assertEquals(2,l1.get(0).getKey());
         assertEquals(3,l1.get(1).getKey());
@@ -188,6 +191,9 @@ class MyDWG_AlgoTest {
         assertEquals(3,l2.get(3).getKey());
         assertEquals(4,l2.get(4).getKey());
         assertEquals(6,l2.get(5).getKey());
+
+        assertEquals(null,l3);
+        assertEquals(null,l4);
     }
 
     @Test
