@@ -10,7 +10,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public void init(DirectedWeightedGraph g) {
-        this.g = new MyDWG((MyDWG)g);
+        this.g =(MyDWG)g;
     }
 
     @Override
@@ -24,23 +24,30 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         return cop;
     }
 
-    private void DFS (DirectedWeightedGraph g,int node, boolean[] visited) throws Exception {
-        visited[node] =true;
-        Iterator<EdgeData> it = g.edgeIter(node);
-        while (it.hasNext()){
-            EdgeData e  = it.next();
-            if (!visited[e.getDest()]) {
-                DFS(g,e.getDest(),visited);
-            }
 
+    public void BFS(DirectedWeightedGraph g,int node, boolean[] visited) throws Exception {
+        LinkedList<Integer> queue = new LinkedList<Integer>();
+        visited[node]=true;
+        queue.add(node);
+        while(!queue.isEmpty()){
+            node = queue.poll();
+            Iterator<EdgeData> iter = g.edgeIter(node);
+            while (iter.hasNext()) {
+                EdgeData n = iter.next();
+                if (!visited[n.getDest()]) {
+                    visited[n.getDest()]=true;
+                    queue.add(n.getDest());
+                }
+            }
         }
     }
+
     @Override
     public boolean isConnected() throws Exception {
         Iterator<NodeData> it = this.getGraph().nodeIter();
         NodeData v = it.next();
         boolean[] visited = new boolean[this.getGraph().nodeSize()];
-        DFS(this.getGraph(), v.getKey(), visited);
+        BFS(this.getGraph(), v.getKey(), visited);
         for (int i = 0; i < visited.length; i++) {
             if (!visited[i]) {
                 return false;
@@ -65,7 +72,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             reversedgraph.removeEdge(originalEdge.getSrc(), originalEdge.getDest());
             reversedgraph.connect(originalEdge.getDest(), originalEdge.getSrc(), originalEdge.getWeight());
         }
-        DFS(reversedgraph, v.getKey(), visited);
+        BFS(reversedgraph, v.getKey(), visited);
         for (int i = 0; i < visited.length; i++) {
             if (!visited[i]) {
                 return false;
@@ -227,7 +234,11 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
                 key=(int)sumofdistance.get(i)[1];
             }
         }
-        return this.getGraph().getNode(key);
+        if(!this.isConnected()){
+            return null;
+        }else {
+            return this.getGraph().getNode(key);
+        }
     }
 
     @Override

@@ -287,9 +287,10 @@ class MyDWG_AlgoTest {
     }
 
     @Test
-    void testGraphAlgo(){
+    void testGraphAlgo() throws Exception {
         MyDWG_Algo testGraphAlgo = new MyDWG_Algo();
-        MyDWG g2 = testGraphAlgo.generateGraph(100000);
+        MyDWG g2 = testGraphAlgo.generateGraph(10000);
         testGraphAlgo.init(g2);
+        assertTrue(testGraphAlgo.isConnected());
     }
 }
