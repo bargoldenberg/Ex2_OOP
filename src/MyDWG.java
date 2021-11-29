@@ -32,14 +32,19 @@ public class MyDWG implements DirectedWeightedGraph {
         }
         for (Map.Entry<Integer, MyNode> entry: g.V.entrySet()) {
             this.V.put(entry.getKey(), new MyNode(entry.getValue()));
-            this.V.get(entry.getKey()).getEdgeOutList().putAll(g.V.get(entry.getKey()).getEdgeOutList());
-            this.V.get(entry.getKey()).getEdgeInList().putAll(g.V.get(entry.getKey()).getEdgeInList());
+            for(int i=0; i<g.V.get(entry.getKey()).getEdgeInList().size(); i++){
+                this.V.get(entry.getKey()).getEdgeInList().add(g.V.get(entry.getKey()).getEdgeInList().get(i));
+            }
+            for(int i=0; i<g.V.get(entry.getKey()).getEdgeOutList().size(); i++){
+                this.V.get(entry.getKey()).getEdgeOutList().add(g.V.get(entry.getKey()).getEdgeOutList().get(i));
+            }
+//            this.V.get(entry.getKey()).getEdgeOutList().putAll(g.V.get(entry.getKey()).getEdgeOutList());
+//            this.V.get(entry.getKey()).getEdgeInList().putAll(g.V.get(entry.getKey()).getEdgeInList());
         }
         this.edgeiter = g.edgeiter;
         this.nodeiter =g.nodeiter;
         this.MC = g.MC;
     }
-
 
     /**
      * This function simply returns a Node according to the i.d.(key);
@@ -124,18 +129,24 @@ public class MyDWG implements DirectedWeightedGraph {
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
         this.edgeiter = this.MC;
-        HashMap<Vector<Integer>, EdgeData> a = (HashMap<Vector<Integer>, EdgeData>) this.V.get(node_id).getEdgeOutList().clone();
+        HashMap<Vector<Integer>, EdgeData> a = new HashMap<Vector<Integer>, EdgeData>();
+        for (int i=0;i<this.V.get(node_id).getEdgeOutList().size();i++){
+            Vector<Integer> key = new Vector<Integer>(2);
+            key.add(node_id);
+            key.add(this.V.get(node_id).getEdgeOutList().get(i));
+            a.put(key,this.E.get(key));
+        }
         Iterator<EdgeData> it = a.values().iterator();
         return it;
     }
 
     @Override
     public NodeData removeNode(int key) {
-        for(Map.Entry<Vector<Integer>,MyEdge> removableEdge: V.get(key).getEdgeOutList().entrySet()){
-            removeEdge(removableEdge.getValue().getSrc(),removableEdge.getValue().getDest());
+        for(int i=0; i<V.get(key).getEdgeOutList().size();i++){
+            removeEdge(key,V.get(key).getEdgeOutList().get(i));
         }
-        for(Map.Entry<Vector<Integer>,MyEdge> removableEdge: V.get(key).getEdgeInList().entrySet()){
-            removeEdge(removableEdge.getValue().getSrc(),removableEdge.getValue().getDest());
+        for(int i=0; i<V.get(key).getEdgeInList().size();i++){
+            removeEdge(V.get(key).getEdgeInList().get(i),key);
         }
         this.MC++;
         return V.remove(key);
@@ -147,8 +158,8 @@ public class MyDWG implements DirectedWeightedGraph {
         key.add(src);
         key.add(dest);
         this.MC++;
-        V.get(src).removeEdgelist(E.get(key));
-        V.get(dest).removeEdgelist(E.get(key));
+        V.get(src).removeEdgelist(src,dest);
+        V.get(dest).removeEdgelist(src,dest);
         return E.remove(key);
     }
 

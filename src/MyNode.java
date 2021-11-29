@@ -11,9 +11,10 @@ public class MyNode implements NodeData {
     private double Weight;
     private String Info;
     private int Tag;
-    private HashMap<Vector<Integer>,MyEdge> edgeInList;
-    private HashMap<Vector<Integer>,MyEdge> edgeOutList;
-
+    // Trying different approach, instead of HashMaps I will use ArrayList with the src/dest values only.
+    // I'm using new name - so I would see where the old HashMap was used.
+    private ArrayList<Integer> edgesIn; // This array will contain the edge src values - since the dest is this node.
+    private ArrayList<Integer> edgesOut;// This array will contain the edge dest values - since the src is this node.
 
     public MyNode(){
         this.Location= null;
@@ -21,8 +22,8 @@ public class MyNode implements NodeData {
         this.Weight=0;
         this.Info="";
         this.Tag = 0;
-        this.edgeInList = new HashMap<Vector<Integer>,MyEdge>();
-        this.edgeOutList = new HashMap<Vector<Integer>,MyEdge>();
+        this.edgesIn = new ArrayList<Integer>();
+        this.edgesOut = new ArrayList<Integer>();
     }
 
     public MyNode(Point3D Location, int Key){
@@ -31,8 +32,8 @@ public class MyNode implements NodeData {
         this.Weight=0;
         this.Info="";
         this.Tag = 0;
-        this.edgeInList = new HashMap<Vector<Integer>,MyEdge>();
-        this.edgeOutList = new HashMap<Vector<Integer>,MyEdge>();
+        this.edgesIn = new ArrayList<Integer>();
+        this.edgesOut = new ArrayList<Integer>();
     }
 
     public MyNode(NodeData n){
@@ -41,8 +42,8 @@ public class MyNode implements NodeData {
         this.Weight= n.getWeight();
         this.Info= n.getInfo();
         this.Tag = n.getTag();
-        this.edgeInList = new HashMap<Vector<Integer>,MyEdge>();
-        this.edgeOutList = new HashMap<Vector<Integer>,MyEdge>();
+        this.edgesIn = new ArrayList<Integer>();
+        this.edgesOut = new ArrayList<Integer>();
     }
 
     @Override
@@ -90,42 +91,41 @@ public class MyNode implements NodeData {
         this.Tag=t;
     }
 
-    public HashMap<Vector<Integer>,MyEdge> getEdgeInList() {
-        return this.edgeInList;
+    public ArrayList<Integer> getEdgeInList() {
+        return this.edgesIn;
     }
 
-    public void setEdgeInList(HashMap<Vector<Integer>,MyEdge> ot) {
-        this.edgeInList.putAll(ot);
+    public void setEdgeInList(ArrayList<Integer> ot) {
+        this.edgesIn.addAll(ot);
     }
 
-    public void setEdgeOutList(HashMap<Vector<Integer>,MyEdge> ot) {
-        this.edgeOutList.putAll(ot);
+    public void setEdgeOutList(ArrayList<Integer> ot) {
+        this.edgesOut.addAll(ot);
     }
 
-    public HashMap<Vector<Integer>,MyEdge> getEdgeOutList() {
-        return this.edgeOutList;
+    public ArrayList<Integer> getEdgeOutList() {
+        return this.edgesOut;
     }
 
     public boolean addEdgelist(MyEdge edge) {
-
         if(edge.Src == this.Key){
-            if(this.edgeOutList == null){
-                this.edgeOutList = new HashMap<Vector<Integer>,MyEdge>();
+            if(this.edgesOut == null){
+                this.edgesOut = new ArrayList<Integer>();
             }
             Vector<Integer> key = new Vector<Integer>();
             key.add(edge.Src);
             key.add(edge.Dest);
-            this.edgeOutList.put(key,edge);
+            this.edgesOut.add(edge.Dest);
             return true;
         }
         else if(edge.Dest == this.Key){
-            if(this.edgeInList == null){
-                this.edgeInList = new HashMap<Vector<Integer>,MyEdge>();
+            if(this.edgesIn == null){
+                this.edgesIn = new ArrayList<Integer>();
             }
             Vector<Integer> key = new Vector<Integer>();
             key.add(edge.Src);
             key.add(edge.Dest);
-            this.edgeInList.put(key,edge);
+            this.edgesIn.add(edge.Src);
             return true;
         }
         else{
@@ -133,19 +133,17 @@ public class MyNode implements NodeData {
         }
     }
 
-    public boolean removeEdgelist(MyEdge edge) {
-        if(edge.Src == this.Key){
-            Vector<Integer> key = new Vector<Integer>();
-            key.add(edge.Src);
-            key.add(edge.Dest);
-            this.edgeOutList.remove(key);
+    public boolean removeEdgelist(int src, int dest) {
+        if(src == this.Key){
+            if (this.edgesOut.contains(dest)){
+                this.edgesOut.remove(this.edgesOut.indexOf(dest));
+            }
             return true;
         }
-        else if(edge.Dest == this.Key){
-            Vector<Integer> key = new Vector<Integer>();
-            key.add(edge.Src);
-            key.add(edge.Dest);
-            this.edgeInList.remove(key);
+        else if(dest == this.Key){
+            if(this.edgesIn.contains(src)){
+                this.edgesIn.remove(this.edgesIn.indexOf(src));
+            }
             return true;
         }
         else{

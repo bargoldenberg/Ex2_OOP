@@ -18,7 +18,6 @@ public class MyEdge implements EdgeData {
         this.key=null;
     }
 
-
     public MyEdge(int Src,double Weight,int Dest){
         this.Src=Src;
         this.Weight=Weight;
@@ -28,6 +27,7 @@ public class MyEdge implements EdgeData {
         key.add(Dest);
         this.key=key;
     }
+
     public MyEdge(MyEdge ot){
         this.Src=ot.Src;
         this.Weight=ot.Weight;

@@ -87,7 +87,7 @@ class MyDWGTest {
         g.addNode(n2);
         g.connect(n1.getKey(),n2.getKey(),2);
         g.connect(n2.getKey(),n1.getKey(),1);
-        System.out.println(g);
+        System.out.println("Test Run");
         g.removeNode(n1.getKey());
         System.out.println(g);
     }

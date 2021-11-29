@@ -2,8 +2,8 @@ import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
 import api.EdgeData;
 import api.NodeData;
-
 import java.util.*;
+
 
 public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     MyDWG g;
@@ -108,14 +108,18 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
                 break;
             }
             else{
-                for(Map.Entry<Vector<Integer>,MyEdge> neighborEdge:this.g.V.get(smallest).getEdgeOutList().entrySet()){
-                    double dis = distance.get(smallest) + neighborEdge.getValue().getWeight();
-                    if(dis < distance.get(neighborEdge.getValue().getDest())){
-                        distance.put(neighborEdge.getValue().getDest(),dis);
-                        prev.put(neighborEdge.getValue().getDest(),smallest);
+                for(int i=0; i<this.g.V.get(smallest).getEdgeOutList().size(); i++){
+                    Vector<Integer> tmpKey = new Vector<Integer>(2);
+                    tmpKey.add(smallest);
+                    tmpKey.add(this.g.V.get(this.g.V.get(smallest).getEdgeOutList().get(i)).getKey());
+                    EdgeData neighborEdge = this.g.E.get(tmpKey);
+                    double dis = distance.get(smallest) + neighborEdge.getWeight();
+                    if(dis < distance.get(neighborEdge.getDest())){
+                        distance.put(neighborEdge.getDest(),dis);
+                        prev.put(neighborEdge.getDest(),smallest);
 
-                        if(!nodesQueue.contains(neighborEdge.getValue().getDest())){
-                            nodesQueue.add(neighborEdge.getValue().getDest());
+                        if(!nodesQueue.contains(neighborEdge.getDest())){
+                            nodesQueue.add(neighborEdge.getDest());
                         }
                     }
                 }
@@ -165,14 +169,18 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
                 break;
             }
             else{
-                for(Map.Entry<Vector<Integer>,MyEdge> neighborEdge:this.g.V.get(smallest).getEdgeOutList().entrySet()){
-                    double dis = distance.get(smallest) + neighborEdge.getValue().getWeight();
-                    if(dis < distance.get(neighborEdge.getValue().getDest())){
-                        distance.put(neighborEdge.getValue().getDest(),dis);
-                        prev.put(neighborEdge.getValue().getDest(),smallest);
+                for(int i=0; i<this.g.V.get(smallest).getEdgeOutList().size();i++){
+                    Vector<Integer> tmpKey = new Vector<Integer>(2);
+                    tmpKey.add(smallest);
+                    tmpKey.add(this.g.V.get(smallest).getEdgeOutList().get(i));
+                    MyEdge neighborEdge = this.g.E.get(tmpKey);
+                    double dis = distance.get(smallest) + neighborEdge.getWeight();
+                    if(dis < distance.get(neighborEdge.getDest())){
+                        distance.put(neighborEdge.getDest(),dis);
+                        prev.put(neighborEdge.getDest(),smallest);
 
-                        if(!nodesQueue.contains(neighborEdge.getValue().getDest())){
-                            nodesQueue.add(neighborEdge.getValue().getDest());
+                        if(!nodesQueue.contains(neighborEdge.getDest())){
+                            nodesQueue.add(neighborEdge.getDest());
                         }
                     }
                 }
@@ -283,8 +291,6 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         return smallest;
     }
 
-
-
     @Override
     public boolean save(String file) {
         return false;
@@ -294,4 +300,35 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     public boolean load(String file) {
         return false;
     }
+
+    public MyDWG generateGraph(int nodes){
+        MyDWG g = new MyDWG();
+        for(int i=0;i<nodes;i++){
+            Point3D p = new Point3D(Math.random()*10,Math.random()*10,Math.random()*10);
+            int key = (int) ((Math.random() * (nodes)));
+            while(g.V.containsKey(key)){
+                key = (int) ((Math.random() * (nodes)));
+            }
+            MyNode n = new MyNode(p,key);
+            g.addNode(n);
+        }
+        for(int i=0;i<nodes;i++){
+            MyNode a = g.V.get(i);
+            for(int j=0;j<10;j++){
+                Vector<Integer> key =new Vector<>(2);
+                key.add(a.getKey());
+                int id = g.V.get((int)(Math.random() * (nodes))).getKey();
+                key.add(id);
+                while(g.E.containsKey(key)){
+                    key.remove(1);
+                    id = g.V.get((int)(Math.random() * (nodes))).getKey();
+                    key.add(id);
+                }
+                g.connect(a.getKey(),id,Math.random()*1000);
+            }
+
+        }
+        return g;
+    }
+
 }

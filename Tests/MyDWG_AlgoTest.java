@@ -285,4 +285,11 @@ class MyDWG_AlgoTest {
     @Test
     void load() {
     }
+
+    @Test
+    void testGraphAlgo(){
+        MyDWG_Algo testGraphAlgo = new MyDWG_Algo();
+        MyDWG g2 = testGraphAlgo.generateGraph(100000);
+        testGraphAlgo.init(g2);
+    }
 }
