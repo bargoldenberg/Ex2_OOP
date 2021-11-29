@@ -1,13 +1,10 @@
+package Graph;
+
 import api.DirectedWeightedGraph;
 import api.EdgeData;
 import api.NodeData;
 
-import java.lang.reflect.Type;
 import java.util.*;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.stream.Collectors;
 
 
 public class MyDWG implements DirectedWeightedGraph {
@@ -74,7 +71,7 @@ public class MyDWG implements DirectedWeightedGraph {
     }
 
     /**
-     *this function take a NodeData, convert it to MyNode object and add it to V(the node set).
+     *this function take a NodeData, convert it to Graph.MyNode object and add it to V(the node set).
      */
     @Override
     public void addNode(NodeData n) {

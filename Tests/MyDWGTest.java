@@ -1,3 +1,7 @@
+import Graph.MyDWG;
+import Graph.MyEdge;
+import Graph.MyNode;
+import Graph.Point3D;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
@@ -39,9 +43,9 @@ class MyDWGTest {
         g.addNode(n1);
         g.addNode(n2);
         g.connect(n1.getKey(),n2.getKey(),2);
-        assertEquals(g.E.get(e1.key).getSrc(),e1.Src);
-        assertEquals(g.E.get(e1.key).getDest(),e1.Dest);
-        assertEquals(g.E.get(e1.key).getWeight(),e1.Weight);
+        assertEquals(g.getEdge(e1.getSrc(),e1.getDest()).getSrc(),e1.getSrc());
+        assertEquals(g.getEdge(e1.getSrc(),e1.getDest()).getDest(),e1.getDest());
+        assertEquals(g.getEdge(e1.getSrc(),e1.getDest()).getWeight(),e1.getWeight());
     }
 
     @Test

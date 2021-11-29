@@ -1,3 +1,4 @@
+import Graph.MyDWG;
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
 

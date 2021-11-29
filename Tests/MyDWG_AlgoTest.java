@@ -1,3 +1,4 @@
+import Graph.*;
 import api.NodeData;
 import org.junit.jupiter.api.Test;
 
@@ -289,8 +290,9 @@ class MyDWG_AlgoTest {
     @Test
     void testGraphAlgo() throws Exception {
         MyDWG_Algo testGraphAlgo = new MyDWG_Algo();
-        MyDWG g2 = testGraphAlgo.generateGraph(10000);
+        MyDWG g2 = testGraphAlgo.generateGraph(10);
         testGraphAlgo.init(g2);
-        assertTrue(testGraphAlgo.isConnected());
+        //System.out.println(testGraphAlgo.center());
+       System.out.println(testGraphAlgo.center());
     }
 }

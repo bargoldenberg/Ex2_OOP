@@ -1,3 +1,5 @@
+package Graph;
+
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
 import api.EdgeData;
@@ -203,13 +205,21 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     }
 
     @Override
-    public NodeData center() throws Exception {
+    public NodeData center() throws Exception{
+        if(this.getGraph().nodeSize()<10000){
+            return centerFWALGO();
+        }else{
+            return centerDIJKSTRA();
+        }
+    }
+    public NodeData centerDIJKSTRA() throws Exception {
         Iterator<NodeData> it1 = this.g.nodeIter();
-
+        int count = 0;
         double eccentricity=0;
         double dist = 0;
         ArrayList<double[]> sumofdistance = new ArrayList<>();
         while(it1.hasNext()){
+            System.out.println(count++);
             NodeData a = it1.next();
             Iterator<NodeData> it2 = this.g.nodeIter();
             eccentricity=0;
@@ -219,6 +229,45 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
                     continue;
                 }
                 dist=this.shortestPathDist(a.getKey(),b.getKey());
+                if(dist>eccentricity){
+                    eccentricity=dist;
+                }
+            }
+            double [] arr = {eccentricity,a.getKey()};
+            sumofdistance.add(arr);
+        }
+        double min = Double.MAX_VALUE;
+        int key = Integer.MAX_VALUE;
+        for(int i =0;i<sumofdistance.size();i++){
+            if(sumofdistance.get(i)[0]<min){
+                min=sumofdistance.get(i)[0];
+                key=(int)sumofdistance.get(i)[1];
+            }
+        }
+        if(!this.isConnected()){
+            return null;
+        }else {
+            return this.getGraph().getNode(key);
+        }
+    }
+    public NodeData centerFWALGO() throws Exception {
+            double[][] distance = FloydWarshallShortestPath();
+        Iterator<NodeData> it1 = this.g.nodeIter();
+        int count = 0;
+        double eccentricity=0;
+        double dist = 0;
+        ArrayList<double[]> sumofdistance = new ArrayList<>();
+        while(it1.hasNext()){
+            System.out.println(count++);
+            NodeData a = it1.next();
+            Iterator<NodeData> it2 = this.g.nodeIter();
+            eccentricity=0;
+            while(it2.hasNext()){
+                NodeData b = it2.next();
+                if(a.getKey()==b.getKey()){
+                    continue;
+                }
+                dist=distance[a.getKey()][b.getKey()];
                 if(dist>eccentricity){
                     eccentricity=dist;
                 }
@@ -342,4 +391,29 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         return g;
     }
 
+    public double[][] FloydWarshallShortestPath() throws Exception {
+        int vertsize=this.getGraph().nodeSize();
+        double [][] graph = new double[vertsize][vertsize];
+        Iterator<EdgeData> iter = this.getGraph().edgeIter();
+        int count = 0;
+        for(int i =0;i< graph.length;i++){
+            for(int j=0;j<graph.length;j++){
+                graph[i][j]=Integer.MAX_VALUE;
+                System.out.println("("+i+","+j+")");
+            }
+        }
+        while(iter.hasNext()){
+            EdgeData e = iter.next();
+            graph[e.getSrc()][e.getDest()]=e.getWeight();
+        }
+        for(int k=0;k<graph.length;k++){
+            for(int i=0;i<graph.length;i++){
+                for(int j=0;j<graph.length;j++){
+                    graph[i][j]=Math.min(graph[i][j],graph[i][k]+graph[k][j]);
+                    System.out.println("calc "+count++);
+                }
+            }
+        }
+        return graph;
+    }
 }
