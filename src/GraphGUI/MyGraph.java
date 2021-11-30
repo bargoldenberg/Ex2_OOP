@@ -98,8 +98,8 @@ public class MyGraph extends JFrame {
                 while(it.hasNext()){
                     NodeData n = it.next();
                     g.setColor(new Color(255, 0, 0));
-                    double x =(n.getLocation().x()-minx)*scalex*0.97;
-                    double y = (n.getLocation().y()-miny)*scaley*0.97;
+                    double x =(n.getLocation().x()-minx)*scalex*0.97+30;
+                    double y = (n.getLocation().y()-miny)*scaley*0.97+30;
                     x+=scalex/scalefactor;
                     y+=scaley/scalefactor;
                     String xs = ""+n.getLocation().x();
@@ -114,10 +114,10 @@ public class MyGraph extends JFrame {
                 while(eiter.hasNext()){
                     EdgeData e = eiter.next();
                     String weight = ""+(int)e.getWeight();
-                    double srcx = (g1.getGraph().getNode(e.getSrc()).getLocation().x()-minx)*scalex;
-                    double srcy = (g1.getGraph().getNode(e.getSrc()).getLocation().y())*scaley;
-                    double destx = (g1.getGraph().getNode(e.getDest()).getLocation().x())*scalex;
-                    double desty = (g1.getGraph().getNode(e.getDest()).getLocation().y())*scaley;
+                    double srcx = (g1.getGraph().getNode(e.getSrc()).getLocation().x()-minx)*scalex+30;
+                    double srcy = (g1.getGraph().getNode(e.getSrc()).getLocation().y())*scaley+30;
+                    double destx = (g1.getGraph().getNode(e.getDest()).getLocation().x())*scalex+30;
+                    double desty = (g1.getGraph().getNode(e.getDest()).getLocation().y())*scaley+30;
                     srcx+=scalex/scalefactor;
                     srcy+=scaley/scalefactor;
                     destx+=scalex/scalefactor;

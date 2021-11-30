@@ -1,6 +1,7 @@
 import Graph.MyDWG;
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
+import GraphGUI.*;
 
 //import java.io.FileNotFoundException;
 //import java.io.FileReader;
@@ -48,10 +49,12 @@ public class Ex2 {
      *
      * @param json_file - a json file (e.g., G1.json - G3.gson)
      */
-    public static void runGUI(String json_file) {
+    public static void runGUI(String json_file) throws Exception {
         DirectedWeightedGraphAlgorithms alg = getGrapgAlgo(json_file);
         // ****** Add your code here ******
         //
         // ********************************
+        MyGraph.runGUI((MyDWG)alg.getGraph());
+
     }
 }
