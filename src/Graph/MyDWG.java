@@ -73,8 +73,7 @@ public class MyDWG implements DirectedWeightedGraph {
      */
     @Override
     public void addNode(NodeData n) {
-        MyNode nw = new MyNode(n);
-        this.V.put(n.getKey(),nw);
+        this.V.put(n.getKey(),(MyNode)n);
         this.MC++;
     }
 

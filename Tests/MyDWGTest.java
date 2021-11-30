@@ -13,6 +13,16 @@ class MyDWGTest {
 
     @Test
     void getNode() {
+        Point3D p1 = new Point3D(1,2,0);
+        Point3D p2 = new Point3D(2,1,0);
+        MyDWG g= new MyDWG();
+        MyNode n1 = new MyNode(p1,0);
+        MyNode n2 = new MyNode(p2,1);
+        MyEdge e1 = new MyEdge(0,2,1);
+        g.addNode(n1);
+        g.addNode(n2);
+        g.connect(n1.getKey(),n2.getKey(),2);
+        assertEquals(g.getNode(0),n1);
     }
 
     @Test
@@ -26,11 +36,22 @@ class MyDWGTest {
         g.addNode(n1);
         g.addNode(n2);
         g.connect(n1.getKey(),n2.getKey(),2);
-        System.out.println(g.getEdge(n1.getKey(),n2.getKey()));
+        assertEquals(g.getEdge(n1.getKey(),n2.getKey()).getSrc(), e1.getSrc());
+        assertEquals(g.getEdge(n1.getKey(),n2.getKey()).getDest(), e1.getDest());
+
     }
 
     @Test
     void addNode() {
+        Point3D p1 = new Point3D(1,2,0);
+        Point3D p2 = new Point3D(2,1,0);
+        MyDWG g= new MyDWG();
+        MyNode n1 = new MyNode(p1,0);
+        MyNode n2 = new MyNode(p2,1);
+        MyEdge e1 = new MyEdge(0,2,1);
+        g.addNode(n1);
+        g.addNode(n2);
+        assertTrue(g.getNode(n1.getKey())!=null);
     }
 
     @Test
@@ -111,9 +132,9 @@ class MyDWGTest {
         g.addNode(n2);
         g.connect(n1.getKey(),n2.getKey(),2);
         g.connect(n2.getKey(),n1.getKey(),1);
-        System.out.println("Test Run");
         g.removeNode(n1.getKey());
-        System.out.println(g);
+        assertTrue(g.getNode(n1.getKey())==null);
+        assertTrue(g.getEdge(n1.getKey(),n2.getKey())==null);
     }
 
     @Test
@@ -126,10 +147,33 @@ class MyDWGTest {
 
     @Test
     void edgeSize() {
+        Point3D p1 = new Point3D(1,2,0);
+        Point3D p2 = new Point3D(2,1,0);
+        MyDWG g= new MyDWG();
+        MyNode n1 = new MyNode(p1,0);
+        MyNode n2 = new MyNode(p2,1);
+        MyEdge e1 = new MyEdge(0,2,1);
+        g.addNode(n1);
+        g.addNode(n2);
+        g.connect(n1.getKey(),n2.getKey(),2);
+        assertEquals(g.edgeSize(),1);
     }
 
     @Test
     void getMC() {
+        Point3D p1 = new Point3D(1,2,0);
+        Point3D p2 = new Point3D(2,1,0);
+        MyDWG g= new MyDWG();
+        int start = g.getMC();
+        MyNode n1 = new MyNode(p1,0);
+        MyNode n2 = new MyNode(p2,1);
+        MyEdge e1 = new MyEdge(0,2,1);
+        g.addNode(n1);
+        g.addNode(n2);
+        g.connect(n1.getKey(),n2.getKey(),2);
+        int end = g.getMC();
+        assertNotEquals(start,end);
+
     }
 
     @Test

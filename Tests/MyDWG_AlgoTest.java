@@ -1,4 +1,5 @@
 import Graph.*;
+import api.DirectedWeightedGraph;
 import api.NodeData;
 import org.junit.jupiter.api.Test;
 
@@ -33,10 +34,44 @@ class MyDWG_AlgoTest {
 
     @Test
     void getGraph() {
+        Point3D p1 = new Point3D(1,2,0);
+        Point3D p2 = new Point3D(2,1,0);
+        Point3D p3 = new Point3D(3,4,0);
+        MyDWG g= new MyDWG();
+        MyNode n1 = new MyNode(p1,0);
+        MyNode n2 = new MyNode(p2,1);
+        MyNode n3 = new MyNode(p3,2);
+        MyEdge e1 = new MyEdge(0,2,1);
+        MyEdge e2 = new MyEdge(1,1,0);
+        g.addNode(n1);
+        g.addNode(n2);
+        g.connect(n1.getKey(),n2.getKey(),2);
+        g.connect(n2.getKey(),n1.getKey(),1);
+        MyDWG_Algo ga = new MyDWG_Algo();
+        ga.init(g);
+        assertEquals(g,ga.getGraph());
     }
 
     @Test
     void copy() {
+        Point3D p1 = new Point3D(1,2,0);
+        Point3D p2 = new Point3D(2,1,0);
+        Point3D p3 = new Point3D(3,4,0);
+        MyDWG g= new MyDWG();
+        MyNode n1 = new MyNode(p1,0);
+        MyNode n2 = new MyNode(p2,1);
+        MyNode n3 = new MyNode(p3,2);
+        MyEdge e1 = new MyEdge(0,2,1);
+        MyEdge e2 = new MyEdge(1,1,0);
+        g.addNode(n1);
+        g.addNode(n2);
+        g.connect(n1.getKey(),n2.getKey(),2);
+        g.connect(n2.getKey(),n1.getKey(),1);
+        MyDWG_Algo ga = new MyDWG_Algo();
+        ga.init(g);
+        DirectedWeightedGraph g1 = ga.copy();
+        assertNotEquals(g1,ga.getGraph());
+
     }
 
     @Test
