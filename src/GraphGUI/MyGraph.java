@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -18,6 +19,7 @@ public class MyGraph extends JFrame {
     public MyGraph(MyDWG gr) throws Exception {
         this.add(new GraphP(gr));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int)size.width;
         int height = (int)size.height;
@@ -35,7 +37,6 @@ public class MyGraph extends JFrame {
         double maxy;
         double scalefactor=1;
         double scalefactor1 = 8;
-
         public GraphP(MyDWG gr) throws Exception {
             g1.init(gr);
             setminxy();
@@ -89,6 +90,10 @@ public class MyGraph extends JFrame {
 
             MyNode prev=null;
             try {
+                Graphics2D g2 = (Graphics2D)g;
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON);
+                double theta;
                 Iterator<NodeData> it = g1.getGraph().nodeIter();
                 while(it.hasNext()){
                     NodeData n = it.next();
@@ -100,11 +105,10 @@ public class MyGraph extends JFrame {
                     String xs = ""+n.getLocation().x();
                     String ys = ""+n.getLocation().y();
                     String coord = "("+xs+","+ys+")"+", id:"+n.getKey();
-                    g.fillOval((int)x,(int)y,20,20);
+                    g.fillOval((int)x-4,(int)y-4,20,20);
                     g.setColor(new Color(0, 0, 0));
                     //g.setPaintMode();
                     g.drawString(coord,(int)x,(int)y-(int)scaley/16);
-
                 }
                 Iterator<EdgeData> eiter = g1.getGraph().edgeIter();
                 while(eiter.hasNext()){
@@ -119,38 +123,37 @@ public class MyGraph extends JFrame {
                     destx+=scalex/scalefactor;
                     desty+=scaley/scalefactor;
                     g.setColor(new Color(0, 72, 255));
-                    if(srcx-destx>=0&&srcy-desty>=0){
-                        int x1 = (int)srcx;//+(int)(scalex/scalefactor1);
-                        int y1 = (int)srcy;//+(int)(scaley/scalefactor1);
-                        int x2 = (int)destx;//+(int)(scalex/scalefactor1);
-                        int y2 = (int)desty;//+(int)(scaley/scalefactor1);
-                        g.drawLine(x1,y1,x2,y2);
-                        x1 = (int)srcx+(int)(scalex/scalefactor1);
-                        y1 = (int)srcy+(int)(scaley/scalefactor1);
-                        x2 = (int)destx+(int)(scalex/scalefactor1);
-                        y2 = (int)desty+(int)(scaley/scalefactor1);
-                        g.drawString(weight, (int)((x1+x2)/2),(int)((y2+y1)/2));
-                    }else{
-                        int x1 = (int)srcx;//-(int)(scalex/scalefactor1);
-                        int y1 = (int)srcy;//-(int)(scaley/scalefactor1);
-                        int x2 = (int)destx;//-(int)(scalex/scalefactor1);
-                        int y2 = (int)desty;//-(int)(scaley/scalefactor1);
-                        g.drawLine(x1,y1,x2,y2);
-                        x1 = (int)srcx-(int)(scalex/scalefactor1);
-                        y1 = (int)srcy-(int)(scaley/scalefactor1);
-                        x2 = (int)destx-(int)(scalex/scalefactor1);
-                        y2 = (int)desty-(int)(scaley/scalefactor1);
-                        g.drawString(weight, (int)((x1+x2)/2),(int)((y1+y2)/2));
-                    }
-                    //g.drawLine((int)srcx,(int)srcy,(int)destx,(int)desty);
-                    //g.setColor(new Color(0, 0, 0));
-
+                    int x1 = (int)srcx;//+(int)(scalex/scalefactor1);
+                    int y1 = (int)srcy;//+(int)(scaley/scalefactor1);
+                    int x2 = (int)destx;//+(int)(scalex/scalefactor1);
+                    int y2 = (int)desty;//+(int)(scaley/scalefactor1);
+                    //g.drawLine(x1,y1,x2,y2);
+                    g2.draw(new Line2D.Double(x1, y1, x2, y2));
+                    theta = Math.atan2(y2 - y1, x2 - x1);
+                    drawArrow(g2, theta, x2, y2);
+                    x1 = (int)srcx+(int)(scalex/scalefactor1);
+                    y1 = (int)srcy+(int)(scaley/scalefactor1);
+                    x2 = (int)destx+(int)(scalex/scalefactor1);
+                    y2 = (int)desty+(int)(scaley/scalefactor1);
+                    g.drawString(weight, (int)((x1+x2)/2),(int)((y2+y1)/2));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
+    }
+    // taken from https://coderanch.com/t/339505/java/drawing-arrows
+    private void drawArrow(Graphics2D g2, double theta, double x0, double y0)
+    {
+        double barb =20;
+        double phi = Math.PI/6;
+        double x = x0 - barb * Math.cos(theta + phi);
+        double y = y0 - barb * Math.sin(theta + phi);
+        g2.draw(new Line2D.Double(x0, y0, x, y));
+        x = x0 - barb * Math.cos(theta - phi);
+        y = y0 - barb * Math.sin(theta - phi);
+        g2.draw(new Line2D.Double(x0, y0, x, y));
     }
     public static void runGUI(MyDWG gr) throws Exception {
         new MyGraph(gr);
