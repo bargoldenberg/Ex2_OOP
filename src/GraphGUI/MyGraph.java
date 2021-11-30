@@ -97,7 +97,7 @@ public class MyGraph extends JFrame {
                 Iterator<NodeData> it = g1.getGraph().nodeIter();
                 while(it.hasNext()){
                     NodeData n = it.next();
-                    g.setColor(new Color(255, 0, 0));
+                    g.setColor(new Color(11, 148, 56, 255));
                     double x =(n.getLocation().x()-minx)*scalex*0.97+30;
                     double y = (n.getLocation().y()-miny)*scaley*0.97+30;
                     x+=scalex/scalefactor;
@@ -105,7 +105,7 @@ public class MyGraph extends JFrame {
                     String xs = ""+n.getLocation().x();
                     String ys = ""+n.getLocation().y();
                     String coord = "("+xs+","+ys+")"+", id:"+n.getKey();
-                    g.fillOval((int)x-4,(int)y-4,20,20);
+                    g.fillOval((int)x-5,(int)y-7,20,20);
                     g.setColor(new Color(0, 0, 0));
                     //g.setPaintMode();
                     g.drawString(coord,(int)x,(int)y-(int)scaley/16);
@@ -122,7 +122,7 @@ public class MyGraph extends JFrame {
                     srcy+=scaley/scalefactor;
                     destx+=scalex/scalefactor;
                     desty+=scaley/scalefactor;
-                    g.setColor(new Color(0, 72, 255));
+                    g.setColor(new Color(0, 0, 0));
                     int x1 = (int)srcx;//+(int)(scalex/scalefactor1);
                     int y1 = (int)srcy;//+(int)(scaley/scalefactor1);
                     int x2 = (int)destx;//+(int)(scalex/scalefactor1);

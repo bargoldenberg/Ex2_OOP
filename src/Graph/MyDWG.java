@@ -16,8 +16,6 @@ public class MyDWG implements DirectedWeightedGraph {
     public MyDWG(){
         V = new HashMap<Integer,MyNode>();
         E = new HashMap<Vector<Integer>,MyEdge>();
-        this.nodeiter=0;
-        this.edgeiter=0;
         this.MC=0;
     }
 
@@ -96,36 +94,68 @@ public class MyDWG implements DirectedWeightedGraph {
     }
 
     @Override
-    public Iterator<NodeData> nodeIter() throws Exception {
-        this.nodeiter = this.MC;
-        HashMap<Integer,NodeData> a = (HashMap<Integer,NodeData> ) this.V.clone();
-        Iterator<NodeData> it = a.values().iterator();
+    public Iterator<NodeData> nodeIter(){
+        int modecounter = this.MC;
+        HashMap<Integer, NodeData> a = (HashMap<Integer, NodeData>) this.V.clone();
+        Iterator<NodeData> itclone = a.values().iterator();
+        Iterator<NodeData> it = new Iterator<NodeData>() {
+            @Override
+            public boolean hasNext() {
+                return itclone.hasNext();
+            }
+
+            @Override
+            public NodeData next() {
+                if (modecounter != MC) {
+                    Exception e = new RuntimeException();
+                    try {
+                        throw e;
+                    } catch (Exception ex) {
+                        System.out.println("Runtime Exception: the graph has been changed");
+
+                    }
+                } else {
+                    return itclone.next();
+                }
+                throw new RuntimeException();
+            }
+        };
         return it;
     }
 
     @Override
     public Iterator<EdgeData> edgeIter() throws Exception {
-        if(this.edgeiter == 0){
-            this.edgeiter = this.MC;
-            HashMap<Vector<Integer>,EdgeData> a = (HashMap<Vector<Integer>,EdgeData> ) this.E.clone();
-            Iterator<EdgeData> it = a.values().iterator();
-            return it;
-        }
-        else if(this.MC != this.edgeiter){
-            Exception e = new RuntimeException();
-            throw e;
-        }
-        else{
-            HashMap<Vector<Integer>,EdgeData> a = (HashMap<Vector<Integer>,EdgeData> ) this.E.clone();
-            Iterator<EdgeData> it = a.values().iterator();
-            return it;
-        }
+        int modecounter = this.MC;
+        HashMap<Vector<Integer>, EdgeData> a = (HashMap<Vector<Integer>, EdgeData>) this.E.clone();
+        Iterator<EdgeData> itclone = a.values().iterator();
+        Iterator<EdgeData> it = new Iterator<EdgeData>() {
+            @Override
+            public boolean hasNext() {
+                return itclone.hasNext();
+            }
 
+            @Override
+            public EdgeData next() {
+                if (modecounter != MC) {
+                    Exception e = new RuntimeException();
+                    try {
+                        throw e;
+                    } catch (Exception ex) {
+                        System.out.println("Runtime Exception: the graph has been changed");
+
+                    }
+                } else {
+                    return itclone.next();
+                }
+                throw new RuntimeException();
+            }
+        };
+        return it;
     }
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
-        this.edgeiter = this.MC;
+        int modecounter = this.MC;
         HashMap<Vector<Integer>, EdgeData> a = new HashMap<Vector<Integer>, EdgeData>();
         for (int i=0;i<this.V.get(node_id).getEdgeOutList().size();i++){
             Vector<Integer> key = new Vector<Integer>(2);
@@ -133,7 +163,30 @@ public class MyDWG implements DirectedWeightedGraph {
             key.add(this.V.get(node_id).getEdgeOutList().get(i));
             a.put(key,this.E.get(key));
         }
-        Iterator<EdgeData> it = a.values().iterator();
+        Iterator<EdgeData> ithash = a.values().iterator();
+        Iterator<EdgeData> it = new Iterator<EdgeData>() {
+            @Override
+            public boolean hasNext() {
+                return ithash.hasNext();
+            }
+
+            @Override
+            public EdgeData next() {
+                if (modecounter != MC) {
+                    Exception e = new RuntimeException();
+                    try {
+                        throw e;
+                    } catch (Exception ex) {
+                        System.out.println("Runtime Exception: the graph has been changed");
+
+                    }
+                } else {
+                    return ithash.next();
+                }
+                throw new RuntimeException();
+
+            }
+        };
         return it;
     }
 

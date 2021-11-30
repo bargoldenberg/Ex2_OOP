@@ -34,7 +34,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         while(!queue.isEmpty()){
             node = queue.poll();
             Iterator<EdgeData> iter = g.edgeIter(node);
-            while (iter.hasNext()) {
+            while (iter.hasNext()){
                 EdgeData n = iter.next();
                 if (!visited[n.getDest()]) {
                     visited[n.getDest()]=true;
@@ -59,7 +59,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             visited[i]=false;
     }
         MyDWG reversedgraph = (MyDWG)this.copy();
-        Iterator<EdgeData> edgeiterator = reversedgraph.edgeIter();
+        Iterator<EdgeData> edgeiterator = this.getGraph().edgeIter();
         while(edgeiterator.hasNext()){
             EdgeData originalEdge = edgeiterator.next();
             MyEdge reversedEdge = new MyEdge(originalEdge.getDest(),originalEdge.getWeight(), originalEdge.getSrc());
@@ -68,7 +68,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             key.add(reversedEdge.getSrc());
             key.add(reversedEdge.getDest());
             boolean condition2 = reversedgraph.E.containsKey(key);
-            if(condition1&&condition2){
+            if(condition1||condition2){
                 continue;
             }
             reversedgraph.removeEdge(originalEdge.getSrc(), originalEdge.getDest());
@@ -206,11 +206,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public NodeData center() throws Exception{
-        if(this.getGraph().nodeSize()<10000){
-            return centerFWALGO();
-        }else{
-            return centerDIJKSTRA();
-        }
+        return centerDIJKSTRA();
     }
     public NodeData centerDIJKSTRA() throws Exception {
         Iterator<NodeData> it1 = this.g.nodeIter();
@@ -219,7 +215,6 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         double dist = 0;
         ArrayList<double[]> sumofdistance = new ArrayList<>();
         while(it1.hasNext()){
-            System.out.println(count++);
             NodeData a = it1.next();
             Iterator<NodeData> it2 = this.g.nodeIter();
             eccentricity=0;
@@ -258,7 +253,6 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         double dist = 0;
         ArrayList<double[]> sumofdistance = new ArrayList<>();
         while(it1.hasNext()){
-            System.out.println(count++);
             NodeData a = it1.next();
             Iterator<NodeData> it2 = this.g.nodeIter();
             eccentricity=0;
@@ -399,7 +393,6 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         for(int i =0;i< graph.length;i++){
             for(int j=0;j<graph.length;j++){
                 graph[i][j]=Integer.MAX_VALUE;
-                System.out.println("("+i+","+j+")");
             }
         }
         while(iter.hasNext()){
@@ -410,10 +403,10 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             for(int i=0;i<graph.length;i++){
                 for(int j=0;j<graph.length;j++){
                     graph[i][j]=Math.min(graph[i][j],graph[i][k]+graph[k][j]);
-                    System.out.println("calc "+count++);
                 }
             }
         }
         return graph;
     }
 }
+// Random r = new Random(seed) (we can revisit a random sequence)
