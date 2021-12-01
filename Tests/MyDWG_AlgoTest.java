@@ -307,9 +307,11 @@ class MyDWG_AlgoTest {
         subGraph1.add(n3);
         subGraph1.add(n4);
         subGraph1.add(n2);
-
+        String t = subGraph1.toString();
         List<NodeData> subGraphTSP1 = testGraphAlgo.tsp(subGraph1);
-        System.out.println(subGraphTSP1.toString());
+        String t1 = subGraphTSP1.toString();
+        assertEquals(t,t1);
+
 
 
     }
@@ -321,13 +323,19 @@ class MyDWG_AlgoTest {
     @Test
     void load() {
     }
-
+    @Test
+    void generateGraph() throws Exception {
+        MyDWG a = new MyDWG();
+        MyDWG_Algo at = new MyDWG_Algo();
+        at.init(at.generateGraph(1000));
+        assertTrue(at.isConnected());
+    }
     @Test
     void testGraphAlgo() throws Exception {
         MyDWG_Algo testGraphAlgo = new MyDWG_Algo();
-        MyDWG g2 = testGraphAlgo.generateGraph(10);
+        MyDWG g2 = testGraphAlgo.generateGraph(1000);
         testGraphAlgo.init(g2);
         //System.out.println(testGraphAlgo.center());
-       System.out.println(testGraphAlgo.center());
+        System.out.println(testGraphAlgo.center());
     }
 }

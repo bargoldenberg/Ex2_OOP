@@ -19,7 +19,7 @@ public class MyGraph extends JFrame {
     public MyGraph(MyDWG gr) throws Exception {
         this.add(new GraphP(gr));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(false);
+        //this.setResizable(false);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int)size.width;
         int height = (int)size.height;
@@ -108,7 +108,7 @@ public class MyGraph extends JFrame {
                     g.fillOval((int)x-5,(int)y-7,20,20);
                     g.setColor(new Color(0, 0, 0));
                     //g.setPaintMode();
-                    g.drawString(coord,(int)x,(int)y-(int)scaley/16);
+                    g.drawString(coord,(int)x,(int)y-(int)scaley/2);
                 }
                 Iterator<EdgeData> eiter = g1.getGraph().edgeIter();
                 while(eiter.hasNext()){
@@ -130,6 +130,7 @@ public class MyGraph extends JFrame {
                     //g.drawLine(x1,y1,x2,y2);
                     g2.draw(new Line2D.Double(x1, y1, x2, y2));
                     theta = Math.atan2(y2 - y1, x2 - x1);
+                    g.setColor(new Color(127, 30, 30));
                     drawArrow(g2, theta, x2, y2);
                     x1 = (int)srcx+(int)(scalex/scalefactor1);
                     y1 = (int)srcy+(int)(scaley/scalefactor1);
@@ -146,7 +147,7 @@ public class MyGraph extends JFrame {
     // taken from https://coderanch.com/t/339505/java/drawing-arrows
     private void drawArrow(Graphics2D g2, double theta, double x0, double y0)
     {
-        double barb =20;
+        double barb =10;
         double phi = Math.PI/6;
         double x = x0 - barb * Math.cos(theta + phi);
         double y = y0 - barb * Math.sin(theta + phi);

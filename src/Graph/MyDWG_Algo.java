@@ -27,17 +27,17 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     }
 
 
-    public void BFS(DirectedWeightedGraph g,int node, boolean[] visited) throws Exception {
+    public void BFS(DirectedWeightedGraph g,int node, HashMap<Integer,Boolean> visited) throws Exception {
         LinkedList<Integer> queue = new LinkedList<Integer>();
-        visited[node]=true;
+        visited.put(node,true);
         queue.add(node);
         while(!queue.isEmpty()){
             node = queue.poll();
             Iterator<EdgeData> iter = g.edgeIter(node);
             while (iter.hasNext()){
                 EdgeData n = iter.next();
-                if (!visited[n.getDest()]) {
-                    visited[n.getDest()]=true;
+                if (!visited.get(n.getDest())) {
+                    visited.put(n.getDest(),true);
                     queue.add(n.getDest());
                 }
             }
@@ -48,16 +48,23 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     public boolean isConnected() throws Exception {
         Iterator<NodeData> it = this.getGraph().nodeIter();
         NodeData v = it.next();
-        boolean[] visited = new boolean[this.getGraph().nodeSize()];
+        HashMap<Integer,Boolean> visited = new HashMap<>();
+        Iterator<NodeData> init = this.getGraph().nodeIter();
+        while(init.hasNext()){
+            visited.put(init.next().getKey(),false);
+        }
+        //boolean[] visited = new boolean[this.getGraph().nodeSize()];
         BFS(this.getGraph(), v.getKey(), visited);
-        for (int i = 0; i < visited.length; i++) {
-            if (!visited[i]) {
+        Iterator<NodeData> checkfalse = this.getGraph().nodeIter();
+        while(checkfalse.hasNext()){
+            if(!visited.get(checkfalse.next().getKey())){
                 return false;
             }
         }
-        for (int i = 0; i < visited.length; i++){
-            visited[i]=false;
-    }
+        Iterator<NodeData> init2 = this.getGraph().nodeIter();
+        while(init2.hasNext()){
+            visited.put(init2.next().getKey(),false);
+        }
         MyDWG reversedgraph = (MyDWG)this.copy();
         Iterator<EdgeData> edgeiterator = this.getGraph().edgeIter();
         while(edgeiterator.hasNext()){
@@ -75,8 +82,9 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             reversedgraph.connect(originalEdge.getDest(), originalEdge.getSrc(), originalEdge.getWeight());
         }
         BFS(reversedgraph, v.getKey(), visited);
-        for (int i = 0; i < visited.length; i++) {
-            if (!visited[i]) {
+        Iterator<NodeData> checkfalse2 = this.getGraph().nodeIter();
+        while(checkfalse2.hasNext()){
+            if(!visited.get(checkfalse2.next().getKey())){
                 return false;
             }
         }
@@ -358,7 +366,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     public MyDWG generateGraph(int nodes){
         MyDWG g = new MyDWG();
         for(int i=0;i<nodes;i++){
-            Point3D p = new Point3D(Math.random()*10,Math.random()*10,Math.random()*10);
+            Point3D p = new Point3D((int)(Math.random()*10),(int)(Math.random()*10),(int)(Math.random()*10));
             int key = (int) ((Math.random() * (nodes)));
             while(g.V.containsKey(key)){
                 key = (int) ((Math.random() * (nodes)));
@@ -368,12 +376,12 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         }
         for(int i=0;i<nodes;i++){
             MyNode a = g.V.get(i);
-            for(int j=0;j<10;j++){
+            for(int j=0;j<9;j++){
                 Vector<Integer> key =new Vector<>(2);
                 key.add(a.getKey());
                 int id = g.V.get((int)(Math.random() * (nodes))).getKey();
                 key.add(id);
-                while(g.E.containsKey(key)){
+                while(g.E.containsKey(key)||a.getKey()==id){
                     key.remove(1);
                     id = g.V.get((int)(Math.random() * (nodes))).getKey();
                     key.add(id);
