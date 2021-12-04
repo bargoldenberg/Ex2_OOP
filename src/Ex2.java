@@ -1,16 +1,8 @@
 import Graph.MyDWG;
+import Graph.MyDWG_Algo;
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
 import GraphGUI.*;
-
-//import java.io.FileNotFoundException;
-//import java.io.FileReader;
-//import java.io.IOException;
-//import java.util.Iterator;
-//import org.json.simple.JSONArray;
-//import org.json.simple.JSONObject;
-//import org.json.simple.parser.JSONParser;
-//import org.json.simple.parser.ParseException;
 
 /**
  * This class is the main class for Ex2 - your implementation will be tested using this class.
@@ -24,10 +16,10 @@ public class Ex2 {
      */
     public static DirectedWeightedGraph getGrapg(String json_file) {
         DirectedWeightedGraph ans = new MyDWG();
-//        JSON parser object to parse read file
-//        JSONParser jsonParser = new JSONParser();
-
-        return ans;
+        MyDWG_Algo graphAlgo = new MyDWG_Algo();
+        graphAlgo.init(ans);
+        graphAlgo.load(json_file);
+        return graphAlgo.getGraph();
     }
 
     /**
@@ -37,11 +29,11 @@ public class Ex2 {
      * @return
      */
     public static DirectedWeightedGraphAlgorithms getGrapgAlgo(String json_file) {
-        DirectedWeightedGraphAlgorithms ans = null;
-        // ****** Add your code here ******
-        //
-        // ********************************
-        return ans;
+        DirectedWeightedGraph ans = new MyDWG();
+        MyDWG_Algo graphAlgo = new MyDWG_Algo();
+        graphAlgo.init(ans);
+        graphAlgo.load(json_file);
+        return graphAlgo;
     }
 
     /**
@@ -51,10 +43,6 @@ public class Ex2 {
      */
     public static void runGUI(String json_file) throws Exception {
         DirectedWeightedGraphAlgorithms alg = getGrapgAlgo(json_file);
-        // ****** Add your code here ******
-        //
-        // ********************************
         MyGraph.runGUI((MyDWG)alg.getGraph());
-
     }
 }

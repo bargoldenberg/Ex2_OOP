@@ -1,7 +1,6 @@
 package Graph;
 
 import api.EdgeData;
-
 import java.util.Vector;
 
 public class MyEdge implements EdgeData {

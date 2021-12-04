@@ -13,6 +13,7 @@ public class MyDWG implements DirectedWeightedGraph {
     int nodeiter;
     int edgeiter;
     int MC ;
+
     public MyDWG(){
         V = new HashMap<Integer,MyNode>();
         E = new HashMap<Vector<Integer>,MyEdge>();
@@ -40,6 +41,21 @@ public class MyDWG implements DirectedWeightedGraph {
         this.nodeiter =g.nodeiter;
         this.MC = g.MC;
     }
+
+    public MyDWG(fromJsonToGraph g){
+        this.MC=0;
+        this.nodeiter = this.edgeiter = 0;
+        V = new HashMap<Integer,MyNode>();
+        E = new HashMap<Vector<Integer>,MyEdge>();
+        for(int i=0; i<g.Nodes.size();i++){
+            V.put(g.Nodes.get(i).getID(),g.Nodes.get(i).getNode());
+        }
+        for(int i=0;i<g.Edges.size();i++){
+            edgeConverter e = g.Edges.get(i);
+            connect(e.getSrc(),e.getDest(),e.getW());
+        }
+    }
+
 
     /**
      * This function simply returns a Node according to the i.d.(key);

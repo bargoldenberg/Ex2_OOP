@@ -1,5 +1,6 @@
 package api;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 /**
@@ -104,5 +105,5 @@ public interface DirectedWeightedGraphAlgorithms {
      * @param file - file name of JSON file
      * @return true - iff the graph was successfully loaded.
      */
-    public boolean load(String file);
+    public boolean load(String file) throws FileNotFoundException;
 }
