@@ -13,7 +13,7 @@ import java.awt.geom.Point2D;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-
+///Bug Alert --
 
 public class MyGraph extends JFrame {
     public MyGraph(MyDWG gr) throws Exception {

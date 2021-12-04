@@ -400,5 +400,6 @@ class MyDWG_AlgoTest {
         testGraphAlgo.init(g2);
         //System.out.println(testGraphAlgo.center());
         System.out.println(testGraphAlgo.center());
+
     }
 }
