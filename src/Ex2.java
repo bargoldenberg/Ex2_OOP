@@ -46,6 +46,6 @@ public class Ex2 {
         MyGraph.runGUI((MyDWG)alg.getGraph());
     }
  public static void main(String[] args) throws Exception {
-        runGUI("/home/bar/Desktop/Ex2_OOP/Ex2_OOP/data/G1.json");
+        runGUI("/home/bar/Desktop/Ex2_OOP/Ex2_OOP/data/G3.json");
  }
 }

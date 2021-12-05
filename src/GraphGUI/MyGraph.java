@@ -38,7 +38,7 @@ public class MyGraph extends JFrame {
         double scalefactor=1;
         double scalefactor1 = 8;
         public GraphP(MyDWG gr) throws Exception {
-            g1.init(g1.generateGraph(10,1));
+            g1.init(gr);
             setminxy();
             repaint();
         }
@@ -83,8 +83,8 @@ public class MyGraph extends JFrame {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            double ABSx = Math.abs(minx-maxx)+1;
-            double ABSy = Math.abs(miny-maxy)+1;
+            double ABSx = Math.abs(minx-maxx);
+            double ABSy = Math.abs(miny-maxy);
             double scalex = (getWidth()/ABSx)*0.7;
             double scaley = (getHeight()/ABSy)*0.7;
 
@@ -100,28 +100,29 @@ public class MyGraph extends JFrame {
                     g.setColor(new Color(11, 148, 56, 255));
                     double x =(n.getLocation().x()-minx)*scalex*0.97;
                     double y = (n.getLocation().y()-miny)*scaley*0.97;
-                    x+=scalex/scalefactor;
-                    y+=scaley/scalefactor;
+                //    x+=scalex/scalefactor;
+                //    y+=scaley/scalefactor;
                     String xs = ""+n.getLocation().x();
                     String ys = ""+n.getLocation().y();
                     String coord = "("+xs+","+ys+")"+", id:"+n.getKey();
-                    g.fillOval((int)x-5,(int)y-7,20,20);
+                    g.fillOval((int)x,(int)y,20,20);
                     g.setColor(new Color(0, 0, 0));
                     //g.setPaintMode();
-                    g.drawString(coord,(int)x,(int)(y-scaley/2));
+                    g.drawString(coord,(int)x,(int)(y));
                 }
                 Iterator<EdgeData> eiter = g1.getGraph().edgeIter();
                 while(eiter.hasNext()){
                     EdgeData e = eiter.next();
                     String weight = ""+(int)e.getWeight();
                     double srcx = (g1.getGraph().getNode(e.getSrc()).getLocation().x()-minx)*scalex;
-                    double srcy = (g1.getGraph().getNode(e.getSrc()).getLocation().y())*scaley;
-                    double destx = (g1.getGraph().getNode(e.getDest()).getLocation().x())*scalex;
-                    double desty = (g1.getGraph().getNode(e.getDest()).getLocation().y())*scaley;
-                    srcx+=scalex/scalefactor;
-                    srcy+=scaley/scalefactor;
-                    destx+=scalex/scalefactor;
-                    desty+=scaley/scalefactor;
+                    double srcy = (g1.getGraph().getNode(e.getSrc()).getLocation().y()-miny)*scaley;
+                    double destx = (g1.getGraph().getNode(e.getDest()).getLocation().x()-minx)*scalex;
+                    double desty = (g1.getGraph().getNode(e.getDest()).getLocation().y()-miny)*scaley;
+
+                   // srcx+=scalex/scalefactor;
+                   // srcy+=scaley/scalefactor;
+//                    destx+=scalex/scalefactor;
+//                    desty+=scaley/scalefactor;
                     g.setColor(new Color(0, 0, 0));
                     int x1 = (int)srcx;//+(int)(scalex/scalefactor1);
                     int y1 = (int)srcy;//+(int)(scaley/scalefactor1);
@@ -136,7 +137,7 @@ public class MyGraph extends JFrame {
                     y1 = (int)srcy+(int)(scaley/scalefactor1);
                     x2 = (int)destx+(int)(scalex/scalefactor1);
                     y2 = (int)desty+(int)(scaley/scalefactor1);
-                    g.drawString(weight, (int)((x1+x2)/2),(int)((y2+y1)/2));
+                    g.drawString(weight, (x1+x2)/2,(y2+y1)/2);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
