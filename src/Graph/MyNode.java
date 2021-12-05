@@ -112,7 +112,7 @@ public class MyNode implements NodeData {
             if(this.edgesOut == null){
                 this.edgesOut = new ArrayList<Integer>();
             }
-            Vector<Integer> key = new Vector<Integer>();
+            ArrayList<Integer> key = new ArrayList<Integer>();
             key.add(edge.Src);
             key.add(edge.Dest);
             this.edgesOut.add(edge.Dest);
@@ -122,7 +122,7 @@ public class MyNode implements NodeData {
             if(this.edgesIn == null){
                 this.edgesIn = new ArrayList<Integer>();
             }
-            Vector<Integer> key = new Vector<Integer>();
+            ArrayList<Integer> key = new ArrayList<Integer>();
             key.add(edge.Src);
             key.add(edge.Dest);
             this.edgesIn.add(edge.Src);

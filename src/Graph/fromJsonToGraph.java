@@ -20,7 +20,7 @@ public class fromJsonToGraph {
             nodeConverter n = new nodeConverter(node.getValue());
             this.Nodes.add(n);
         }
-        for(Map.Entry<Vector<Integer>, MyEdge> edge: g.E.entrySet()){
+        for(Map.Entry<ArrayList<Integer>, MyEdge> edge: g.E.entrySet()){
             edgeConverter e = new edgeConverter(edge.getValue());
             this.Edges.add(e);
         }

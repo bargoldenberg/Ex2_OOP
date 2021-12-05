@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MyDWG_AlgoTest {
 
+
     @Test
     void init() {
         Point3D p1 = new Point3D(1,2,0);
@@ -237,34 +238,37 @@ class MyDWG_AlgoTest {
 
     @Test
     void center() throws Exception {
-        Point3D a = new Point3D(0,+
-                0,0);
-        Point3D b = new Point3D(1,3,0);
-        Point3D c = new Point3D(4,2,0);
-        Point3D d = new Point3D(6,1,0);
-        MyDWG testGraph = new MyDWG();
-        MyNode node1 = new MyNode(a,0);
-        MyNode node2 = new MyNode(b,1);
-        MyNode node3 = new MyNode(c,2);
-        MyNode node4 = new MyNode(d,3);
-
-        testGraph.addNode(node1);
-        testGraph.addNode(node2);
-        testGraph.addNode(node3);
-//        testGraph.addNode(node1);        **FOR LATER TESTS***
-        testGraph.addNode(node4);
-
-        testGraph.connect(0,1,1);
-        testGraph.connect(1,2,1);
-        testGraph.connect(2,1,1);
-        testGraph.connect(2,3,1);
-        testGraph.connect(2,0,1);
-        testGraph.connect(3,0,1);
-//        testGraph.connect(0,0,1);      ******FOR TEST LATER **********
-        MyDWG_Algo g1 = new MyDWG_Algo();
-        g1.init(g1.generateGraph(10,1));
-        //assertEquals(g1.center().getKey(),node3.getKey());
-        System.out.println(g1.center());
+//        Point3D a = new Point3D(0,+
+//                0,0);
+//        Point3D b = new Point3D(1,3,0);
+//        Point3D c = new Point3D(4,2,0);
+//        Point3D d = new Point3D(6,1,0);
+//        MyDWG testGraph = new MyDWG();
+//        MyNode node1 = new MyNode(a,0);
+//        MyNode node2 = new MyNode(b,1);
+//        MyNode node3 = new MyNode(c,2);
+//        MyNode node4 = new MyNode(d,3);
+//
+//        testGraph.addNode(node1);
+//        testGraph.addNode(node2);
+//        testGraph.addNode(node3);
+////        testGraph.addNode(node1);        **FOR LATER TESTS***
+//        testGraph.addNode(node4);
+//
+//        testGraph.connect(0,1,1);
+//        testGraph.connect(1,2,1);
+//        testGraph.connect(2,1,1);
+//        testGraph.connect(2,3,1);
+//        testGraph.connect(2,0,1);
+//        testGraph.connect(3,0,1);
+////        testGraph.connect(0,0,1);      ******FOR TEST LATER **********
+//        MyDWG_Algo g1 = new MyDWG_Algo();
+//        g1.init(g1.generateGraph(10,1));
+//        //assertEquals(g1.center().getKey(),node3.getKey());
+//        System.out.println(g1.center());
+        MyDWG_Algo a = new MyDWG_Algo();
+        a.load("/home/bar/Desktop/Ex2_OOP/Ex2_OOP/data/G3.json");
+        System.out.println(a.center());
 
     }
 
@@ -361,50 +365,56 @@ class MyDWG_AlgoTest {
 
         MyDWG_Algo testGraphAlgo = new MyDWG_Algo();
         testGraphAlgo.init(g);
-        testGraphAlgo.save("Test1.json");
+        testGraphAlgo.save("1000Nodes.json");
     }
 
     @Test
-    void load() {
+    void load() throws Exception {
         // FIrst Test for loading my made small json.
-        MyDWG graph1= new MyDWG();
+        //MyDWG graph1= new MyDWG();
         MyDWG_Algo testGraphAlgo1 = new MyDWG_Algo();
-        testGraphAlgo1.init(graph1);
-        assertEquals(false,testGraphAlgo1.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\dontExist.json"));
-        assertEquals(true,testGraphAlgo1.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\forTest.json"));
-        System.out.println(testGraphAlgo1.getGraph().toString());
+        //testGraphAlgo1.init(graph1);
+//        assertEquals(false,testGraphAlgo1.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\dontExist.json"));
+//        assertEquals(true,testGraphAlgo1.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\forTest.json"));
+//        System.out.println(testGraphAlgo1.getGraph().toString());
+        testGraphAlgo1.load("1000Nodes.json");
+        //System.out.println(testGraphAlgo1.isConnected());
+        System.out.println(testGraphAlgo1.center());
 
 
         //Second Test is for big json - that has been giving to as.
         MyDWG graph2 = new MyDWG();
         MyDWG_Algo testGraphAlgo2 = new MyDWG_Algo();
         testGraphAlgo2.init(graph2);
-        assertEquals(false,testGraphAlgo2.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\dontExist.json"));
-        assertEquals(true,testGraphAlgo2.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\G1.json"));
-        System.out.println(testGraphAlgo2.getGraph().toString());
+//        assertEquals(false,testGraphAlgo2.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\dontExist.json"));
+//        assertEquals(true,testGraphAlgo2.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\G1.json"));
+//        System.out.println(testGraphAlgo2.getGraph().toString());
 
         // For Last Test, we will make a new graph, save it and reload it(The save and make of the new graph will be done in SaveTest).
-        MyDWG graph3 = new MyDWG();
-        MyDWG_Algo testGraphAlgo3 = new MyDWG_Algo();
-        testGraphAlgo2.init(graph3);
-        assertEquals(false,testGraphAlgo3.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\dontExist.json"));
-        assertEquals(true,testGraphAlgo3.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\Test1.json"));
-        System.out.println(testGraphAlgo3.getGraph().toString());
+//        MyDWG graph3 = new MyDWG();
+//        MyDWG_Algo testGraphAlgo3 = new MyDWG_Algo();
+//        testGraphAlgo2.init(graph3);
+//        assertEquals(false,testGraphAlgo3.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\dontExist.json"));
+//        assertEquals(true,testGraphAlgo3.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\1000Nodes.json"));
+//        System.out.println(testGraphAlgo3.getGraph().toString());
     }
     @Test
     void generateGraph() throws Exception {
         MyDWG a = new MyDWG();
         MyDWG_Algo at = new MyDWG_Algo();
-        at.init(at.generateGraph(1000,1));
-        assertTrue(at.isConnected());
+        at.init(at.generateGraph(10000,2));
+        System.out.println(at.center());
     }
     @Test
     void testGraphAlgo() throws Exception {
+
+        // MyDWG g2 = testGraphAlgo.generateGraph(1000,1);
         MyDWG_Algo testGraphAlgo = new MyDWG_Algo();
-        MyDWG g2 = testGraphAlgo.generateGraph(1000,1);
-        testGraphAlgo.init(g2);
-        //System.out.println(testGraphAlgo.center());
+        testGraphAlgo.load("1000Nodes.json");
         System.out.println(testGraphAlgo.center());
+
+        //System.out.println(testGraphAlgo.isConnected());
+        //System.out.println(testGraphAlgo.center());
 
     }
 }

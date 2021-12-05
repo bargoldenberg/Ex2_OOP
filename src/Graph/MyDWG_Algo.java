@@ -78,7 +78,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             EdgeData originalEdge = edgeiterator.next();
             MyEdge reversedEdge = new MyEdge(originalEdge.getDest(), originalEdge.getWeight(), originalEdge.getSrc());
             boolean condition1 = reversedgraph.E.containsValue(originalEdge);
-            Vector<Integer> key = new Vector<Integer>();
+            ArrayList<Integer> key = new ArrayList<Integer>();
             key.add(reversedEdge.getSrc());
             key.add(reversedEdge.getDest());
             boolean condition2 = reversedgraph.E.containsKey(key);
@@ -124,13 +124,12 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
                     smallest = prev.get(smallest);
                 }
                 path.add(this.g.V.get(smallest));
-                Collections.reverse(path);
 
             } else if (distance.get(smallest) == Double.MAX_VALUE) {
                 break;
             } else {
                 for (int i = 0; i < this.g.V.get(smallest).getEdgeOutList().size(); i++) {
-                    Vector<Integer> tmpKey = new Vector<Integer>(2);
+                    ArrayList<Integer> tmpKey = new ArrayList<Integer>(2);
                     tmpKey.add(smallest);
                     tmpKey.add(this.g.V.get(this.g.V.get(smallest).getEdgeOutList().get(i)).getKey());
                     EdgeData neighborEdge = this.g.E.get(tmpKey);
@@ -187,7 +186,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
                 break;
             } else {
                 for (int i = 0; i < this.g.V.get(smallest).getEdgeOutList().size(); i++) {
-                    Vector<Integer> tmpKey = new Vector<Integer>(2);
+                    ArrayList<Integer> tmpKey = new ArrayList<Integer>(2);
                     tmpKey.add(smallest);
                     tmpKey.add(this.g.V.get(smallest).getEdgeOutList().get(i));
                     MyEdge neighborEdge = this.g.E.get(tmpKey);
@@ -214,8 +213,9 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     private HashMap<Integer, Double> shortestPathMap(int src) {
         HashMap<Integer, Double> distance = new HashMap<Integer, Double>();
         HashMap<Integer, Integer> prev = new HashMap<Integer, Integer>();
-        PriorityQueue<Integer> nodesQueue = new PriorityQueue<Integer>();
-        List<NodeData> path = new ArrayList<NodeData>();
+        Queue<Integer> nodesQueue = new LinkedList<Integer>();
+        HashSet<Integer> queueset = new HashSet<Integer>();
+        //List<NodeData> path = new ArrayList<NodeData>();
 
         for (Map.Entry<Integer, MyNode> node : this.g.V.entrySet()) {
             if (node.getKey() == src) {
@@ -227,22 +227,24 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             prev.put(node.getKey(), null);
         }
 
+
         while (!nodesQueue.isEmpty()) {
             int smallest = nodesQueue.poll();
+            queueset.remove(smallest);
             // check for breaking the loop, IF we got to the destination.
             //if (smallest == dest) {
             // while (prev.get(smallest) != null) {
             //     path.add(this.g.V.get(smallest));
             //      smallest = prev.get(smallest);
             //   }
-            path.add(this.g.V.get(smallest));
-            Collections.reverse(path);
+            //path.add(this.g.V.get(smallest));
+            //Collections.reverse(path);
 
             if (distance.get(smallest) == Double.MAX_VALUE) {
                 break;
             } else {
                 for (int i = 0; i < this.g.V.get(smallest).getEdgeOutList().size(); i++) {
-                    Vector<Integer> tmpKey = new Vector<Integer>(2);
+                    ArrayList<Integer> tmpKey = new ArrayList<Integer>(2);
                     tmpKey.add(smallest);
                     tmpKey.add(this.g.V.get(this.g.V.get(smallest).getEdgeOutList().get(i)).getKey());
                     EdgeData neighborEdge = this.g.E.get(tmpKey);
@@ -251,8 +253,9 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
                         distance.put(neighborEdge.getDest(), dis);
                         prev.put(neighborEdge.getDest(), smallest);
 
-                        if (!nodesQueue.contains(neighborEdge.getDest())) {
+                        if (!queueset.contains(neighborEdge.getDest())) {
                             nodesQueue.add(neighborEdge.getDest());
+                            queueset.add(neighborEdge.getDest());
                         }
                     }
                 }
@@ -410,7 +413,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         for (int i = 0; i < nodes; i++) {
             MyNode a = g.V.get(i);
             for (int j = 0; j < 9; j++) {
-                Vector<Integer> key = new Vector<>(2);
+                ArrayList<Integer> key = new ArrayList<>(2);
                 key.add(a.getKey());
                 int id = g.V.get(ra.nextInt(nodes)).getKey();
                 key.add(id);
@@ -425,6 +428,5 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         }
         return g;
     }
-
 }
 // Random r = new Random(seed) (we can revisit a random sequence)

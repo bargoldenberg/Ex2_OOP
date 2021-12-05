@@ -1,6 +1,8 @@
 package Graph;
 
 import api.EdgeData;
+
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class MyEdge implements EdgeData {
@@ -9,7 +11,7 @@ public class MyEdge implements EdgeData {
     double Weight;
     String Info;
     int Tag;
-    Vector<Integer> key;
+    ArrayList<Integer> key;
 
     public MyEdge(){
         this.Src=0;
@@ -23,7 +25,7 @@ public class MyEdge implements EdgeData {
         this.Src=Src;
         this.Weight=Weight;
         this.Dest=Dest;
-        key=new Vector<Integer>(2);
+        key=new ArrayList<Integer>(2);
         key.add(Src);
         key.add(Dest);
         this.key=key;
@@ -33,7 +35,7 @@ public class MyEdge implements EdgeData {
         this.Src=ot.Src;
         this.Weight=ot.Weight;
         this.Dest=ot.Dest;
-        key =new Vector<Integer>(2);
+        key =new ArrayList<Integer>(2);
         key.add(this.Src);
         key.add(this.Dest);
         this.key = key;

@@ -23,7 +23,7 @@ public class MyGraph extends JFrame {
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int)size.width;
         int height = (int)size.height;
-        this.setSize(height/2,height/2);
+        this.setSize(width/2,height/2);
 //        this.add(new GraphP());
         this.setVisible(true);
     }
@@ -108,12 +108,12 @@ public class MyGraph extends JFrame {
                     g.fillOval((int)x,(int)y,20,20);
                     g.setColor(new Color(0, 0, 0));
                     //g.setPaintMode();
-                    g.drawString(coord,(int)x,(int)(y));
+                  //  g.drawString(coord,(int)x,(int)(y));
                 }
                 Iterator<EdgeData> eiter = g1.getGraph().edgeIter();
                 while(eiter.hasNext()){
                     EdgeData e = eiter.next();
-                    String weight = ""+(int)e.getWeight();
+                  //  String weight = ""+(int)e.getWeight();
                     double srcx = (g1.getGraph().getNode(e.getSrc()).getLocation().x()-minx)*scalex;
                     double srcy = (g1.getGraph().getNode(e.getSrc()).getLocation().y()-miny)*scaley;
                     double destx = (g1.getGraph().getNode(e.getDest()).getLocation().x()-minx)*scalex;
@@ -137,7 +137,7 @@ public class MyGraph extends JFrame {
                     y1 = (int)srcy+(int)(scaley/scalefactor1);
                     x2 = (int)destx+(int)(scalex/scalefactor1);
                     y2 = (int)desty+(int)(scaley/scalefactor1);
-                    g.drawString(weight, (x1+x2)/2,(y2+y1)/2);
+                 //   g.drawString(weight, (x1+x2)/2,(y2+y1)/2);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
