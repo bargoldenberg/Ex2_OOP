@@ -122,6 +122,8 @@ class MyDWG_AlgoTest {
         testGraph.removeEdge(3,0);
         g1.init(testGraph);
         assertFalse(g1.isConnected());
+        g1.load("/home/bar/Desktop/Ex2_OOP/Ex2_OOP/data/G3.json");
+        System.out.println(g1.isConnected());
     }
 
     @Test
@@ -235,7 +237,8 @@ class MyDWG_AlgoTest {
 
     @Test
     void center() throws Exception {
-        Point3D a = new Point3D(0,0,0);
+        Point3D a = new Point3D(0,+
+                0,0);
         Point3D b = new Point3D(1,3,0);
         Point3D c = new Point3D(4,2,0);
         Point3D d = new Point3D(6,1,0);
@@ -259,8 +262,10 @@ class MyDWG_AlgoTest {
         testGraph.connect(3,0,1);
 //        testGraph.connect(0,0,1);      ******FOR TEST LATER **********
         MyDWG_Algo g1 = new MyDWG_Algo();
-        g1.init(testGraph);
-        assertEquals(g1.center().getKey(),node3.getKey());
+        g1.init(g1.generateGraph(10,1));
+        //assertEquals(g1.center().getKey(),node3.getKey());
+        System.out.println(g1.center());
+
     }
 
     @Test
@@ -390,13 +395,13 @@ class MyDWG_AlgoTest {
     void generateGraph() throws Exception {
         MyDWG a = new MyDWG();
         MyDWG_Algo at = new MyDWG_Algo();
-        at.init(at.generateGraph(1000));
+        at.init(at.generateGraph(1000,1));
         assertTrue(at.isConnected());
     }
     @Test
     void testGraphAlgo() throws Exception {
         MyDWG_Algo testGraphAlgo = new MyDWG_Algo();
-        MyDWG g2 = testGraphAlgo.generateGraph(1000);
+        MyDWG g2 = testGraphAlgo.generateGraph(1000,1);
         testGraphAlgo.init(g2);
         //System.out.println(testGraphAlgo.center());
         System.out.println(testGraphAlgo.center());

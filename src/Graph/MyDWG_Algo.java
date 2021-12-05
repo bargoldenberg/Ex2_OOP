@@ -211,12 +211,61 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
 
     }
 
+    private HashMap<Integer, Double> shortestPathMap(int src) {
+        HashMap<Integer, Double> distance = new HashMap<Integer, Double>();
+        HashMap<Integer, Integer> prev = new HashMap<Integer, Integer>();
+        PriorityQueue<Integer> nodesQueue = new PriorityQueue<Integer>();
+        List<NodeData> path = new ArrayList<NodeData>();
+
+        for (Map.Entry<Integer, MyNode> node : this.g.V.entrySet()) {
+            if (node.getKey() == src) {
+                distance.put(node.getKey(), 0.0);
+                nodesQueue.add(node.getKey());
+            } else {
+                distance.put(node.getKey(), Double.MAX_VALUE);
+            }
+            prev.put(node.getKey(), null);
+        }
+
+        while (!nodesQueue.isEmpty()) {
+            int smallest = nodesQueue.poll();
+            // check for breaking the loop, IF we got to the destination.
+            //if (smallest == dest) {
+            // while (prev.get(smallest) != null) {
+            //     path.add(this.g.V.get(smallest));
+            //      smallest = prev.get(smallest);
+            //   }
+            path.add(this.g.V.get(smallest));
+            Collections.reverse(path);
+
+            if (distance.get(smallest) == Double.MAX_VALUE) {
+                break;
+            } else {
+                for (int i = 0; i < this.g.V.get(smallest).getEdgeOutList().size(); i++) {
+                    Vector<Integer> tmpKey = new Vector<Integer>(2);
+                    tmpKey.add(smallest);
+                    tmpKey.add(this.g.V.get(this.g.V.get(smallest).getEdgeOutList().get(i)).getKey());
+                    EdgeData neighborEdge = this.g.E.get(tmpKey);
+                    double dis = distance.get(smallest) + neighborEdge.getWeight();
+                    if (dis < distance.get(neighborEdge.getDest())) {
+                        distance.put(neighborEdge.getDest(), dis);
+                        prev.put(neighborEdge.getDest(), smallest);
+
+                        if (!nodesQueue.contains(neighborEdge.getDest())) {
+                            nodesQueue.add(neighborEdge.getDest());
+                        }
+                    }
+                }
+            }
+        }
+
+        return distance;
+
+
+    }
+
     @Override
     public NodeData center() throws Exception {
-        return centerDIJKSTRA();
-    }
-
-    public NodeData centerDIJKSTRA() throws Exception {
         Iterator<NodeData> it1 = this.g.nodeIter();
         int count = 0;
         double eccentricity = 0;
@@ -224,6 +273,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         ArrayList<double[]> sumofdistance = new ArrayList<>();
         while (it1.hasNext()) {
             NodeData a = it1.next();
+            HashMap<Integer, Double> distance = shortestPathMap(a.getKey());
             Iterator<NodeData> it2 = this.g.nodeIter();
             eccentricity = 0;
             while (it2.hasNext()) {
@@ -231,7 +281,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
                 if (a.getKey() == b.getKey()) {
                     continue;
                 }
-                dist = this.shortestPathDist(a.getKey(), b.getKey());
+                dist = distance.get(b.getKey());
                 if (dist > eccentricity) {
                     eccentricity = dist;
                 }
@@ -254,44 +304,6 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         }
     }
 
-    public NodeData centerFWALGO() throws Exception {
-        double[][] distance = FloydWarshallShortestPath();
-        Iterator<NodeData> it1 = this.g.nodeIter();
-        int count = 0;
-        double eccentricity = 0;
-        double dist = 0;
-        ArrayList<double[]> sumofdistance = new ArrayList<>();
-        while (it1.hasNext()) {
-            NodeData a = it1.next();
-            Iterator<NodeData> it2 = this.g.nodeIter();
-            eccentricity = 0;
-            while (it2.hasNext()) {
-                NodeData b = it2.next();
-                if (a.getKey() == b.getKey()) {
-                    continue;
-                }
-                dist = distance[a.getKey()][b.getKey()];
-                if (dist > eccentricity) {
-                    eccentricity = dist;
-                }
-            }
-            double[] arr = {eccentricity, a.getKey()};
-            sumofdistance.add(arr);
-        }
-        double min = Double.MAX_VALUE;
-        int key = Integer.MAX_VALUE;
-        for (int i = 0; i < sumofdistance.size(); i++) {
-            if (sumofdistance.get(i)[0] < min) {
-                min = sumofdistance.get(i)[0];
-                key = (int) sumofdistance.get(i)[1];
-            }
-        }
-        if (!this.isConnected()) {
-            return null;
-        } else {
-            return this.getGraph().getNode(key);
-        }
-    }
 
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
@@ -372,8 +384,9 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         try {
             Gson gson = new Gson();
             FileReader fileReader = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);;
-            fromJsonToGraph graph = gson.fromJson(bufferedReader,fromJsonToGraph.class);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            ;
+            fromJsonToGraph graph = gson.fromJson(bufferedReader, fromJsonToGraph.class);
             MyDWG myGraph = new MyDWG(graph);
             init(new MyDWG(graph));
             return true;
@@ -382,13 +395,14 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         }
     }
 
-    public MyDWG generateGraph(int nodes) {
+    public MyDWG generateGraph(int nodes,int seed) {
         MyDWG g = new MyDWG();
+        Random ra = new Random(seed);
         for (int i = 0; i < nodes; i++) {
-            Point3D p = new Point3D((int) (Math.random() * 10), (int) (Math.random() * 10), (int) (Math.random() * 10));
-            int key = (int) ((Math.random() * (nodes)));
+            Point3D p = new Point3D( ra.nextInt(nodes),  ra.nextInt(nodes),  ra.nextInt(nodes));
+            int key = (ra.nextInt(nodes));
             while (g.V.containsKey(key)) {
-                key = (int) ((Math.random() * (nodes)));
+                key = (ra.nextInt(nodes));
             }
             MyNode n = new MyNode(p, key);
             g.addNode(n);
@@ -398,42 +412,19 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             for (int j = 0; j < 9; j++) {
                 Vector<Integer> key = new Vector<>(2);
                 key.add(a.getKey());
-                int id = g.V.get((int) (Math.random() * (nodes))).getKey();
+                int id = g.V.get(ra.nextInt(nodes)).getKey();
                 key.add(id);
                 while (g.E.containsKey(key) || a.getKey() == id) {
                     key.remove(1);
-                    id = g.V.get((int) (Math.random() * (nodes))).getKey();
+                    id = g.V.get(ra.nextInt(nodes)).getKey();
                     key.add(id);
                 }
-                g.connect(a.getKey(), id, Math.random() * 1000);
+                g.connect(a.getKey(), id, ra.nextDouble(1000));
             }
 
         }
         return g;
     }
 
-    public double[][] FloydWarshallShortestPath() throws Exception {
-        int vertsize = this.getGraph().nodeSize();
-        double[][] graph = new double[vertsize][vertsize];
-        Iterator<EdgeData> iter = this.getGraph().edgeIter();
-        int count = 0;
-        for (int i = 0; i < graph.length; i++) {
-            for (int j = 0; j < graph.length; j++) {
-                graph[i][j] = Integer.MAX_VALUE;
-            }
-        }
-        while (iter.hasNext()) {
-            EdgeData e = iter.next();
-            graph[e.getSrc()][e.getDest()] = e.getWeight();
-        }
-        for (int k = 0; k < graph.length; k++) {
-            for (int i = 0; i < graph.length; i++) {
-                for (int j = 0; j < graph.length; j++) {
-                    graph[i][j] = Math.min(graph[i][j], graph[i][k] + graph[k][j]);
-                }
-            }
-        }
-        return graph;
-    }
 }
 // Random r = new Random(seed) (we can revisit a random sequence)

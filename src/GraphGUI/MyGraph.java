@@ -38,7 +38,7 @@ public class MyGraph extends JFrame {
         double scalefactor=1;
         double scalefactor1 = 8;
         public GraphP(MyDWG gr) throws Exception {
-            g1.init(gr);
+            g1.init(g1.generateGraph(10,1));
             setminxy();
             repaint();
         }
@@ -98,8 +98,8 @@ public class MyGraph extends JFrame {
                 while(it.hasNext()){
                     NodeData n = it.next();
                     g.setColor(new Color(11, 148, 56, 255));
-                    double x =(n.getLocation().x()-minx)*scalex*0.97+30;
-                    double y = (n.getLocation().y()-miny)*scaley*0.97+30;
+                    double x =(n.getLocation().x()-minx)*scalex*0.97;
+                    double y = (n.getLocation().y()-miny)*scaley*0.97;
                     x+=scalex/scalefactor;
                     y+=scaley/scalefactor;
                     String xs = ""+n.getLocation().x();
@@ -108,16 +108,16 @@ public class MyGraph extends JFrame {
                     g.fillOval((int)x-5,(int)y-7,20,20);
                     g.setColor(new Color(0, 0, 0));
                     //g.setPaintMode();
-                    g.drawString(coord,(int)x,(int)y-(int)scaley/2);
+                    g.drawString(coord,(int)x,(int)(y-scaley/2));
                 }
                 Iterator<EdgeData> eiter = g1.getGraph().edgeIter();
                 while(eiter.hasNext()){
                     EdgeData e = eiter.next();
                     String weight = ""+(int)e.getWeight();
-                    double srcx = (g1.getGraph().getNode(e.getSrc()).getLocation().x()-minx)*scalex+30;
-                    double srcy = (g1.getGraph().getNode(e.getSrc()).getLocation().y())*scaley+30;
-                    double destx = (g1.getGraph().getNode(e.getDest()).getLocation().x())*scalex+30;
-                    double desty = (g1.getGraph().getNode(e.getDest()).getLocation().y())*scaley+30;
+                    double srcx = (g1.getGraph().getNode(e.getSrc()).getLocation().x()-minx)*scalex;
+                    double srcy = (g1.getGraph().getNode(e.getSrc()).getLocation().y())*scaley;
+                    double destx = (g1.getGraph().getNode(e.getDest()).getLocation().x())*scalex;
+                    double desty = (g1.getGraph().getNode(e.getDest()).getLocation().y())*scaley;
                     srcx+=scalex/scalefactor;
                     srcy+=scaley/scalefactor;
                     destx+=scalex/scalefactor;
