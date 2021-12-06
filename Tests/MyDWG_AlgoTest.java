@@ -364,7 +364,7 @@ class MyDWG_AlgoTest {
         g.connect(n5.getKey(),n6.getKey(),12);
 
         MyDWG_Algo testGraphAlgo = new MyDWG_Algo();
-        testGraphAlgo.init(g);
+        testGraphAlgo.init(testGraphAlgo.generateGraph(1000,1));
         testGraphAlgo.save("1000Nodes.json");
     }
 
@@ -402,7 +402,8 @@ class MyDWG_AlgoTest {
     void generateGraph() throws Exception {
         MyDWG a = new MyDWG();
         MyDWG_Algo at = new MyDWG_Algo();
-        at.init(at.generateGraph(10000,2));
+        at.init(at.generateGraph(1000,1));
+
         System.out.println(at.center());
     }
     @Test

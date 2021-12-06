@@ -6,6 +6,8 @@ import api.NodeData;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Line2D;
@@ -15,22 +17,44 @@ import java.util.LinkedList;
 
 ///Bug Alert --
 
-public class MyGraph extends JFrame {
+public class MyGraph extends JFrame implements ActionListener {
+    JButton centerb;
+    MyDWG_Algo g1;
     public MyGraph(MyDWG gr) throws Exception {
-        this.add(new GraphP(gr));
+
+        JPanel p = new JPanel(new BorderLayout(3,1));
+        this.setContentPane(p);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        centerb = new JButton();
+        centerb.setText("Center");
+        centerb.setBounds(850,10,100,50);
+        this.add(centerb);
+        this.add(new GraphP(gr));
         //this.setResizable(false);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int)size.width;
         int height = (int)size.height;
-        this.setSize(width/2,height/2);
+        //this.setLayout( null);
+        this.setSize(width/2,width/2);
 //        this.add(new GraphP());
         this.setVisible(true);
+
+        //this.add(centerb);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource()==centerb){
+            try {
+                NodeData a = g1.center();
+                
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     public  class GraphP extends JPanel {
-
-        MyDWG_Algo g1 = new MyDWG_Algo();
         double minx;
         double miny;
         double maxx;
@@ -38,6 +62,7 @@ public class MyGraph extends JFrame {
         double scalefactor=1;
         double scalefactor1 = 8;
         public GraphP(MyDWG gr) throws Exception {
+            g1 = new MyDWG_Algo();
             g1.init(gr);
             setminxy();
             repaint();

@@ -213,7 +213,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     private HashMap<Integer, Double> shortestPathMap(int src) {
         HashMap<Integer, Double> distance = new HashMap<Integer, Double>();
         HashMap<Integer, Integer> prev = new HashMap<Integer, Integer>();
-        Queue<Integer> nodesQueue = new LinkedList<Integer>();
+        PriorityQueue<Integer> nodesQueue = new PriorityQueue<Integer>(Comparator.comparingDouble(distance::get));
         HashSet<Integer> queueset = new HashSet<Integer>();
         //List<NodeData> path = new ArrayList<NodeData>();
 
@@ -231,15 +231,6 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         while (!nodesQueue.isEmpty()) {
             int smallest = nodesQueue.poll();
             queueset.remove(smallest);
-            // check for breaking the loop, IF we got to the destination.
-            //if (smallest == dest) {
-            // while (prev.get(smallest) != null) {
-            //     path.add(this.g.V.get(smallest));
-            //      smallest = prev.get(smallest);
-            //   }
-            //path.add(this.g.V.get(smallest));
-            //Collections.reverse(path);
-
             if (distance.get(smallest) == Double.MAX_VALUE) {
                 break;
             } else {
