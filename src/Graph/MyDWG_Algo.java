@@ -283,7 +283,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public NodeData center() throws Exception {
-        Iterator<NodeData> it1 = this.g.nodeIter();
+        Iterator<NodeData> it1 = this.gr.nodeIter();
         int count = 0;
         double eccentricity = 0;
         double dist = 0;
@@ -291,7 +291,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         while (it1.hasNext()) {
             NodeData a = it1.next();
             HashMap<Integer, Double> distance = shortestPathMap(a.getKey());
-            Iterator<NodeData> it2 = this.g.nodeIter();
+            Iterator<NodeData> it2 = this.gr.nodeIter();
             eccentricity = 0;
             while (it2.hasNext()) {
                 NodeData b = it2.next();
@@ -454,7 +454,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     @Override
     public boolean save(String file) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        fromJsonToGraph graphJson = new fromJsonToGraph(this.g);
+        fromJsonToGraph graphJson = new fromJsonToGraph(this.gr);
         String json = gson.toJson(graphJson);
         try {
             FileWriter fw = new FileWriter("" + file);
