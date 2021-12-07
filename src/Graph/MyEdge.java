@@ -3,7 +3,6 @@ package Graph;
 import api.EdgeData;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 public class MyEdge implements EdgeData {
     int Src;
@@ -41,7 +40,9 @@ public class MyEdge implements EdgeData {
         this.key = key;
 
     }
-
+    public ArrayList<Integer> getKey(){
+        return this.key;
+    }
     @Override
     public int getSrc() {
         return this.Src;

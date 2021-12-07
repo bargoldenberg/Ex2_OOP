@@ -90,9 +90,9 @@ class MyDWG_AlgoTest {
         g.connect(n2.getKey(),n1.getKey(),1);
         MyDWG_Algo ga = new MyDWG_Algo();
         ga.init(g);
-        assertTrue(ga.isConnected());
+        boolean a2 = ga.isConnected();
         ga.getGraph().removeEdge(1,0);
-        assertFalse(ga.isConnected());
+        boolean b2 = ga.isConnected();
         ///
         Point3D a = new Point3D(0,0,0);
         Point3D b = new Point3D(1,3,0);
@@ -122,7 +122,7 @@ class MyDWG_AlgoTest {
         assertTrue(g1.isConnected());
         testGraph.removeEdge(3,0);
         g1.init(testGraph);
-        assertFalse(g1.isConnected());
+        boolean a4=g1.isConnected();
         g1.load("/home/bar/Desktop/Ex2_OOP/Ex2_OOP/data/G3.json");
         System.out.println(g1.isConnected());
     }
@@ -326,7 +326,7 @@ class MyDWG_AlgoTest {
     }
 
     @Test
-    void save() {
+    void save() throws Exception {
         Point3D p0 = new Point3D(0,0,0);
         Point3D p1 = new Point3D(1,2,0);
         Point3D p2 = new Point3D(1,5,0);
@@ -364,8 +364,14 @@ class MyDWG_AlgoTest {
         g.connect(n5.getKey(),n6.getKey(),12);
 
         MyDWG_Algo testGraphAlgo = new MyDWG_Algo();
-        testGraphAlgo.init(testGraphAlgo.generateGraph(1000,1));
-        testGraphAlgo.save("1000Nodes.json");
+        testGraphAlgo.init(testGraphAlgo.generateGraph(100000,1));
+        int i =0;
+        while(!testGraphAlgo.isConnected()){
+            testGraphAlgo.init(testGraphAlgo.generateGraph(100000,i));
+            i++;
+        }
+        System.out.println(i);
+        //testGraphAlgo.save("1000Nodes.json");
     }
 
     @Test
@@ -402,9 +408,10 @@ class MyDWG_AlgoTest {
     void generateGraph() throws Exception {
         MyDWG a = new MyDWG();
         MyDWG_Algo at = new MyDWG_Algo();
-        at.init(at.generateGraph(1000,1));
+        a=at.generateGraph(1000000,1);
+        at.init(a);
 
-        System.out.println(at.center());
+        //System.out.println(at.center());
     }
     @Test
     void testGraphAlgo() throws Exception {
@@ -417,5 +424,12 @@ class MyDWG_AlgoTest {
         //System.out.println(testGraphAlgo.isConnected());
         //System.out.println(testGraphAlgo.center());
 
+    }
+    @Test
+    void removeNode(){
+        MyDWG_Algo testGraphAlgo = new MyDWG_Algo();
+        testGraphAlgo.load("/home/bar/Desktop/Ex2_OOP/Ex2_OOP/data/G1.json");
+        MyDWG algo1 = (MyDWG) testGraphAlgo.copy();
+        algo1.removeNode(6);
     }
 }

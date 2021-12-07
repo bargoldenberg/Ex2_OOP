@@ -84,9 +84,14 @@ class MyDWGTest {
         g.addNode(n2);
         g.connect(n1.getKey(),n2.getKey(),2);
         Iterator<NodeData> it = g.nodeIter();
-
-            it.next();
-            g.addNode(n3);
+        it.next();
+        //it.remove();
+        it.next();
+        g.addNode(n3);
+        Iterator<NodeData> it2 = g.nodeIter();
+        while (it2.hasNext()) {
+            System.out.println(it2.next());
+        }
 
     }
 
@@ -106,16 +111,24 @@ class MyDWGTest {
 
         Iterator it = g.edgeIter();
         while(it.hasNext()) {
+
             System.out.println(it.next());
+            it.remove();
         }
-        Iterator it2 = g.edgeIter(n2.getKey());
+        Iterator it2 = g.edgeIter();
         while(it2.hasNext()) {
+
             System.out.println(it2.next());
+
         }
-        Iterator it3 = g.nodeIter();
-        while(it3.hasNext()) {
-            System.out.println(it3.next());
-        }
+//        Iterator it2 = g.edgeIter(n2.getKey());
+//        while(it2.hasNext()) {
+//            System.out.println(it2.next());
+//        }
+//        Iterator it3 = g.nodeIter();
+//        while(it3.hasNext()) {
+//            System.out.println(it3.next());
+//        }
     }
 
 
@@ -135,6 +148,7 @@ class MyDWGTest {
         g.removeNode(n1.getKey());
         assertTrue(g.getNode(n1.getKey())==null);
         assertTrue(g.getEdge(n1.getKey(),n2.getKey())==null);
+
     }
 
     @Test

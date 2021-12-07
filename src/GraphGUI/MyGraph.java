@@ -6,12 +6,9 @@ import api.NodeData;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
+import java.awt.event.*;
+import java.awt.geom.*;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -19,37 +16,95 @@ import java.util.LinkedList;
 
 public class MyGraph extends JFrame implements ActionListener {
     JButton centerb;
+    JButton shortestpathb;
+    JButton removenode;
+    JTextField src;
+    JTextField dst;
+    JTextField node;
     MyDWG_Algo g1;
+    MyDWG_Algo og;
+    int source;
+    int destination;
+    NodeData center;
+    ArrayList<NodeData> path;
+    int centercounter=0;
     public MyGraph(MyDWG gr) throws Exception {
 
         JPanel p = new JPanel(new BorderLayout(3,1));
+
+        //src.
         this.setContentPane(p);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         centerb = new JButton();
+        src = new JTextField();
+        dst = new JTextField();
+        node = new JTextField();
+        removenode = new JButton();
+        shortestpathb = new JButton();
+        src.setBounds(700,35,75,25);
+        dst.setBounds(775,35,75,25);
+        node.setBounds(800,120,150,25);
+        shortestpathb.setText("Shortest Path");
+        shortestpathb.setBounds(700,10,150,25);
+        removenode.setText("Remove Node");
+        removenode.setBounds(800,70,150,50);
+        this.add(shortestpathb);
+        this.add(src);
+        this.add(dst);
+        this.add(node);
+        //src.addActionListener(this);
+        //dst.addActionListener(this);
+        shortestpathb.addActionListener(this);
         centerb.setText("Center");
         centerb.setBounds(850,10,100,50);
+        centerb.addActionListener(this);
+        removenode.addActionListener(this);
         this.add(centerb);
+        this.add(removenode);
         this.add(new GraphP(gr));
-        //this.setResizable(false);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int)size.width;
         int height = (int)size.height;
-        //this.setLayout( null);
         this.setSize(width/2,width/2);
-//        this.add(new GraphP());
         this.setVisible(true);
-
-        //this.add(centerb);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==centerb){
             try {
-                NodeData a = g1.center();
-                
+                if(centercounter%2==0) {
+                    NodeData a = g1.center();
+                    this.center = a;
+                    centercounter++;
+                    repaint();
+                }else{
+                    this.center=null;
+                    centercounter++;
+                    repaint();
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
+            }
+        }else if(e.getSource()==shortestpathb) {
+            if (src.getText().length()==0|| dst.getText().length()==0) {
+                path = null;
+                System.out.println("hi");
+                repaint();
+            } else {
+                source = Integer.parseInt(src.getText());
+                destination = Integer.parseInt(dst.getText());
+                path = (ArrayList<NodeData>) g1.shortestPath(source, destination);
+                repaint();
+            }
+        }else if(e.getSource()==removenode){
+            if(node.getText().length()==0){
+                g1.init(og.copy());
+                repaint();
+            }else {
+                int rmvnode = Integer.parseInt(node.getText());
+                this.g1.getGraph().removeNode(rmvnode);
+                repaint();
             }
         }
     }
@@ -63,7 +118,9 @@ public class MyGraph extends JFrame implements ActionListener {
         double scalefactor1 = 8;
         public GraphP(MyDWG gr) throws Exception {
             g1 = new MyDWG_Algo();
+            og = new MyDWG_Algo();
             g1.init(gr);
+            og.init(g1.copy());
             setminxy();
             repaint();
         }
@@ -105,7 +162,7 @@ public class MyGraph extends JFrame implements ActionListener {
 
         }
 
-        @Override
+
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             double ABSx = Math.abs(minx-maxx);
@@ -123,37 +180,39 @@ public class MyGraph extends JFrame implements ActionListener {
                 while(it.hasNext()){
                     NodeData n = it.next();
                     g.setColor(new Color(11, 148, 56, 255));
-                    double x =(n.getLocation().x()-minx)*scalex*0.97;
-                    double y = (n.getLocation().y()-miny)*scaley*0.97;
-                //    x+=scalex/scalefactor;
-                //    y+=scaley/scalefactor;
+                    double x =(n.getLocation().x()-minx)*scalex*0.97+30;
+                    double y = (n.getLocation().y()-miny)*scaley*0.97+30;
                     String xs = ""+n.getLocation().x();
                     String ys = ""+n.getLocation().y();
                     String coord = "("+xs+","+ys+")"+", id:"+n.getKey();
-                    g.fillOval((int)x,(int)y,20,20);
+                    g.fillOval((int)x-2,(int)y-2,20,20);
                     g.setColor(new Color(0, 0, 0));
-                    //g.setPaintMode();
-                  //  g.drawString(coord,(int)x,(int)(y));
+                    Font f = new Font("ariel", Font.BOLD, 16);
+                    g.setFont(f);
+                    g.drawString(n.getKey()+"",(int)x,(int)y-10);
+
+                }
+                if(center!=null){
+                    double x = (center.getLocation().x()-minx)*scalex*0.97+30;
+                    double y = (center.getLocation().y()-miny)*scaley*0.97+30;
+                    g.setColor(new Color(255, 0, 243));
+                    g.fillOval((int)x-2,(int)y-2,20,20);
+                    g.setColor(new Color(0, 0, 0));
+                    g.drawString("CENTER",(int)x-10,(int)y+50);
                 }
                 Iterator<EdgeData> eiter = g1.getGraph().edgeIter();
                 while(eiter.hasNext()){
                     EdgeData e = eiter.next();
-                  //  String weight = ""+(int)e.getWeight();
-                    double srcx = (g1.getGraph().getNode(e.getSrc()).getLocation().x()-minx)*scalex;
-                    double srcy = (g1.getGraph().getNode(e.getSrc()).getLocation().y()-miny)*scaley;
-                    double destx = (g1.getGraph().getNode(e.getDest()).getLocation().x()-minx)*scalex;
-                    double desty = (g1.getGraph().getNode(e.getDest()).getLocation().y()-miny)*scaley;
-
-                   // srcx+=scalex/scalefactor;
-                   // srcy+=scaley/scalefactor;
-//                    destx+=scalex/scalefactor;
-//                    desty+=scaley/scalefactor;
+                    double srcx = (g1.getGraph().getNode(e.getSrc()).getLocation().x()-minx)*scalex+30;
+                    double srcy = (g1.getGraph().getNode(e.getSrc()).getLocation().y()-miny)*scaley+30;
+                    double destx = (g1.getGraph().getNode(e.getDest()).getLocation().x()-minx)*scalex+30;
+                    double desty = (g1.getGraph().getNode(e.getDest()).getLocation().y()-miny)*scaley+30;
                     g.setColor(new Color(0, 0, 0));
-                    int x1 = (int)srcx;//+(int)(scalex/scalefactor1);
-                    int y1 = (int)srcy;//+(int)(scaley/scalefactor1);
-                    int x2 = (int)destx;//+(int)(scalex/scalefactor1);
-                    int y2 = (int)desty;//+(int)(scaley/scalefactor1);
-                    //g.drawLine(x1,y1,x2,y2);
+                    int x1 = (int)srcx;
+                    int y1 = (int)srcy;
+                    int x2 = (int)destx;
+                    int y2 = (int)desty;
+                    g2.setStroke(new BasicStroke(1));
                     g2.draw(new Line2D.Double(x1, y1, x2, y2));
                     theta = Math.atan2(y2 - y1, x2 - x1);
                     g.setColor(new Color(127, 30, 30));
@@ -162,7 +221,28 @@ public class MyGraph extends JFrame implements ActionListener {
                     y1 = (int)srcy+(int)(scaley/scalefactor1);
                     x2 = (int)destx+(int)(scalex/scalefactor1);
                     y2 = (int)desty+(int)(scaley/scalefactor1);
-                 //   g.drawString(weight, (x1+x2)/2,(y2+y1)/2);
+                }
+                if(path!=null){
+                    for(int i =0;i<path.size()-1;i++){
+                        System.out.println(path.size());
+                        EdgeData curredge = g1.getGraph().getEdge(path.get(i).getKey(),path.get(i+1).getKey());
+                        double srcx = (g1.getGraph().getNode(curredge.getSrc()).getLocation().x()-minx)*scalex+30;
+                        double srcy = (g1.getGraph().getNode(curredge.getSrc()).getLocation().y()-miny)*scaley+30;
+                        double destx = (g1.getGraph().getNode(curredge.getDest()).getLocation().x()-minx)*scalex+30;
+                        double desty = (g1.getGraph().getNode(curredge.getDest()).getLocation().y()-miny)*scaley+30;
+                        int x1 = (int)srcx;
+                        int y1 = (int)srcy;
+                        int x2 = (int)destx;
+                        int y2 = (int)desty;
+                        System.out.println(x1);
+                        System.out.println(x2);
+                        g.setColor(new Color(65, 255, 0));
+                        g2.draw(new Line2D.Double(x1, y1, x2, y2));
+                        g.setColor(new Color(0, 0, 0));
+                        ((Graphics2D) g).setStroke(new BasicStroke(5));
+                        g2.drawString(curredge.getWeight()+"",(x1+x2)/2,(y1+y2)/2);
+
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -173,10 +253,11 @@ public class MyGraph extends JFrame implements ActionListener {
     // taken from https://coderanch.com/t/339505/java/drawing-arrows
     private void drawArrow(Graphics2D g2, double theta, double x0, double y0)
     {
-        double barb =10;
+        double barb =20;
         double phi = Math.PI/6;
         double x = x0 - barb * Math.cos(theta + phi);
         double y = y0 - barb * Math.sin(theta + phi);
+        g2.setStroke(new BasicStroke(3));
         g2.draw(new Line2D.Double(x0, y0, x, y));
         x = x0 - barb * Math.cos(theta - phi);
         y = y0 - barb * Math.sin(theta - phi);
