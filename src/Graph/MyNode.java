@@ -1,5 +1,6 @@
 package Graph;
 
+import api.EdgeData;
 import api.GeoLocation;
 import api.NodeData;
 import java.util.ArrayList;
@@ -107,25 +108,25 @@ public class MyNode implements NodeData {
         return this.edgesOut;
     }
 
-    public boolean addEdgelist(MyEdge edge) {
-        if(edge.Src == this.Key){
+    public boolean addEdgelist(EdgeData edge) {
+        if(edge.getSrc() == this.Key){
             if(this.edgesOut == null){
                 this.edgesOut = new ArrayList<Integer>();
             }
             ArrayList<Integer> key = new ArrayList<Integer>();
-            key.add(edge.Src);
-            key.add(edge.Dest);
-            this.edgesOut.add(edge.Dest);
+            key.add(edge.getSrc());
+            key.add(edge.getDest());
+            this.edgesOut.add(edge.getDest());
             return true;
         }
-        else if(edge.Dest == this.Key){
+        else if(edge.getDest() == this.Key){
             if(this.edgesIn == null){
                 this.edgesIn = new ArrayList<Integer>();
             }
             ArrayList<Integer> key = new ArrayList<Integer>();
-            key.add(edge.Src);
-            key.add(edge.Dest);
-            this.edgesIn.add(edge.Src);
+            key.add(edge.getDest());
+            key.add(edge.getDest());
+            this.edgesIn.add(edge.getSrc());
             return true;
         }
         else{

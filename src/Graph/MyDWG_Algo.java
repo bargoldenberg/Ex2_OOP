@@ -15,32 +15,39 @@ import java.util.*;
 
 
 public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
-    MyDWG g;
+    MyDWG gr;
 
     @Override
     public void init(DirectedWeightedGraph g) {
-       this.g = (MyDWG) g;
-//        try {
-//            Iterator<NodeData> nodeiter = g.nodeIter();
-//            while(nodeiter.hasNext()){
-//
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        gr = new MyDWG();
+        try {
+            Iterator<NodeData> nodeiter = g.nodeIter();
+            while(nodeiter.hasNext()){
+                this.gr.addNode(nodeiter.next());
+            }
+            Iterator<EdgeData> edgeiter = g.edgeIter();
+            while(edgeiter.hasNext()){
+                EdgeData edge = edgeiter.next();
+                this.gr.connectinit((MyEdge)edge);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 
     @Override
     public DirectedWeightedGraph getGraph() {
-        return this.g;
+        return this.gr;
     }
 
     @Override
     public DirectedWeightedGraph copy() {
-        MyDWG cop = new MyDWG(this.g);
+        MyDWG cop = new MyDWG(this.gr);
         return cop;
     }
+
 
     public void BFS(DirectedWeightedGraph g, int node, HashMap<Integer, Boolean> visited) throws Exception {
         LinkedList<Integer> queue = new LinkedList<Integer>();
@@ -80,21 +87,29 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         while (init2.hasNext()) {
             visited.put(init2.next().getKey(), false);
         }
-        MyDWG reversedgraph = (MyDWG) this.copy();
+        MyDWG reversedgraph = new MyDWG();
+        Iterator<NodeData> nodeiterator = this.getGraph().nodeIter();
+        while(nodeiterator.hasNext()){
+            MyNode currnode =new MyNode(nodeiterator.next());
+            currnode.getEdgeOutList().clear();
+            currnode.getEdgeInList().clear();
+            reversedgraph.addNode(currnode);
+        }
         Iterator<EdgeData> edgeiterator = this.getGraph().edgeIter();
         while (edgeiterator.hasNext()) {
             EdgeData originalEdge = edgeiterator.next();
             MyEdge reversedEdge = new MyEdge(originalEdge.getDest(), originalEdge.getWeight(), originalEdge.getSrc());
-            boolean condition1 = reversedgraph.E.containsValue(originalEdge);
+           // boolean condition1 = reversedgraph.E.containsValue(originalEdge);
             ArrayList<Integer> key = new ArrayList<Integer>();
             key.add(reversedEdge.getSrc());
             key.add(reversedEdge.getDest());
-            boolean condition2 = reversedgraph.E.containsKey(key);
-            if (condition1 || condition2) {
+            //boolean condition2 = reversedgraph.E.containsKey(key);
+            if (false) {
                 continue;
+            } else {
+                //reversedgraph.removeEdge(originalEdge.getSrc(), originalEdge.getDest());
+                reversedgraph.connect(originalEdge.getDest(), originalEdge.getSrc(), originalEdge.getWeight());
             }
-            reversedgraph.removeEdge(originalEdge.getSrc(), originalEdge.getDest());
-            reversedgraph.connect(originalEdge.getDest(), originalEdge.getSrc(), originalEdge.getWeight());
         }
         BFS(reversedgraph, v.getKey(), visited);
         Iterator<NodeData> checkfalse2 = this.getGraph().nodeIter();
@@ -110,10 +125,10 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     public double shortestPathDist(int src, int dest) {
         HashMap<Integer, Double> distance = new HashMap<Integer, Double>();
         HashMap<Integer, Integer> prev = new HashMap<Integer, Integer>();
-        PriorityQueue<Integer> nodesQueue = new PriorityQueue<Integer>();
+        PriorityQueue<Integer> nodesQueue = new PriorityQueue<Integer>((a,b)-> (int) (distance.get(a)-distance.get(b)));
         List<NodeData> path = new ArrayList<NodeData>();
 
-        for (Map.Entry<Integer, MyNode> node : this.g.V.entrySet()) {
+        for (Map.Entry<Integer, MyNode> node : this.gr.V.entrySet()) {
             if (node.getKey() == src) {
                 distance.put(node.getKey(), 0.0);
                 nodesQueue.add(node.getKey());
@@ -128,19 +143,19 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             // check for breaking the loop, IF we got to the destination.
             if (smallest == dest) {
                 while (prev.get(smallest) != null) {
-                    path.add(this.g.V.get(smallest));
+                    path.add(this.gr.V.get(smallest));
                     smallest = prev.get(smallest);
                 }
-                path.add(this.g.V.get(smallest));
+                path.add(this.gr.V.get(smallest));
 
             } else if (distance.get(smallest) == Double.MAX_VALUE) {
                 break;
             } else {
-                for (int i = 0; i < this.g.V.get(smallest).getEdgeOutList().size(); i++) {
+                for (int i = 0; i < this.gr.V.get(smallest).getEdgeOutList().size(); i++) {
                     ArrayList<Integer> tmpKey = new ArrayList<Integer>(2);
                     tmpKey.add(smallest);
-                    tmpKey.add(this.g.V.get(this.g.V.get(smallest).getEdgeOutList().get(i)).getKey());
-                    EdgeData neighborEdge = this.g.E.get(tmpKey);
+                    tmpKey.add(this.gr.V.get(this.gr.V.get(smallest).getEdgeOutList().get(i)).getKey());
+                    EdgeData neighborEdge = this.gr.E.get(tmpKey);
                     double dis = distance.get(smallest) + neighborEdge.getWeight();
                     if (dis < distance.get(neighborEdge.getDest())) {
                         distance.put(neighborEdge.getDest(), dis);
@@ -166,10 +181,10 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     public List<NodeData> shortestPath(int src, int dest) {
         HashMap<Integer, Double> distance = new HashMap<Integer, Double>();
         HashMap<Integer, Integer> prev = new HashMap<Integer, Integer>();
-        PriorityQueue<Integer> nodesQueue = new PriorityQueue<Integer>();
+        PriorityQueue<Integer> nodesQueue = new PriorityQueue<Integer>((a,b)-> (int) (distance.get(a)-distance.get(b)));
         List<NodeData> path = new ArrayList<NodeData>();
 
-        for (Map.Entry<Integer, MyNode> node : this.g.V.entrySet()) {
+        for (Map.Entry<Integer, MyNode> node : this.gr.V.entrySet()) {
             if (node.getKey() == src) {
                 distance.put(node.getKey(), 0.0);
                 nodesQueue.add(node.getKey());
@@ -184,20 +199,20 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             // check for breaking the loop, IF we got to the destination.
             if (smallest == dest) {
                 while (prev.get(smallest) != null) {
-                    path.add(this.g.V.get(smallest));
+                    path.add(this.gr.V.get(smallest));
                     smallest = prev.get(smallest);
                 }
-                path.add(this.g.V.get(smallest));
+                path.add(this.gr.V.get(smallest));
                 Collections.reverse(path);
 
             } else if (distance.get(smallest) == Double.MAX_VALUE) {
                 break;
             } else {
-                for (int i = 0; i < this.g.V.get(smallest).getEdgeOutList().size(); i++) {
+                for (int i = 0; i < this.gr.V.get(smallest).getEdgeOutList().size(); i++) {
                     ArrayList<Integer> tmpKey = new ArrayList<Integer>(2);
                     tmpKey.add(smallest);
-                    tmpKey.add(this.g.V.get(smallest).getEdgeOutList().get(i));
-                    MyEdge neighborEdge = this.g.E.get(tmpKey);
+                    tmpKey.add(this.gr.V.get(smallest).getEdgeOutList().get(i));
+                    MyEdge neighborEdge = this.gr.E.get(tmpKey);
                     double dis = distance.get(smallest) + neighborEdge.getWeight();
                     if (dis < distance.get(neighborEdge.getDest())) {
                         distance.put(neighborEdge.getDest(), dis);
@@ -221,11 +236,11 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     private HashMap<Integer, Double> shortestPathMap(int src) {
         HashMap<Integer, Double> distance = new HashMap<Integer, Double>();
         HashMap<Integer, Integer> prev = new HashMap<Integer, Integer>();
-        PriorityQueue<Integer> nodesQueue = new PriorityQueue<Integer>(Comparator.comparingDouble(distance::get));
+        PriorityQueue<Integer> nodesQueue = new PriorityQueue<Integer>((a,b)-> (int) (distance.get(a)-distance.get(b)));
         HashSet<Integer> queueset = new HashSet<Integer>();
         //List<NodeData> path = new ArrayList<NodeData>();
 
-        for (Map.Entry<Integer, MyNode> node : this.g.V.entrySet()) {
+        for (Map.Entry<Integer, MyNode> node : this.gr.V.entrySet()) {
             if (node.getKey() == src) {
                 distance.put(node.getKey(), 0.0);
                 nodesQueue.add(node.getKey());
@@ -242,11 +257,11 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             if (distance.get(smallest) == Double.MAX_VALUE) {
                 break;
             } else {
-                for (int i = 0; i < this.g.V.get(smallest).getEdgeOutList().size(); i++) {
+                for (int i = 0; i < this.gr.V.get(smallest).getEdgeOutList().size(); i++) {
                     ArrayList<Integer> tmpKey = new ArrayList<Integer>(2);
                     tmpKey.add(smallest);
-                    tmpKey.add(this.g.V.get(this.g.V.get(smallest).getEdgeOutList().get(i)).getKey());
-                    EdgeData neighborEdge = this.g.E.get(tmpKey);
+                    tmpKey.add(this.gr.V.get(this.gr.V.get(smallest).getEdgeOutList().get(i)).getKey());
+                    EdgeData neighborEdge = this.gr.E.get(tmpKey);
                     double dis = distance.get(smallest) + neighborEdge.getWeight();
                     if (dis < distance.get(neighborEdge.getDest())) {
                         distance.put(neighborEdge.getDest(), dis);
@@ -268,7 +283,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public NodeData center() throws Exception {
-        Iterator<NodeData> it1 = this.g.nodeIter();
+        Iterator<NodeData> it1 = this.gr.nodeIter();
         int count = 0;
         double eccentricity = 0;
         double dist = 0;
@@ -276,7 +291,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         while (it1.hasNext()) {
             NodeData a = it1.next();
             HashMap<Integer, Double> distance = shortestPathMap(a.getKey());
-            Iterator<NodeData> it2 = this.g.nodeIter();
+            Iterator<NodeData> it2 = this.gr.nodeIter();
             eccentricity = 0;
             while (it2.hasNext()) {
                 NodeData b = it2.next();
@@ -371,6 +386,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
+
         /**
          * Implementing with Greedy Algorithm.
          */
@@ -379,6 +395,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         double[] distance = new double[cities.size()];
         NodeData ptr = cities.get(curr);    ///__ FOR NOW WE START WITH 0, NEXT WE WILL FIND THE OPTIMAL STARTING POINT__
         rightOrder.add(ptr);
+
         while (counter < cities.size()) {
             ptr = cities.get(curr);
             tmp = curr;
@@ -407,6 +424,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         }
         return rightOrder;
     }
+
     /**
      * Helper for tcp, return the smallest number (index) from array.
      *
@@ -436,7 +454,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     @Override
     public boolean save(String file) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        fromJsonToGraph graphJson = new fromJsonToGraph(this.g);
+        fromJsonToGraph graphJson = new fromJsonToGraph(this.gr);
         String json = gson.toJson(graphJson);
         try {
             FileWriter fw = new FileWriter("" + file);
@@ -454,6 +472,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             Gson gson = new Gson();
             FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
+            ;
             fromJsonToGraph graph = gson.fromJson(bufferedReader, fromJsonToGraph.class);
             MyDWG myGraph = new MyDWG(graph);
             init(new MyDWG(graph));
@@ -494,3 +513,4 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         return g;
     }
 }
+// Random r = new Random(seed) (we can revisit a random sequence)

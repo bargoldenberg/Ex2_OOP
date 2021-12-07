@@ -5,6 +5,7 @@ import api.EdgeData;
 import api.NodeData;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 
 public class MyDWG implements DirectedWeightedGraph {
@@ -107,13 +108,24 @@ public class MyDWG implements DirectedWeightedGraph {
         E.put(edge.key,edge);
         this.MC++;
     }
+    public void connectinit(EdgeData edge){
+        V.get(edge.getSrc()).addEdgelist(edge);
+        V.get(edge.getDest()).addEdgelist(edge);
+        ArrayList<Integer> key = new ArrayList<Integer>(2);
+        key.add(edge.getSrc());
+        key.add(edge.getDest());
+        E.put(key, (MyEdge) edge);
+        this.MC++;
+    }
 
     @Override
     public Iterator<NodeData> nodeIter(){
+
         int modecounter = this.MC;
         HashMap<Integer, NodeData> a = (HashMap<Integer, NodeData>) this.V.clone();
         Iterator<NodeData> itclone = a.values().iterator();
         Iterator<NodeData> it = new Iterator<NodeData>() {
+            NodeData node;
             @Override
             public boolean hasNext() {
                 return itclone.hasNext();
@@ -130,9 +142,24 @@ public class MyDWG implements DirectedWeightedGraph {
 
                     }
                 } else {
-                    return itclone.next();
+                    node = itclone.next();
+                    return node;
                 }
                 throw new RuntimeException();
+            }
+            public void remove() {
+                int outsize = V.get(node.getKey()).getEdgeOutList().size();
+                int insize = V.get(node.getKey()).getEdgeInList().size();
+                for(int i=0; i<outsize;i++){
+                    removeEdge(node.getKey(),V.get(node.getKey()).getEdgeOutList().get(0));
+                }
+                for(int i=0; i<insize;i++){
+                    removeEdge(V.get(node.getKey()).getEdgeInList().get(0),node.getKey());
+                }
+
+            }
+            public void forEachRemaining(Consumer<? super NodeData> action) {
+                itclone.forEachRemaining(action);
             }
         };
         return it;
@@ -141,9 +168,11 @@ public class MyDWG implements DirectedWeightedGraph {
     @Override
     public Iterator<EdgeData> edgeIter() throws Exception {
         int modecounter = this.MC;
+
         HashMap<ArrayList<Integer>, EdgeData> a = (HashMap<ArrayList<Integer>, EdgeData>) this.E.clone();
         Iterator<EdgeData> itclone = a.values().iterator();
         Iterator<EdgeData> it = new Iterator<EdgeData>() {
+            EdgeData edge;
             @Override
             public boolean hasNext() {
                 return itclone.hasNext();
@@ -160,9 +189,23 @@ public class MyDWG implements DirectedWeightedGraph {
 
                     }
                 } else {
-                    return itclone.next();
+                    edge = itclone.next();
+                    return edge;
                 }
                 throw new RuntimeException();
+            }
+            @Override
+            public void remove() {
+                V.get(edge.getSrc()).removeEdgelist(edge.getSrc(),edge.getDest());
+                V.get(edge.getDest()).removeEdgelist(edge.getSrc(),edge.getDest());
+                ArrayList<Integer> key= new ArrayList<Integer>(2);
+                key.add(edge.getSrc());
+                key.add(edge.getDest());
+                E.remove(key);
+            }
+            @Override
+            public void forEachRemaining(Consumer<? super EdgeData> action) {
+                itclone.forEachRemaining(action);
             }
         };
         return it;
@@ -207,11 +250,13 @@ public class MyDWG implements DirectedWeightedGraph {
 
     @Override
     public NodeData removeNode(int key) {
-        for(int i=0; i<V.get(key).getEdgeOutList().size();i++){
-            removeEdge(key,V.get(key).getEdgeOutList().get(i));
+        int outsize = V.get(key).getEdgeOutList().size();
+        int insize = V.get(key).getEdgeInList().size();
+        for(int i=0; i<outsize;i++){
+            removeEdge(key,V.get(key).getEdgeOutList().get(0));
         }
-        for(int i=0; i<V.get(key).getEdgeInList().size();i++){
-            removeEdge(V.get(key).getEdgeInList().get(i),key);
+        for(int i=0; i<insize;i++){
+            removeEdge(V.get(key).getEdgeInList().get(0),key);
         }
         this.MC++;
         return V.remove(key);
