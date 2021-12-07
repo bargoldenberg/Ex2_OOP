@@ -51,7 +51,9 @@ public class MyNode implements NodeData {
     public int getKey() {
         return this.Key;
     }
-
+    public void setKey(int key){
+        this.Key = key;
+    }
     @Override
     public GeoLocation getLocation() {
         return this.Location;
