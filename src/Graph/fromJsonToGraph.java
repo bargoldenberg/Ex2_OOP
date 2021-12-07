@@ -12,7 +12,6 @@ public class fromJsonToGraph {
     ArrayList<edgeConverter> Edges;
     ArrayList<nodeConverter> Nodes;
 
-
     public fromJsonToGraph(MyDWG g){
         this.Edges = new ArrayList<edgeConverter>();
         this.Nodes = new ArrayList<nodeConverter>();
@@ -37,5 +36,4 @@ public class fromJsonToGraph {
         }
         return str;
     }
-
 }

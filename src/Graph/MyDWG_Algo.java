@@ -6,8 +6,11 @@ import api.EdgeData;
 import api.NodeData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.util.*;
 
 
@@ -280,7 +283,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
 
     @Override
     public NodeData center() throws Exception {
-        Iterator<NodeData> it1 = this.gr.nodeIter();
+        Iterator<NodeData> it1 = this.g.nodeIter();
         int count = 0;
         double eccentricity = 0;
         double dist = 0;
@@ -288,7 +291,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         while (it1.hasNext()) {
             NodeData a = it1.next();
             HashMap<Integer, Double> distance = shortestPathMap(a.getKey());
-            Iterator<NodeData> it2 = this.gr.nodeIter();
+            Iterator<NodeData> it2 = this.g.nodeIter();
             eccentricity = 0;
             while (it2.hasNext()) {
                 NodeData b = it2.next();
@@ -318,6 +321,68 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         }
     }
 
+    // Still Not ready!
+    public List<NodeData> tsp2(List<NodeData> cities) {
+        /**
+         * Implementing with Greedy Algorithm.
+         */
+        List<List<NodeData>> allPaths = new ArrayList<List<NodeData>>();
+        int index = 0;
+        double[] myDist = new double[cities.size()];
+        try {
+            if (!this.isConnected()){
+                return null;
+            }
+            else{
+                int curr =0;
+                for(int num=0; num < cities.size();num++){
+                    curr = num;
+                    List<NodeData> rightOrder = new ArrayList<NodeData>();
+                    int tmp = 0, counter = 0;
+                    double[] distance = new double[cities.size()];
+                    NodeData ptr = cities.get(curr);    ///WE START WITH 0
+                    rightOrder.add(ptr);
+                    while (counter < cities.size() && rightOrder.size() < cities.size() ) {//
+                        ptr = cities.get(curr);
+                        tmp = curr;
+                        for (int i = 0; i < cities.size(); i++) {
+                            if (ptr.getKey() != cities.get(i).getKey()) {
+                                distance[i] = shortestPathDist(ptr.getKey(), cities.get(i).getKey());
+                            } else {
+                                distance[i] = Double.MAX_VALUE;
+                            }
+                            while (curr == tmp) {
+                                int smallest = smallestDist(distance); /// smallest is the index of the smallest number in the array.
+                                if (!rightOrder.contains(cities.get(smallest))) {
+                                    rightOrder.add(cities.get(smallest));
+                                    curr = smallest;
+                                    counter++;
+                                } else if (rightOrder.size() != cities.size()) {
+                                    distance[smallest] = Double.MAX_VALUE;
+                                } else {
+                                    break;
+                                }
+                            }
+                            if (rightOrder.size() == cities.size()) {
+                                break;
+                            }
+                        }
+                        if(rightOrder.size() == cities.size()){
+                            allPaths.add(rightOrder);
+                        }
+                    }
+                }
+                    for (int i=0; i<allPaths.size(); i++) {
+                        myDist[i] = totalWeight(allPaths.get(i));
+                    }
+                    index = smallestDist(myDist);
+                }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return allPaths.get(index);
+    }
 
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
@@ -378,10 +443,18 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         return smallest;
     }
 
+    private double totalWeight(List<NodeData> cities){
+        double pathW = 0.0;
+        for(int i=0; i<=cities.size()-2; i++){
+            pathW += this.shortestPathDist(cities.get(i).getKey(),cities.get(i+1).getKey());
+        }
+        return pathW;
+    }
+
     @Override
     public boolean save(String file) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        fromJsonToGraph graphJson = new fromJsonToGraph(this.gr);
+        fromJsonToGraph graphJson = new fromJsonToGraph(this.g);
         String json = gson.toJson(graphJson);
         try {
             FileWriter fw = new FileWriter("" + file);

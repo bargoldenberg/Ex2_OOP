@@ -10,10 +10,10 @@ import java.util.function.Consumer;
 
 public class MyDWG implements DirectedWeightedGraph {
     HashMap<Integer,MyNode> V;
-     HashMap<ArrayList<Integer>,MyEdge> E;
+    HashMap<ArrayList<Integer>,MyEdge> E;
     int nodeiter;
     int edgeiter;
-    int MC ;
+    int MC;
 
     public MyDWG(){
         V = new HashMap<Integer,MyNode>();
@@ -286,6 +286,10 @@ public class MyDWG implements DirectedWeightedGraph {
     @Override
     public int getMC() {
         return this.MC;
+    }
+
+    public HashMap<ArrayList<Integer>,MyEdge> getE(){
+        return this.E;
     }
 
     public String toString(){
