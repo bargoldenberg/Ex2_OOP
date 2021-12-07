@@ -15,11 +15,12 @@ import java.awt.geom.Point2D;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-///Bug Alert --
-
 public class MyGraph extends JFrame implements ActionListener {
     JButton centerb;
+    JButton findFile; /// For now, don't touch.
     MyDWG_Algo g1;
+
+
     public MyGraph(MyDWG gr) throws Exception {
 
         JPanel p = new JPanel(new BorderLayout(3,1));
@@ -185,6 +186,7 @@ public class MyGraph extends JFrame implements ActionListener {
     public static void runGUI(MyDWG gr) throws Exception {
         new MyGraph(gr);
     }
+
     public static void main(String[] args) throws Exception {
         Point3D p0 = new Point3D(0,0,0);
         Point3D p1 = new Point3D(1,2,0);

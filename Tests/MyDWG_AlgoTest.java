@@ -4,6 +4,7 @@ import api.NodeData;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -274,6 +275,12 @@ class MyDWG_AlgoTest {
 
     @Test
     void tsp() {
+        /**
+         * Test 1 for TSP:
+         *      this test is for a small group (3 Nodes).
+         *      best case is 3, worst case is 8, because it's a small numbers i will check if the path TSP will bring
+         *      back is no bigger than 3*1.5.
+         */
         Point3D p0 = new Point3D(0,0,0);
         Point3D p1 = new Point3D(1,2,0);
         Point3D p2 = new Point3D(1,5,0);
@@ -289,7 +296,6 @@ class MyDWG_AlgoTest {
         MyNode n4 = new MyNode(p4,4);
         MyNode n5 = new MyNode(p5,5);
         MyNode n6 = new MyNode(p6,6);
-
         g.addNode(n0);
         g.addNode(n1);
         g.addNode(n2);
@@ -297,7 +303,6 @@ class MyDWG_AlgoTest {
         g.addNode(n4);
         g.addNode(n5);
         g.addNode(n6);
-
         g.connect(n0.getKey(),n1.getKey(),1);
         g.connect(n1.getKey(),n2.getKey(),1);
         g.connect(n2.getKey(),n1.getKey(),2);
@@ -309,21 +314,169 @@ class MyDWG_AlgoTest {
         g.connect(n4.getKey(),n6.getKey(),5);
         g.connect(n0.getKey(),n6.getKey(),15);
         g.connect(n5.getKey(),n6.getKey(),12);
-
         MyDWG_Algo testGraphAlgo = new MyDWG_Algo();
         testGraphAlgo.init(g);
+        //testGraphAlgo.save("TestTSP1.json");
         List<NodeData> subGraph1 = new ArrayList<NodeData>();
         subGraph1.add(n3);
         subGraph1.add(n4);
         subGraph1.add(n2);
-        String t = subGraph1.toString();
-        List<NodeData> subGraphTSP1 = testGraphAlgo.tsp(subGraph1);
+        ArrayList<NodeData> subGraphTSP1 = (ArrayList<NodeData>) testGraphAlgo.tsp(subGraph1);
+        double pathW = 0.0;
+        for(int i=0; i<=subGraphTSP1.size()-2; i++){
+            pathW += testGraphAlgo.shortestPathDist(subGraphTSP1.get(i).getKey(),subGraphTSP1.get(i+1).getKey());
+        }
         String t1 = subGraphTSP1.toString();
-        assertEquals(t,t1);
+        assertTrue(pathW <= 3*1.5);
+        assertFalse(pathW <= 2); // because 3 is the Best case, it will never be smaller then that.
+
+        /**
+         * Test 2 for TSP:
+         *      this test is for 4 nodes group.
+         *      best case: d(2->3->1->5) = 20.74.
+         *      worst case: d(3->1->2->5) = 36.7.
+         *      I will check if the path the algorithm.
+         */
+        Point3D P0 = new Point3D(0.0,0.0,0.0);
+        Point3D P1 = new Point3D(1.0,1.0,0.0);
+        Point3D P2 = new Point3D(1.0,5.0,0.0);
+        Point3D P3 = new Point3D(3.0,2.0,0.0);
+        Point3D P4 = new Point3D(4.0,1.0,0.0);
+        Point3D P5 = new Point3D(6.0,2.0,0.0);
+        MyDWG G = new MyDWG();
+        MyNode N0 = new MyNode(P0,0);
+        MyNode N1 = new MyNode(P1,1);
+        MyNode N2 = new MyNode(P2,2);
+        MyNode N3 = new MyNode(P3,3);
+        MyNode N4 = new MyNode(P4,4);
+        MyNode N5 = new MyNode(P5,5);
+        G.addNode(N0);
+        G.addNode(N1);
+        G.addNode(N2);
+        G.addNode(N3);
+        G.addNode(N4);
+        G.addNode(N5);
+        G.connect(N0.getKey(),N1.getKey(),1.0);
+        G.connect(N1.getKey(),N2.getKey(),10.23);
+        G.connect(N2.getKey(),N3.getKey(),8.91);
+        G.connect(N3.getKey(),N1.getKey(),5.73);
+        G.connect(N1.getKey(),N5.getKey(),6.1);
+        G.connect(N5.getKey(),N1.getKey(),7.0);
+        G.connect(N5.getKey(),N3.getKey(),0.5);
+        G.connect(N3.getKey(),N4.getKey(),5.2);
+        G.connect(N4.getKey(),N5.getKey(),4.7);
+        MyDWG_Algo gAlgo =new MyDWG_Algo();
+        gAlgo.init(G);
+        //gAlgo.save("TestTSP2.json");
+        List<NodeData> subGraph2 = new ArrayList<NodeData>();
+        subGraph2.add(N1);
+        subGraph2.add(N2);
+        subGraph2.add(N3);
+        subGraph2.add(N5);
+        ArrayList<NodeData> subGraphTSP2 = (ArrayList<NodeData>) gAlgo.tsp(subGraph2);
+        pathW = 0.0;
+        for(int i=0; i<=subGraphTSP2.size()-2; i++){
+            pathW += testGraphAlgo.shortestPathDist(subGraphTSP2.get(i).getKey(),subGraphTSP2.get(i+1).getKey());
+        }
+        assertTrue(pathW <= 20.74*1.25); // see if my algorithm path is at least With a deviation of 25% from the best path.
+        assertFalse(pathW >= 36.7); // because 3 is the Best case, it will never be smaller then that.
+//        /**
+//         * Next Test
+//         */
+//
+//        //MyDWG graph = new MyDWG();
+//        MyDWG_Algo graphAl = new MyDWG_Algo();
+//        graphAl.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\TestJson.json");
+//        System.out.println("Test 1: ");
+//        List<NodeData>nodes=new ArrayList<NodeData>();
+//        nodes.add(graphAl.getGraph().getNode(4));
+//        nodes.add(graphAl.getGraph().getNode(2));
+//        nodes.add(graphAl.getGraph().getNode(6));
+//        ArrayList<NodeData> tsp1 = (ArrayList<NodeData>) graphAl.tsp2(nodes);
+//        pathW = 0.0;
+//        for(int i=0; i<=tsp1.size()-2; i++){
+//            pathW += graphAl.shortestPathDist(tsp1.get(i).getKey(),tsp1.get(i+1).getKey());
+//        }
+//        System.out.println("TSP for list 1: "+pathW);
+//        nodes.clear();
+//        System.out.println("Test 2: ");
+//        nodes.add(graphAl.getGraph().getNode(6));
+//        nodes.add(graphAl.getGraph().getNode(4));
+//        nodes.add(graphAl.getGraph().getNode(2));
+//        ArrayList<NodeData> tsp2 = (ArrayList<NodeData>) graphAl.tsp2(nodes);
+//        pathW = 0.0;
+//        for(int i=0; i<=tsp1.size()-2; i++){
+//            pathW += graphAl.shortestPathDist(tsp2.get(i).getKey(),tsp2.get(i+1).getKey());
+//        }
+//        System.out.println("TSP for list 2: "+pathW);
+//        nodes.clear();
+//        System.out.println("Test 3:");
+//        nodes.add(graphAl.getGraph().getNode(1));
+//        nodes.add(graphAl.getGraph().getNode(6));
+//        nodes.add(graphAl.getGraph().getNode(3));
+//        nodes.add(graphAl.getGraph().getNode(4));
+//        ArrayList<NodeData> tsp3 = (ArrayList<NodeData>) graphAl.tsp2(nodes);
+//        pathW = 0.0;
+//        for(int i=0; i<=tsp1.size()-2; i++){
+//            pathW += graphAl.shortestPathDist(tsp3.get(i).getKey(),tsp3.get(i+1).getKey());
+//        }
+//        System.out.println("TSP for list 3: "+pathW);
+//        nodes.clear();
+        /**
+         * Test for G1.json
+         *
+         */
+        List<NodeData>nodes=new ArrayList<NodeData>();
+        MyDWG_Algo givenJson = new MyDWG_Algo();
+        givenJson.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\G1.json");
+        nodes.add(givenJson.getGraph().getNode(1));
+        nodes.add(givenJson.getGraph().getNode(2));
+        nodes.add(givenJson.getGraph().getNode(3));
+        nodes.add(givenJson.getGraph().getNode(4));
+        nodes.add(givenJson.getGraph().getNode(5));
+        ArrayList<NodeData> G1 = (ArrayList<NodeData>) givenJson.tsp2(nodes);
+        pathW = 0.0;
+        for(int i=0; i<=G1.size()-2; i++){
+            pathW += givenJson.shortestPathDist(G1.get(i).getKey(), G1.get(i+1).getKey());
+        }
+        System.out.println("G1 Test tsp: "+pathW);
+        /**
+         * Test for G3.json,
+         * looking for path between 20 points (from total 47 points).
+         *
+         */
+        nodes.clear();
+        MyDWG_Algo givenJson3 = new MyDWG_Algo();
+        givenJson.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\G3.json");
+        nodes.add(givenJson.getGraph().getNode(1));
+        nodes.add(givenJson.getGraph().getNode(2));
+        nodes.add(givenJson.getGraph().getNode(3));
+        nodes.add(givenJson.getGraph().getNode(4));
+        nodes.add(givenJson.getGraph().getNode(5));
+        nodes.add(givenJson.getGraph().getNode(6));
+        nodes.add(givenJson.getGraph().getNode(7));
+        nodes.add(givenJson.getGraph().getNode(8));
+        nodes.add(givenJson.getGraph().getNode(9));
+        nodes.add(givenJson.getGraph().getNode(10));
+        nodes.add(givenJson.getGraph().getNode(11));
+        nodes.add(givenJson.getGraph().getNode(12));
+        nodes.add(givenJson.getGraph().getNode(13));
+        nodes.add(givenJson.getGraph().getNode(14));
+        nodes.add(givenJson.getGraph().getNode(15));
+        nodes.add(givenJson.getGraph().getNode(16));
+        nodes.add(givenJson.getGraph().getNode(17));
+        nodes.add(givenJson.getGraph().getNode(20));
+        nodes.add(givenJson.getGraph().getNode(30));
+        nodes.add(givenJson.getGraph().getNode(40));
+        ArrayList<NodeData> G2 = (ArrayList<NodeData>) givenJson.tsp2(nodes);
+        pathW = 0.0;
+        for(int i=0; i<=G2.size()-2; i++){
+            pathW += givenJson.shortestPathDist(G2.get(i).getKey(), G2.get(i+1).getKey());
+        }
+        System.out.println("G2 Test tsp: "+pathW);
 
 
-
-    }
+     }
 
     @Test
     void save() {
