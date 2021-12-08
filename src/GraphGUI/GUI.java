@@ -1,7 +1,6 @@
 package GraphGUI;
 
 import Graph.*;
-import api.DirectedWeightedGraph;
 import api.EdgeData;
 import api.NodeData;
 
@@ -12,9 +11,8 @@ import java.awt.geom.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 
-public class MyGraph extends JFrame implements ActionListener {
+public class GUI extends JFrame implements ActionListener {
     JPanel functionPanel;
     JButton centerb;
     JButton clear;
@@ -34,7 +32,7 @@ public class MyGraph extends JFrame implements ActionListener {
     int centercounter = 0;
 
 
-    public MyGraph(MyDWG gr) {
+    public GUI(MyDWG gr) {
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         JPanel p = new JPanel(new BorderLayout());//3,1
         functionPanel = new JPanel();
@@ -319,7 +317,7 @@ public class MyGraph extends JFrame implements ActionListener {
     }
 
     public static void runGUI(MyDWG gr) {
-        new MyGraph(gr);
+        new GUI(gr);
     }
 
     public static void main(String[] args) throws Exception {
