@@ -43,7 +43,7 @@ public class Ex2 {
      */
     public static void runGUI(String json_file) throws Exception {
         DirectedWeightedGraphAlgorithms alg = getGrapgAlgo(json_file);
-        MyGraph.runGUI((MyDWG)alg.getGraph());
+        MyGraph.runGUI(null);
     }
  public static void main(String[] args) throws Exception {
 //        runGUI("/home/bar/Desktop/Ex2_OOP/Ex2_OOP/data/G1.json");

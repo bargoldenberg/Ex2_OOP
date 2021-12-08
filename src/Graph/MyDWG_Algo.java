@@ -501,7 +501,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         }
         for (int i = 0; i < nodes; i++) {
             MyNode a = g.V.get(i);
-            for (int j = 0; j < 10; j++) {
+            for (int j = 0; j < 9; j++) {
                 ArrayList<Integer> key = new ArrayList<>(2);
                 key.add(a.getKey());
                 int id = g.V.get(ra.nextInt(nodes)).getKey();

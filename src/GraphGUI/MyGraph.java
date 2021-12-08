@@ -1,6 +1,7 @@
 package GraphGUI;
 
 import Graph .*;
+import api.DirectedWeightedGraph;
 import api.EdgeData;
 import api.NodeData;
 
@@ -14,6 +15,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class MyGraph extends JFrame implements ActionListener {
+
     JButton centerb;
     JButton shortestpathb;
     JButton removenode;
@@ -31,18 +33,15 @@ public class MyGraph extends JFrame implements ActionListener {
 
 
     public MyGraph(MyDWG gr) throws Exception {
-
         JPanel p = new JPanel(new BorderLayout());//3,1
         //this.setContentPane(p);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setTitle("Ex2");
-
+        this.setTitle("Ex2-Graph-GUI");
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int)size.width;
         int height = (int)size.height;
-        this.setSize(width/2 + 230,height/2);
-        this.setResizable(false);
-
+        this.setSize(width/2,width/2);
+        this.setResizable(true);
         centerb = new JButton();
         src = new JTextField();
         dst = new JTextField();
@@ -54,21 +53,21 @@ public class MyGraph extends JFrame implements ActionListener {
         src.setBounds(700,35,75,25);
         dst.setBounds(775,35,75,25);
         node.setBounds(800,120,150,25);
-        shortestpathb.setText("Shortest Path");
         shortestpathb.setBounds(700,10,150,25);
-        removenode.setText("Remove Node");
         removenode.setBounds(800,70,150,50);
+        centerb.setBounds(850,10,100,50);
+        shortestpathb.setText("Shortest Path");
+        removenode.setText("Remove Node");
+        centerb.setText("Center");
+        selectFile.addActionListener(this); // Adding select button to actionPreformed.
+        shortestpathb.addActionListener(this);
+        centerb.addActionListener(this);
+        removenode.addActionListener(this);
         this.add(p,BorderLayout.WEST);
         this.add(shortestpathb);
         this.add(src);
         this.add(dst);
         this.add(node);
-        centerb.setText("Center");
-        centerb.setBounds(850,10,100,50);
-        selectFile.addActionListener(this); // Adding select button to actionPreformed.
-        shortestpathb.addActionListener(this);
-        centerb.addActionListener(this);
-        removenode.addActionListener(this);
         this.add(centerb);
         this.add(removenode);
         this.add(selectFile);
@@ -86,10 +85,12 @@ public class MyGraph extends JFrame implements ActionListener {
         public GraphP(MyDWG gr) throws Exception {
             g1 = new MyDWG_Algo();
             og = new MyDWG_Algo();
+
             g1.init(gr);
             og.init(g1.copy());
             setminxy();
             repaint();
+
         }
 
         public void setminxy() throws Exception {
@@ -260,6 +261,15 @@ public class MyGraph extends JFrame implements ActionListener {
             int response = fileChooser.showOpenDialog(null); // select file to Open.
             if(response == JFileChooser.APPROVE_OPTION){
                 String jsonPath = fileChooser.getSelectedFile().getAbsolutePath();
+                this.g1.load(jsonPath);
+                try {
+                    runGUI((MyDWG) this.g1.getGraph());
+                    setVisible(false); //you can't see me!
+                    dispose();
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
 //                System.out.println(jsonPath);  // For Test
             }
         }
@@ -319,6 +329,6 @@ public class MyGraph extends JFrame implements ActionListener {
         g.connect(n0.getKey(),n6.getKey(),15);
         g.connect(n5.getKey(),n6.getKey(),12);
 
-        runGUI(g);
+        runGUI(null);
     }
 }

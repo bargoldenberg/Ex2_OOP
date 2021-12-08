@@ -561,8 +561,8 @@ class MyDWG_AlgoTest {
     void generateGraph() throws Exception {
         MyDWG a = new MyDWG();
         MyDWG_Algo at = new MyDWG_Algo();
-        at.generateGraph(1000,1);
-        at.center();
+        at.generateGraph(100,5);
+        System.out.println(at.center());
 
 
         //System.out.println(at.center());
