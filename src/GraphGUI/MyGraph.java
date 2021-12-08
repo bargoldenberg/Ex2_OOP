@@ -8,16 +8,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
-
-///Bug Alert --
 
 public class MyGraph extends JFrame implements ActionListener {
     JButton centerb;
     JButton shortestpathb;
     JButton removenode;
+    JButton selectFile;
     JTextField src;
     JTextField dst;
     JTextField node;
@@ -28,19 +28,29 @@ public class MyGraph extends JFrame implements ActionListener {
     NodeData center;
     ArrayList<NodeData> path;
     int centercounter=0;
+
+
     public MyGraph(MyDWG gr) throws Exception {
 
-        JPanel p = new JPanel(new BorderLayout(3,1));
-
-        //src.
-        this.setContentPane(p);
+        JPanel p = new JPanel(new BorderLayout());//3,1
+        //this.setContentPane(p);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setTitle("Ex2");
+
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int)size.width;
+        int height = (int)size.height;
+        this.setSize(width/2 + 230,height/2);
+        this.setResizable(false);
+
         centerb = new JButton();
         src = new JTextField();
         dst = new JTextField();
         node = new JTextField();
         removenode = new JButton();
         shortestpathb = new JButton();
+        selectFile = new JButton("Select file"); // initialize the selectFile Bottom.
+        selectFile.setBounds(800,150,150,25); // initialize selectFile size.
         src.setBounds(700,35,75,25);
         dst.setBounds(775,35,75,25);
         node.setBounds(800,120,150,25);
@@ -48,65 +58,22 @@ public class MyGraph extends JFrame implements ActionListener {
         shortestpathb.setBounds(700,10,150,25);
         removenode.setText("Remove Node");
         removenode.setBounds(800,70,150,50);
+        this.add(p,BorderLayout.WEST);
         this.add(shortestpathb);
         this.add(src);
         this.add(dst);
         this.add(node);
-        //src.addActionListener(this);
-        //dst.addActionListener(this);
-        shortestpathb.addActionListener(this);
         centerb.setText("Center");
         centerb.setBounds(850,10,100,50);
+        selectFile.addActionListener(this); // Adding select button to actionPreformed.
+        shortestpathb.addActionListener(this);
         centerb.addActionListener(this);
         removenode.addActionListener(this);
         this.add(centerb);
         this.add(removenode);
-        this.add(new GraphP(gr));
-        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int)size.width;
-        int height = (int)size.height;
-        this.setSize(width/2,width/2);
+        this.add(selectFile);
+        this.add(new GraphP(gr)); //// FIX
         this.setVisible(true);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==centerb){
-            try {
-                if(centercounter%2==0) {
-                    NodeData a = g1.center();
-                    this.center = a;
-                    centercounter++;
-                    repaint();
-                }else{
-                    this.center=null;
-                    centercounter++;
-                    repaint();
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }else if(e.getSource()==shortestpathb) {
-            if (src.getText().length()==0|| dst.getText().length()==0) {
-                path = null;
-                System.out.println("hi");
-                repaint();
-            } else {
-                source = Integer.parseInt(src.getText());
-                destination = Integer.parseInt(dst.getText());
-                path = (ArrayList<NodeData>) g1.shortestPath(source, destination);
-                repaint();
-            }
-        }else if(e.getSource()==removenode){
-            if(node.getText().length()==0){
-                g1.init(og.copy());
-                repaint();
-            }else {
-                int rmvnode = Integer.parseInt(node.getText());
-                this.g1.getGraph().removeNode(rmvnode);
-                repaint();
-            }
-        }
     }
 
     public  class GraphP extends JPanel {
@@ -161,7 +128,6 @@ public class MyGraph extends JFrame implements ActionListener {
 
 
         }
-
 
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -250,6 +216,55 @@ public class MyGraph extends JFrame implements ActionListener {
 
         }
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource()==centerb){
+            try {
+                if(centercounter%2==0) {
+                    NodeData a = g1.center();
+                    this.center = a;
+                    centercounter++;
+                    repaint();
+                }else{
+                    this.center=null;
+                    centercounter++;
+                    repaint();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }else if(e.getSource()==shortestpathb) {
+            if (src.getText().length()==0|| dst.getText().length()==0) {
+                path = null;
+                System.out.println("hi");
+                repaint();
+            } else {
+                source = Integer.parseInt(src.getText());
+                destination = Integer.parseInt(dst.getText());
+                path = (ArrayList<NodeData>) g1.shortestPath(source, destination);
+                repaint();
+            }
+        }else if(e.getSource()==removenode){
+            if(node.getText().length()==0){
+                g1.init(og.copy());
+                repaint();
+            }else {
+                int rmvnode = Integer.parseInt(node.getText());
+                this.g1.getGraph().removeNode(rmvnode);
+                repaint();
+            }
+        }else if(e.getSource()==selectFile){
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File("."));
+            int response = fileChooser.showOpenDialog(null); // select file to Open.
+            if(response == JFileChooser.APPROVE_OPTION){
+                String jsonPath = fileChooser.getSelectedFile().getAbsolutePath();
+//                System.out.println(jsonPath);  // For Test
+            }
+        }
+    }
+
     // taken from https://coderanch.com/t/339505/java/drawing-arrows
     private void drawArrow(Graphics2D g2, double theta, double x0, double y0)
     {
@@ -266,6 +281,7 @@ public class MyGraph extends JFrame implements ActionListener {
     public static void runGUI(MyDWG gr) throws Exception {
         new MyGraph(gr);
     }
+
     public static void main(String[] args) throws Exception {
         Point3D p0 = new Point3D(0,0,0);
         Point3D p1 = new Point3D(1,2,0);
