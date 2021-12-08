@@ -561,7 +561,8 @@ class MyDWG_AlgoTest {
     void generateGraph() throws Exception {
         MyDWG a = new MyDWG();
         MyDWG_Algo at = new MyDWG_Algo();
-        at.init(at.generateGraph(1000000,1));
+        at.generateGraph(1000,1);
+        at.center();
 
 
         //System.out.println(at.center());
@@ -569,9 +570,11 @@ class MyDWG_AlgoTest {
     @Test
     void testGraphAlgo() throws Exception {
 
-        // MyDWG g2 = testGraphAlgo.generateGraph(1000,1);
+        //  MyDWG g2 = testGraphAlgo.generateGraph(1000,1);
         MyDWG_Algo testGraphAlgo = new MyDWG_Algo();
-        testGraphAlgo.load("1000Nodes.json");
+        //testGraphAlgo.init(testGraphAlgo.generateGraph(100000, 1));
+        //System.out.println(testGraphAlgo.isConnected());
+        testGraphAlgo.load("100000.json");
         System.out.println(testGraphAlgo.center());
 
         //System.out.println(testGraphAlgo.isConnected());

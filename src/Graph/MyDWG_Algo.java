@@ -245,6 +245,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         HashMap<Integer, Integer> prev = new HashMap<Integer, Integer>();
         PriorityQueue<Integer> nodesQueue = new PriorityQueue<Integer>((a,b)-> (int) (distance.get(a)-distance.get(b)));
         HashSet<Integer> queueset = new HashSet<Integer>();
+        double max = Double.MIN_VALUE;
         //List<NodeData> path = new ArrayList<NodeData>();
 
         for (Map.Entry<Integer, MyNode> node : this.gr.V.entrySet()) {
@@ -256,7 +257,6 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             }
             prev.put(node.getKey(), null);
         }
-
 
         while (!nodesQueue.isEmpty()) {
             int smallest = nodesQueue.poll();
@@ -282,7 +282,6 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
                 }
             }
         }
-
         return distance;
 
 
@@ -291,15 +290,14 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     @Override
     public NodeData center() throws Exception {
         Iterator<NodeData> it1 = this.gr.nodeIter();
-        int count = 0;
-        double eccentricity = 0;
-        double dist = 0;
+        double eccentricity;
+        double dist;
         ArrayList<double[]> sumofdistance = new ArrayList<>();
         while (it1.hasNext()) {
             NodeData a = it1.next();
             HashMap<Integer, Double> distance = shortestPathMap(a.getKey());
             Iterator<NodeData> it2 = this.gr.nodeIter();
-            eccentricity = 0;
+            eccentricity = Double.MIN_VALUE;
             while (it2.hasNext()) {
                 NodeData b = it2.next();
                 if (a.getKey() == b.getKey()) {
@@ -489,7 +487,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         }
     }
 
-    public MyDWG generateGraph(int nodes,int seed) {
+    public void generateGraph(int nodes,int seed) {
         MyDWG g = new MyDWG();
         Random ra = new Random(seed);
         for (int i = 0; i < nodes; i++) {
@@ -503,7 +501,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         }
         for (int i = 0; i < nodes; i++) {
             MyNode a = g.V.get(i);
-            for (int j = 0; j < 9; j++) {
+            for (int j = 0; j < 10; j++) {
                 ArrayList<Integer> key = new ArrayList<>(2);
                 key.add(a.getKey());
                 int id = g.V.get(ra.nextInt(nodes)).getKey();
@@ -517,7 +515,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             }
 
         }
-        return g;
+        this.gr = g;
     }
 }
 // Random r = new Random(seed) (we can revisit a random sequence)
