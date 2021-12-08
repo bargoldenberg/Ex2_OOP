@@ -10,6 +10,7 @@ import java.awt.event.*;
 import java.awt.geom.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 public class GUI extends JFrame implements ActionListener {
@@ -20,15 +21,23 @@ public class GUI extends JFrame implements ActionListener {
     JButton shortestpathb;
     JButton removenode;
     JButton selectFile;
+    JButton TSPb;
+    JButton enter;
+    JTextField tsplist;
     JTextField src;
     JTextField dst;
     JTextField node;
+    JPanel pop;
+    JFrame popup;
     MyDWG_Algo g1;
     MyDWG_Algo og;
     int source;
     int destination;
     NodeData center;
+    NodeData startpoint;
+    NodeData endpoint;
     ArrayList<NodeData> path;
+    ArrayList<NodeData> tsppath;
     int centercounter = 0;
 
 
@@ -45,8 +54,6 @@ public class GUI extends JFrame implements ActionListener {
         int height = (int) size.height;
         this.setSize(width / 2, width / 2);
         this.setResizable(true);
-        clear = new JButton();
-        save = new JButton();
         src = new JTextField();
         src.setPreferredSize(new Dimension(50, 25));
         dst = new JTextField();
@@ -59,12 +66,14 @@ public class GUI extends JFrame implements ActionListener {
         removenode = new JButton("Remove Node");
         shortestpathb = new JButton("Shortest Path");
         selectFile = new JButton("Load Graph");
+        TSPb = new JButton("TSP");
         selectFile.addActionListener(this); // Adding select button to actionPreformed.
         shortestpathb.addActionListener(this);
         centerb.addActionListener(this);
         removenode.addActionListener(this);
         clear.addActionListener(this);
         save.addActionListener(this);
+        TSPb.addActionListener(this);
         this.add(functionPanel);
         this.add(p, BorderLayout.WEST);
         functionPanel.add(shortestpathb);
@@ -76,6 +85,7 @@ public class GUI extends JFrame implements ActionListener {
         functionPanel.add(selectFile);
         functionPanel.add(save);
         functionPanel.add(clear);
+        functionPanel.add(TSPb);
         this.add(new GraphP(gr)); //// FIX
         this.setVisible(true);
         this.setTitle("Ex2 - UI");
@@ -181,6 +191,22 @@ public class GUI extends JFrame implements ActionListener {
                     g.setColor(new Color(0, 0, 0));
                     g.drawString("CENTER", (int) x - 10, (int) y + 50);
                 }
+                if (startpoint != null) {
+                    double x = (startpoint.getLocation().x() - minx) * scalex * 0.97 + 30;
+                    double y = (startpoint.getLocation().y() - miny) * scaley * 0.97 + 30;
+                    g.setColor(new Color(25, 0, 255));
+                    g.fillOval((int) x - 2, (int) y - 2, 20, 20);
+                    g.setColor(new Color(0, 0, 0));
+                    g.drawString("START POINT", (int) x - 10, (int) y + 50);
+                }
+                if (endpoint != null) {
+                    double x = (endpoint.getLocation().x() - minx) * scalex * 0.97 + 30;
+                    double y = (endpoint.getLocation().y() - miny) * scaley * 0.97 + 30;
+                    g.setColor(new Color(25, 0, 255));
+                    g.fillOval((int) x - 2, (int) y - 2, 20, 20);
+                    g.setColor(new Color(0, 0, 0));
+                    g.drawString("END POINT", (int) x - 10, (int) y + 50);
+                }
                 Iterator<EdgeData> eiter = g1.getGraph().edgeIter();
                 while (eiter.hasNext()) {
                     EdgeData e = eiter.next();
@@ -205,7 +231,6 @@ public class GUI extends JFrame implements ActionListener {
                 }
                 if (path != null) {
                     for (int i = 0; i < path.size() - 1; i++) {
-                        System.out.println(path.size());
                         EdgeData curredge = g1.getGraph().getEdge(path.get(i).getKey(), path.get(i + 1).getKey());
                         double srcx = (g1.getGraph().getNode(curredge.getSrc()).getLocation().x() - minx) * scalex + 30;
                         double srcy = (g1.getGraph().getNode(curredge.getSrc()).getLocation().y() - miny) * scaley + 30;
@@ -215,13 +240,30 @@ public class GUI extends JFrame implements ActionListener {
                         int y1 = (int) srcy;
                         int x2 = (int) destx;
                         int y2 = (int) desty;
-                        System.out.println(x1);
-                        System.out.println(x2);
                         g.setColor(new Color(65, 255, 0));
                         g2.draw(new Line2D.Double(x1, y1, x2, y2));
                         g.setColor(new Color(0, 0, 0));
                         ((Graphics2D) g).setStroke(new BasicStroke(5));
                         g2.drawString(curredge.getWeight() + "", (x1 + x2) / 2, (y1 + y2) / 2);
+
+                    }
+                }
+                if (tsppath != null) {
+                    for (int i = 0; i < tsppath.size() - 1; i++) {
+                        EdgeData curredge = g1.getGraph().getEdge(tsppath.get(i).getKey(), tsppath.get(i + 1).getKey());
+                        double srcx = (g1.getGraph().getNode(curredge.getSrc()).getLocation().x() - minx) * scalex + 30;
+                        double srcy = (g1.getGraph().getNode(curredge.getSrc()).getLocation().y() - miny) * scaley + 30;
+                        double destx = (g1.getGraph().getNode(curredge.getDest()).getLocation().x() - minx) * scalex + 30;
+                        double desty = (g1.getGraph().getNode(curredge.getDest()).getLocation().y() - miny) * scaley + 30;
+                        int x1 = (int) srcx;
+                        int y1 = (int) srcy;
+                        int x2 = (int) destx;
+                        int y2 = (int) desty;
+                        g.setColor(new Color(255, 0, 0));
+                        g2.draw(new Line2D.Double(x1, y1, x2, y2));
+                        g.setColor(new Color(0, 0, 0));
+                        ((Graphics2D) g).setStroke(new BasicStroke(5));
+                        //g2.drawString(curredge.getWeight() + "", (x1 + x2) / 2, (y1 + y2) / 2);
 
                     }
                 }
@@ -252,7 +294,6 @@ public class GUI extends JFrame implements ActionListener {
         } else if (e.getSource() == shortestpathb) {
             if (src.getText().length() == 0 || dst.getText().length() == 0) {
                 path = null;
-                System.out.println("hi");
                 repaint();
             } else {
                 source = Integer.parseInt(src.getText());
@@ -290,6 +331,9 @@ public class GUI extends JFrame implements ActionListener {
             centercounter = 0;
             path = null;
             g1.init(og.copy());
+            tsppath=null;
+            this.startpoint=null;
+            this.endpoint=null;
             repaint();
         } else if (e.getSource() == save) {
             JFileChooser fileChooser = new JFileChooser();
@@ -297,9 +341,57 @@ public class GUI extends JFrame implements ActionListener {
             int response = fileChooser.showSaveDialog(null); // select file to Open.
             if (response == JFileChooser.APPROVE_OPTION) {
                 String jsonPath = fileChooser.getSelectedFile().getAbsolutePath();
-                System.out.println(jsonPath);
                 this.g1.save(jsonPath);
             }
+        } else if (e.getSource()==TSPb) {
+            popup = new JFrame("TSP");
+
+            pop = new JPanel();
+            popup.setContentPane(pop);
+            pop.setBackground(Color.lightGray);
+            popup.setBackground(Color.lightGray);
+            popup.setLocationRelativeTo(null);
+            //popup.pack();
+            Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+            popup.setSize((int)d.getWidth()/3,(int)d.getHeight()/5);
+            popup.setResizable(false);
+            popup.setVisible(true);
+            tsplist = new JTextField();
+            enter = new JButton("Enter Cities");
+            enter.setPreferredSize(new Dimension(400,40));
+            JLabel inst = new JLabel("enter cities in this format 1,2,3,4");
+            popup.add(enter);
+            popup.add(inst);
+            enter.addActionListener(this);
+            tsplist.setPreferredSize(new Dimension(150, 30));
+            popup.add(tsplist);
+            //popup.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        }else if(e.getSource()==enter){
+            String cities = tsplist.getText();
+            popup.setVisible(false);
+            popup.dispose();
+            String[]list = cities.split(",");
+            tsppath = new ArrayList<>();
+
+            ArrayList<NodeData> Cities = new ArrayList<>();
+            for(int i=0;i<list.length;i++){
+                Cities.add(this.g1.getGraph().getNode(Integer.parseInt(list[i])));
+            }
+            Cities=(ArrayList)this.g1.tsp(Cities);
+
+            for(int i =0;i<Cities.size()-1;i++){
+                ArrayList<NodeData> tmp =(ArrayList)this.g1.shortestPath(Cities.get(i).getKey(),Cities.get(i+1).getKey());
+                if(i!=Cities.size()-2){
+                    tmp.remove(tmp.get(tmp.size()-1));
+                }
+                for(int k=0;k<tmp.size();k++){
+                    tsppath.add(tmp.get(k));
+                }
+                startpoint = tsppath.get(0);
+                endpoint = tsppath.get(tsppath.size()-1);
+            }
+            repaint();
+
         }
     }
 
