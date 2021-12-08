@@ -64,6 +64,7 @@ public class GUI extends JFrame implements ActionListener {
         centerb.addActionListener(this);
         removenode.addActionListener(this);
         clear.addActionListener(this);
+        save.addActionListener(this);
         this.add(functionPanel);
         this.add(p,BorderLayout.WEST);
         functionPanel.add(shortestpathb);
@@ -203,7 +204,7 @@ public class GUI extends JFrame implements ActionListener {
                 }
                 if(path!=null){
                     for(int i =0;i<path.size()-1;i++){
-                        System.out.println(path.size());
+
                         EdgeData curredge = g1.getGraph().getEdge(path.get(i).getKey(),path.get(i+1).getKey());
                         double srcx = (g1.getGraph().getNode(curredge.getSrc()).getLocation().x()-minx)*scalex+30;
                         double srcy = (g1.getGraph().getNode(curredge.getSrc()).getLocation().y()-miny)*scaley+30;
@@ -213,8 +214,6 @@ public class GUI extends JFrame implements ActionListener {
                         int y1 = (int)srcy;
                         int x2 = (int)destx;
                         int y2 = (int)desty;
-                        System.out.println(x1);
-                        System.out.println(x2);
                         g.setColor(new Color(65, 255, 0));
                         g2.draw(new Line2D.Double(x1, y1, x2, y2));
                         g.setColor(new Color(0, 0, 0));
@@ -288,6 +287,15 @@ public class GUI extends JFrame implements ActionListener {
                 runGUI(null);
                 setVisible(false); //you can't see me!
                 dispose();
+        }else if(e.getSource()==save){
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File("."));
+            int response = fileChooser.showSaveDialog(null); // select file to Open.
+            if(response == JFileChooser.APPROVE_OPTION){
+                String jsonPath = fileChooser.getSelectedFile().getAbsolutePath();
+                System.out.println(jsonPath);
+                this.g1.save(jsonPath);
+            }
         }
     }
 
