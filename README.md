@@ -1,6 +1,6 @@
 # Ex2_OOP
 #### Contributers: Bar Goldenberg, Sappit Bohbot
-###About the project:
+### About the project:
 in this project we are assigned to implement a Directed Weighted 
 Graph, and run algorithms on it.
 and we were asked to build a GUI were you could load graphs using a JSON file.
@@ -41,7 +41,10 @@ The Edges hold the source node key and the destination node key and the edges we
 #### 10,000 Vertices 100,000 Edges: 4 min 56 sec
 #### 100,000 Vertices 1,000,000 Edges: timeout
 #### 1,000,000 Vertices 10,000,000 Edges: timeout
-
+### GUI:
+![GUI](https://user-images.githubusercontent.com/89586016/145229725-20bb96ed-0a35-491b-9432-f52765f2fc60.png)
+### Class Diagram:
+![image](https://user-images.githubusercontent.com/89586016/145232356-d7e6e0b8-a6dd-45f1-9465-1025dd380d40.png)
 
 
 
