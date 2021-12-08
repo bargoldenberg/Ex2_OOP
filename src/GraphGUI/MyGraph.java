@@ -287,8 +287,9 @@ public class MyGraph extends JFrame implements ActionListener {
 //                System.out.println(jsonPath);  // For Test
             }
         }else if(e.getSource()==clear){
-            this.removeAll();
-
+                runGUI(null);
+                setVisible(false); //you can't see me!
+                dispose();
         }
     }
 
