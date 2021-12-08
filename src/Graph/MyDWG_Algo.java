@@ -23,12 +23,19 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         try {
             Iterator<NodeData> nodeiter = g.nodeIter();
             while(nodeiter.hasNext()){
-                this.gr.addNode(nodeiter.next());
+                NodeData n = nodeiter.next();
+                MyNode a = new MyNode();
+                a.setLocation(n.getLocation());
+                a.setInfo(n.getInfo());
+                a.setWeight(n.getWeight());
+                a.setTag(n.getTag());
+                a.setKey(n.getKey());
+                this.gr.addNode(a);
             }
             Iterator<EdgeData> edgeiter = g.edgeIter();
             while(edgeiter.hasNext()){
                 EdgeData edge = edgeiter.next();
-                this.gr.connectinit((MyEdge)edge);
+                this.gr.connectinit(edge);
             }
         } catch (Exception e) {
             e.printStackTrace();
