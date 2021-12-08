@@ -15,8 +15,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class MyGraph extends JFrame implements ActionListener {
-
+    JPanel functionPanel;
     JButton centerb;
+    JButton clear;
+    JButton save;
     JButton shortestpathb;
     JButton removenode;
     JButton selectFile;
@@ -32,47 +34,55 @@ public class MyGraph extends JFrame implements ActionListener {
     int centercounter=0;
 
 
-    public MyGraph(MyDWG gr) throws Exception {
+    public MyGraph(MyDWG gr) {
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         JPanel p = new JPanel(new BorderLayout());//3,1
+        functionPanel = new JPanel();
+        functionPanel.setBackground(Color.lightGray);
+        functionPanel.setBounds(size.width/2-150,0,150,size.width/2);
         //this.setContentPane(p);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("Ex2-Graph-GUI");
-        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int)size.width;
         int height = (int)size.height;
         this.setSize(width/2,width/2);
         this.setResizable(true);
-        centerb = new JButton();
+        clear = new JButton();
+        save = new JButton();
         src = new JTextField();
+        src.setPreferredSize(new Dimension(50,25));
         dst = new JTextField();
+        dst.setPreferredSize(new Dimension(50,25));
         node = new JTextField();
-        removenode = new JButton();
-        shortestpathb = new JButton();
-        selectFile = new JButton("Select file"); // initialize the selectFile Bottom.
-        selectFile.setBounds(800,150,150,25); // initialize selectFile size.
-        src.setBounds(700,35,75,25);
-        dst.setBounds(775,35,75,25);
-        node.setBounds(800,120,150,25);
-        shortestpathb.setBounds(700,10,150,25);
-        removenode.setBounds(800,70,150,50);
-        centerb.setBounds(850,10,100,50);
-        shortestpathb.setText("Shortest Path");
-        removenode.setText("Remove Node");
-        centerb.setText("Center");
+        node.setPreferredSize(new Dimension(75,25));
+        clear = new JButton("Clear");
+        save = new JButton("Save Graph");
+        centerb = new JButton("Center");
+        removenode = new JButton("Remove Node");
+        shortestpathb = new JButton("Shortest Path");
+        selectFile = new JButton("Load Graph");
         selectFile.addActionListener(this); // Adding select button to actionPreformed.
         shortestpathb.addActionListener(this);
         centerb.addActionListener(this);
         removenode.addActionListener(this);
+        clear.addActionListener(this);
+        this.add(functionPanel);
         this.add(p,BorderLayout.WEST);
-        this.add(shortestpathb);
-        this.add(src);
-        this.add(dst);
-        this.add(node);
-        this.add(centerb);
-        this.add(removenode);
-        this.add(selectFile);
+        functionPanel.add(shortestpathb);
+        functionPanel.add(src);
+        functionPanel.add(dst);
+        functionPanel.add(removenode);
+        functionPanel.add(node);
+        functionPanel.add(centerb);
+        functionPanel.add(selectFile);
+        functionPanel.add(save);
+        functionPanel.add(clear);
         this.add(new GraphP(gr)); //// FIX
         this.setVisible(true);
+        this.setTitle("Ex2 - UI");
+        this.setResizable(false);
+
+
     }
 
     public  class GraphP extends JPanel {
@@ -82,13 +92,17 @@ public class MyGraph extends JFrame implements ActionListener {
         double maxy;
         double scalefactor=1;
         double scalefactor1 = 8;
-        public GraphP(MyDWG gr) throws Exception {
+        public GraphP(MyDWG gr)  {
             g1 = new MyDWG_Algo();
             og = new MyDWG_Algo();
 
             g1.init(gr);
             og.init(g1.copy());
-            setminxy();
+            try {
+                setminxy();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             repaint();
 
         }
@@ -272,6 +286,9 @@ public class MyGraph extends JFrame implements ActionListener {
                 }
 //                System.out.println(jsonPath);  // For Test
             }
+        }else if(e.getSource()==clear){
+            this.removeAll();
+
         }
     }
 
@@ -288,7 +305,7 @@ public class MyGraph extends JFrame implements ActionListener {
         y = y0 - barb * Math.sin(theta - phi);
         g2.draw(new Line2D.Double(x0, y0, x, y));
     }
-    public static void runGUI(MyDWG gr) throws Exception {
+    public static void runGUI(MyDWG gr)  {
         new MyGraph(gr);
     }
 
