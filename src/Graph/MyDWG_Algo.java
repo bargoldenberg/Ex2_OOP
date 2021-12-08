@@ -128,13 +128,20 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         return true;
     }
 
+    /**
+     * This Function based on Dijkstra's algorithm (https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm).
+     * @param src  - start node
+     * @param dest - end (target) node
+     * @return the distance (as a Double) of the shortest path between src and dest that exist in the graph.
+     */
     @Override
     public double shortestPathDist(int src, int dest) {
-        HashMap<Integer, Double> distance = new HashMap<Integer, Double>();
-        HashMap<Integer, Integer> prev = new HashMap<Integer, Integer>();
+        HashMap<Integer, Double> distance = new HashMap<Integer, Double>(); //Map to keep all distance between src to the other nodes (the key is the id).
+        HashMap<Integer, Integer> prev = new HashMap<Integer, Integer>(); //Map to keep the previews node before this one in the shortest path from src.
         PriorityQueue<Integer> nodesQueue = new PriorityQueue<Integer>((a,b)-> (int) (distance.get(a)-distance.get(b)));
-        List<NodeData> path = new ArrayList<NodeData>();
-
+        // PriorityQueue to keep Next node to check - its comparator is the distance of two nodes.
+        List<NodeData> path = new ArrayList<NodeData>(); // ArrayList of the final best path.
+        //this loop is for enqueueing src to the queue and initialize src distance value to 0, all other nodes set to infinity.
         for (Map.Entry<Integer, MyNode> node : this.gr.V.entrySet()) {
             if (node.getKey() == src) {
                 distance.put(node.getKey(), 0.0);
@@ -147,17 +154,15 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
 
         while (!nodesQueue.isEmpty()) {
             int smallest = nodesQueue.poll();
-            // check for breaking the loop, IF we got to the destination.
-            if (smallest == dest) {
+            if (smallest == dest) {  // check for breaking the loop, IF we got to the destination.
                 while (prev.get(smallest) != null) {
                     path.add(this.gr.V.get(smallest));
                     smallest = prev.get(smallest);
                 }
                 path.add(this.gr.V.get(smallest));
-
-            } else if (distance.get(smallest) == Double.MAX_VALUE) {
+            } else if (distance.get(smallest) == Double.MAX_VALUE) { // that means we got to dead end.
                 break;
-            } else {
+            } else { // for given Node, we will check all his neighbors distance from him (and from them him to the src).
                 for (int i = 0; i < this.gr.V.get(smallest).getEdgeOutList().size(); i++) {
                     ArrayList<Integer> tmpKey = new ArrayList<Integer>(2);
                     tmpKey.add(smallest);
@@ -167,7 +172,6 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
                     if (dis < distance.get(neighborEdge.getDest())) {
                         distance.put(neighborEdge.getDest(), dis);
                         prev.put(neighborEdge.getDest(), smallest);
-
                         if (!nodesQueue.contains(neighborEdge.getDest())) {
                             nodesQueue.add(neighborEdge.getDest());
                         }
@@ -180,19 +184,25 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         } else {
             return distance.get(dest);
         }
-
-
     }
 
+    /**
+     * This Function based on Dijkstra's algorithm (https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm).
+     * @param src  - start node
+     * @param dest - end (target) node
+     * @return the shortest path (as a List of nodes [NodeData]) between src and dest that exist in the graph.
+     */
     @Override
     public List<NodeData> shortestPath(int src, int dest) {
-        HashMap<Integer, Double> distance = new HashMap<Integer, Double>();
-        HashMap<Integer, Integer> prev = new HashMap<Integer, Integer>();
+        HashMap<Integer, Double> distance = new HashMap<Integer, Double>();//Map to keep all distance between src to the other nodes (the key is the id).
+        HashMap<Integer, Integer> prev = new HashMap<Integer, Integer>();//Map to keep the previews node before this one in the shortest path from src.
         PriorityQueue<Integer> nodesQueue = new PriorityQueue<Integer>((a,b)-> (int) (distance.get(a)-distance.get(b)));
-        List<NodeData> path = new ArrayList<NodeData>();
+        // PriorityQueue to keep Next node to check - its comparator is the distance of two nodes.
+        List<NodeData> path = new ArrayList<NodeData>();// ArrayList of the final best path.
+        //this loop is for enqueueing src to the queue and initialize src distance value to 0, all other nodes set to infinity.
 
         for (Map.Entry<Integer, MyNode> node : this.gr.V.entrySet()) {
-            if (node.getKey() == src) {
+            if (node.getKey() == src) {     // check for breaking the loop, IF we got to the destination.
                 distance.put(node.getKey(), 0.0);
                 nodesQueue.add(node.getKey());
             } else {
@@ -212,9 +222,9 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
                 path.add(this.gr.V.get(smallest));
                 Collections.reverse(path);
 
-            } else if (distance.get(smallest) == Double.MAX_VALUE) {
+            } else if (distance.get(smallest) == Double.MAX_VALUE) {    // that means we got to dead end.
                 break;
-            } else {
+            } else {// for given Node, we will check all his neighbors distance from him (and from them him to the src).
                 for (int i = 0; i < this.gr.V.get(smallest).getEdgeOutList().size(); i++) {
                     ArrayList<Integer> tmpKey = new ArrayList<Integer>(2);
                     tmpKey.add(smallest);
@@ -240,6 +250,13 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
 
     }
 
+
+    /**
+     * This Function based on Dijkstra's algorithm (https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm).
+     * @param src  - start node
+     * @return HashMap of all the shortest distances from one src,Basically the full distance list in shortestPathDist but
+     * instead of returning a specific element (the dest) it returns the List.
+     */
     private HashMap<Integer, Double> shortestPathMap(int src) {
         HashMap<Integer, Double> distance = new HashMap<Integer, Double>();
         HashMap<Integer, Integer> prev = new HashMap<Integer, Integer>();
@@ -283,24 +300,28 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             }
         }
         return distance;
-
-
     }
 
+    /**
+     * center of the graph - the Node that is closest (average weight) to the all other nodes.
+     * @return the center node of the graph (NodeData).
+     * @throws Exception
+     */
     @Override
     public NodeData center() throws Exception {
-        Iterator<NodeData> it1 = this.gr.nodeIter();
+        Iterator<NodeData> it1 = this.gr.nodeIter(); // Setting iterator to go on all the graph nodes.
         double eccentricity;
         double dist;
-        ArrayList<double[]> sumofdistance = new ArrayList<>();
+        ArrayList<double[]> sumofdistance = new ArrayList<>(); // ArrayList that will contain all the distances.
         while (it1.hasNext()) {
             NodeData a = it1.next();
+            //using shortestPathMap to get all the smallest distances from this node.
             HashMap<Integer, Double> distance = shortestPathMap(a.getKey());
-            Iterator<NodeData> it2 = this.gr.nodeIter();
+            Iterator<NodeData> it2 = this.gr.nodeIter();// Setting second iterator to go on all the graph nodes.
             eccentricity = Double.MIN_VALUE;
             while (it2.hasNext()) {
                 NodeData b = it2.next();
-                if (a.getKey() == b.getKey()) {
+                if (a.getKey() == b.getKey()) {  // if both iterators is the same node - do nothing.
                     continue;
                 }
                 dist = distance.get(b.getKey());
@@ -327,16 +348,24 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     }
 
     /**
-     * Implementing with Upgraded Greedy Algorithm.
-     *
+     * TSP (Traveling Salesman Problem),given graph and list of nodes, what is the shortest path that contain them all?
+     * Implemented with Upgraded Greedy Algorithm:
+     *      - the Greedy Algorithm: take random Node, check what is the closest node in the list and go to him.
+     *                              do it until no Nodes left on the list.
+     *      - Upgrade: insted of choosing random Node, check All tsp from all nodes in the list, them return the best result.
+     * @param cities - List of Nodes in the graph.
+     * @return List of the SAME cities, but sorted in order of the best path (where List[0] = Strating Node).
      */
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
+//      Implementing with Upgraded Greedy Algorithm. Assuming that all the functions' spouse to work with a million Nodes graph,
+//      so with more advanced algorithms it might be problematic.
 
-        List<List<NodeData>> allPaths = new ArrayList<List<NodeData>>();
+        List<List<NodeData>> allPaths = new ArrayList<List<NodeData>>(); // List that will contain all tsp paths.
         int index = 0;
-        double[] myDist = new double[cities.size()];
+        double[] myDist = new double[cities.size()]; // List that will contain all the paths final weight.
         try {
+            //  First check if the sub graph is connected
             boolean flag = true;
             for(int i=1; i<cities.size(); i++){
                 double pathCheck =shortestPathDist(cities.get(0).getKey() ,cities.get(i).getKey());
@@ -349,14 +378,14 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
                     flag = false;
                 }
             }
-            if (!flag){
+            if (!flag){ //if the sub graph is not connected (flag = false) return null.
                 return null;
             }
-            else{
+            else{// this is the TSP main function, do it every time for different start node.
                 int curr =0;
                 for(int num=0; num < cities.size();num++){
                     curr = num;
-                    List<NodeData> rightOrder = new ArrayList<NodeData>();
+                    List<NodeData> rightOrder = new ArrayList<NodeData>(); // List of single path.
                     int tmp = 0, counter = 0;
                     double[] distance = new double[cities.size()];
                     NodeData ptr = cities.get(curr);    ///WE START WITH 0
@@ -405,7 +434,6 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
 
     /**
      * Helper for tcp, return the smallest number (index) from array.
-     *
      * @param arr - array
      * @return index of the smallest number.
      */
@@ -421,6 +449,11 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         return smallest;
     }
 
+    /**
+     * Helper for tcp, gets a list of nodes and return total the weight (int the order the nodes set).
+     * @param cities - list of nodes.
+     * @return total the weight (int the order the nodes set).
+     */
     private double totalWeight(List<NodeData> cities){
         double pathW = 0.0;
         for(int i=0; i<=cities.size()-2; i++){
@@ -429,6 +462,11 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         return pathW;
     }
 
+    /**
+     * simple save using GSON library and the convertor classes (I made them for the save/load).
+     * @param file - the file name (may include a relative path).
+     * @return boolean - if the save was successful it returns true, else false.
+     */
     @Override
     public boolean save(String file) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -445,6 +483,11 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         }
     }
 
+    /**
+     * load function using GSON library and the convertor classes (I made them for the save/load).
+     * @param file - file name of JSON file
+     * @return boolean - if the load was successful it returns true, else false.
+     */
     @Override
     public boolean load(String file) {
         try {
@@ -460,11 +503,15 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             return false;
         }
     }
-
+    /**
+     * Graph generator - with a random values.
+     * @param nodes - number of nodes (int).
+     * @param seed - number of edges (int).
+     */
     public void generateGraph(int nodes,int seed) {
         MyDWG g = new MyDWG();
         Random ra = new Random(seed);
-        for (int i = 0; i < nodes; i++) {
+        for (int i = 0; i < nodes; i++) { // Generate all the nodes and adding them to the graph
             Point3D p = new Point3D( ra.nextInt(nodes),  ra.nextInt(nodes),  ra.nextInt(nodes));
             int key = (ra.nextInt(nodes));
             while (g.V.containsKey(key)) {
@@ -473,7 +520,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             MyNode n = new MyNode(p, key);
             g.addNode(n);
         }
-        for (int i = 0; i < nodes; i++) {
+        for (int i = 0; i < nodes; i++) { // Generate all the edges and generate random connections to the Nodes.
             MyNode a = g.V.get(i);
             for (int j = 0; j < 9; j++) {
                 ArrayList<Integer> key = new ArrayList<>(2);
@@ -487,7 +534,6 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
                 }
                 g.connect(a.getKey(), id, ra.nextDouble(1000));
             }
-
         }
         this.gr = g;
     }
