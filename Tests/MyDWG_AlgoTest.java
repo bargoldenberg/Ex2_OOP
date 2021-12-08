@@ -123,9 +123,9 @@ class MyDWG_AlgoTest {
         assertTrue(g1.isConnected());
         testGraph.removeEdge(3,0);
         g1.init(testGraph);
-        boolean a4=g1.isConnected();
-        g1.load("/home/bar/Desktop/Ex2_OOP/Ex2_OOP/10000Nodes.json");
-        System.out.println(g1.isConnected());
+        assertFalse(g1.isConnected());
+//        g1.load("/home/bar/Desktop/Ex2_OOP/Ex2_OOP/10000Nodes.json");
+//        System.out.println(g1.isConnected());
     }
 
     @Test
@@ -239,37 +239,37 @@ class MyDWG_AlgoTest {
 
     @Test
     void center() throws Exception {
-//        Point3D a = new Point3D(0,+
-//                0,0);
-//        Point3D b = new Point3D(1,3,0);
-//        Point3D c = new Point3D(4,2,0);
-//        Point3D d = new Point3D(6,1,0);
-//        MyDWG testGraph = new MyDWG();
-//        MyNode node1 = new MyNode(a,0);
-//        MyNode node2 = new MyNode(b,1);
-//        MyNode node3 = new MyNode(c,2);
-//        MyNode node4 = new MyNode(d,3);
-//
-//        testGraph.addNode(node1);
-//        testGraph.addNode(node2);
-//        testGraph.addNode(node3);
-////        testGraph.addNode(node1);        **FOR LATER TESTS***
-//        testGraph.addNode(node4);
-//
-//        testGraph.connect(0,1,1);
-//        testGraph.connect(1,2,1);
-//        testGraph.connect(2,1,1);
-//        testGraph.connect(2,3,1);
-//        testGraph.connect(2,0,1);
-//        testGraph.connect(3,0,1);
-////        testGraph.connect(0,0,1);      ******FOR TEST LATER **********
-//        MyDWG_Algo g1 = new MyDWG_Algo();
-//        g1.init(g1.generateGraph(10,1));
-//        //assertEquals(g1.center().getKey(),node3.getKey());
+        Point3D a = new Point3D(0,+
+                0,0);
+        Point3D b = new Point3D(1,3,0);
+        Point3D c = new Point3D(4,2,0);
+        Point3D d = new Point3D(6,1,0);
+        MyDWG testGraph = new MyDWG();
+        MyNode node1 = new MyNode(a,0);
+        MyNode node2 = new MyNode(b,1);
+        MyNode node3 = new MyNode(c,2);
+        MyNode node4 = new MyNode(d,3);
+
+        testGraph.addNode(node1);
+        testGraph.addNode(node2);
+        testGraph.addNode(node3);
+//        testGraph.addNode(node1);        **FOR LATER TESTS***
+        testGraph.addNode(node4);
+
+        testGraph.connect(0,1,1);
+        testGraph.connect(1,2,1);
+        testGraph.connect(2,1,1);
+        testGraph.connect(2,3,1);
+        testGraph.connect(2,0,1);
+        testGraph.connect(3,0,1);
+//        testGraph.connect(0,0,1);      ******FOR TEST LATER **********
+        MyDWG_Algo g1 = new MyDWG_Algo();
+        g1.init(testGraph);
+        assertEquals(g1.center().getKey(),node3.getKey());
 //        System.out.println(g1.center());
-        MyDWG_Algo a = new MyDWG_Algo();
-        a.load("/home/bar/Desktop/Ex2_OOP/Ex2_OOP/data/G3.json");
-        System.out.println(a.center());
+//        MyDWG_Algo a = new MyDWG_Algo();
+//        a.load("/home/bar/Desktop/Ex2_OOP/Ex2_OOP/data/G3.json");
+//        System.out.println(a.center());
 
     }
 
@@ -518,31 +518,9 @@ class MyDWG_AlgoTest {
     void generateGraph() throws Exception {
         MyDWG a = new MyDWG();
         MyDWG_Algo at = new MyDWG_Algo();
-        at.generateGraph(100,5);
-        System.out.println(at.center());
-
-
-        //System.out.println(at.center());
+        at.generateGraph(10000,5);
+        assertNotEquals(at.getGraph(),null);
     }
-    @Test
-    void testGraphAlgo() throws Exception {
 
-        //  MyDWG g2 = testGraphAlgo.generateGraph(1000,1);
-        MyDWG_Algo testGraphAlgo = new MyDWG_Algo();
-        //testGraphAlgo.init(testGraphAlgo.generateGraph(100000, 1));
-        //System.out.println(testGraphAlgo.isConnected());
-        testGraphAlgo.load("100000.json");
-        System.out.println(testGraphAlgo.center());
 
-        //System.out.println(testGraphAlgo.isConnected());
-        //System.out.println(testGraphAlgo.center());
-
-    }
-    @Test
-    void removeNode(){
-        MyDWG_Algo testGraphAlgo = new MyDWG_Algo();
-        testGraphAlgo.load("/home/bar/Desktop/Ex2_OOP/Ex2_OOP/data/G1.json");
-        MyDWG algo1 = (MyDWG) testGraphAlgo.copy();
-        algo1.removeNode(6);
-    }
 }

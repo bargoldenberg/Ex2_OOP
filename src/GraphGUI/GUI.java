@@ -412,43 +412,9 @@ public class GUI extends JFrame implements ActionListener {
         new GUI(gr);
     }
 
-    public static void main(String[] args) throws Exception {
-        Point3D p0 = new Point3D(0, 0, 0);
-        Point3D p1 = new Point3D(1, 2, 0);
-        Point3D p2 = new Point3D(1, 5, 0);
-        Point3D p3 = new Point3D(4, 4, 0);
-        Point3D p4 = new Point3D(4, 3, 0);
-        Point3D p5 = new Point3D(4, 0, 0);
-        Point3D p6 = new Point3D(9, 2, 0);
-        MyDWG g = new MyDWG();
-        MyNode n0 = new MyNode(p0, 0);
-        MyNode n1 = new MyNode(p1, 1);
-        MyNode n2 = new MyNode(p2, 2);
-        MyNode n3 = new MyNode(p3, 3);
-        MyNode n4 = new MyNode(p4, 4);
-        MyNode n5 = new MyNode(p5, 5);
-        MyNode n6 = new MyNode(p6, 6);
-
-        g.addNode(n0);
-        g.addNode(n1);
-        g.addNode(n2);
-        g.addNode(n3);
-        g.addNode(n4);
-        g.addNode(n5);
-        g.addNode(n6);
-
-        g.connect(n0.getKey(), n1.getKey(), 1);
-        g.connect(n1.getKey(), n2.getKey(), 1);
-        g.connect(n2.getKey(), n1.getKey(), 2);
-        g.connect(n2.getKey(), n3.getKey(), 2);
-        g.connect(n3.getKey(), n4.getKey(), 1);
-        g.connect(n4.getKey(), n3.getKey(), 1);
-        g.connect(n2.getKey(), n4.getKey(), 4);
-        g.connect(n4.getKey(), n2.getKey(), 2);
-        g.connect(n4.getKey(), n6.getKey(), 5);
-        g.connect(n0.getKey(), n6.getKey(), 15);
-        g.connect(n5.getKey(), n6.getKey(), 12);
-
-        runGUI(null);
+    public static void main(String[] args){
+        MyDWG_Algo alg = new MyDWG_Algo();
+        alg.load(args[0]);
+        runGUI((MyDWG)alg.getGraph());
     }
 }
