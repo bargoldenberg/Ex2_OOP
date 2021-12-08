@@ -17,6 +17,10 @@ import java.util.*;
 public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     MyDWG gr;
 
+    /**
+     * initiates graph from abstract DirectedWeightedGraph.
+     * @param g
+     */
     @Override
     public void init(DirectedWeightedGraph g) {
         gr = new MyDWG();
@@ -49,12 +53,18 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         return this.gr;
     }
 
+    /**
+     * creates a Deep Copy.
+     * @return DirectedWeightedGraph
+     */
     @Override
     public DirectedWeightedGraph copy() {
         MyDWG cop = new MyDWG(this.gr);
         return cop;
     }
-
+    /**
+     * BFS (Breath First Search) algorithm to traverse a graph.
+     */
 
     public void BFS(DirectedWeightedGraph g, int node, HashMap<Integer, Boolean> visited) throws Exception {
         LinkedList<Integer> queue = new LinkedList<Integer>();
@@ -72,7 +82,11 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             }
         }
     }
-
+    /**
+     * This Function takes a vertex runs the BFS algorithm, transposes the graph and then runs a second
+     * BFS. if we traverse all vertices in both BFS runs then the graph is Strongly Connected.
+     * @return Boolean value representing if the graph is Strongly Connected.
+     */
     @Override
     public boolean isConnected() throws Exception {
         Iterator<NodeData> it = this.getGraph().nodeIter();
@@ -303,7 +317,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
     }
 
     /**
-     * center of the graph - the Node that is closest (average weight) to the all other nodes.
+     * center of the graph - the Node whose max distance from any other node is minimal.
      * @return the center node of the graph (NodeData).
      * @throws Exception
      */
