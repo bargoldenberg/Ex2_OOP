@@ -47,7 +47,7 @@ The Edges hold the source node key and the destination node key and the edges we
 ![image](https://user-images.githubusercontent.com/89586016/145232356-d7e6e0b8-a6dd-45f1-9465-1025dd380d40.png)
 ### How to run:
 1. in the folder "out/artifacts/Ex2_Jar" there is a jar file
-2. open folder in terminal and type the command java -jar Ex2.jar <Graph json file>
+2. open folder in terminal and type the command java -jar Ex2.jar *<Graph json file>*
 ####  you can find the json files inside the data folder.
 #### please notice the this jar file was compiled with open JDK 17 therefore any older version of JDK wont work.
 
