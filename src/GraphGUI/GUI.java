@@ -49,13 +49,13 @@ public class GUI extends JFrame implements ActionListener {
         functionPanel = new JPanel();
         functionPanel.setBackground(Color.lightGray);
         functionPanel.setBounds(size.width / 2 - 150, 0, 150, size.width / 2);
-        //this.setContentPane(p);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocation((size.width/2-this.getSize().width)/2, (size.height/2-this.getSize().height)/3);
         this.setTitle("Ex2-Graph-GUI");
         int width = (int) size.width;
         int height = (int) size.height;
         this.setSize(width / 2, width / 2);
-        this.setResizable(true);
+        this.setResizable(false);
         src = new JTextField();
         src.setPreferredSize(new Dimension(50, 25));
         dst = new JTextField();
@@ -78,11 +78,12 @@ public class GUI extends JFrame implements ActionListener {
         clear.addActionListener(this);
         save.addActionListener(this);
         TSPb.addActionListener(this);
+        this.setLayout(new BorderLayout(1,3));
         this.add(functionPanel);
         this.add(p, BorderLayout.WEST);
         functionPanel.add(shortestpathb);
-        functionPanel.add(src);
-        functionPanel.add(dst);
+        functionPanel.add(src,BorderLayout.EAST);
+        functionPanel.add(dst,BorderLayout.WEST);
         functionPanel.add(removenode);
         functionPanel.add(node);
         functionPanel.add(centerb);
@@ -94,7 +95,7 @@ public class GUI extends JFrame implements ActionListener {
         this.add(new GraphP(gr)); //// FIX
         this.setVisible(true);
         this.setTitle("Ex2 - UI");
-        this.setResizable(true);
+        this.setResizable(false);
 
 
     }
@@ -376,7 +377,6 @@ public class GUI extends JFrame implements ActionListener {
             popup.setResizable(true);
             tsplist.setPreferredSize(new Dimension(150, 30));
             popup.add(tsplist);
-            //popup.setDefaultCloseOperation(EXIT_ON_CLOSE);
         }else if(e.getSource()==enter){
             String cities = tsplist.getText();
             popup.setVisible(false);
@@ -435,7 +435,7 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
-    // taken from https://coderanch.com/t/339505/java/drawing-arrows
+    // based on code from https://coderanch.com/t/339505/java/drawing-arrows
     private void drawArrow(Graphics2D g2, double theta, double x0, double y0) {
         double barb = 20;
         double phi = Math.PI / 6;
