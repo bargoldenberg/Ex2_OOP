@@ -1,17 +1,17 @@
 # Ex2_OOP
 #### Contributers: Bar Goldenberg, Sappit Bohbot
 ### About the project:
-in this project we are assigned to implement a Directed Weighted 
+in this project we are assigned to implement a Directed Weighted
 Graph, and run algorithms on it.
 and we were asked to build a GUI were you could load graphs using a JSON file.
 ### Problems we encountered:
 in this project we were asked to be able to generate large graphs
 up to 1,000,000 Vertices and 10,000,000 Edges
 therefore we must take Space Complexity into account.
-in addition to those problems we need to be able to run algorithms 
-efficiently on our graph. 
+in addition to those problems we need to be able to run algorithms
+efficiently on our graph.
 ### Graph Design
-Our graph is implemented using two HashMaps 
+Our graph is implemented using two HashMaps
 the first one (V) holds Vertices (nodes)
 and the second one (E) holds Edges.
 each node holds two ArrayLists the first array list holds the edges
@@ -42,12 +42,14 @@ The Edges hold the source node key and the destination node key and the edges we
 #### 100,000 Vertices 1,000,000 Edges: timeout
 #### 1,000,000 Vertices 10,000,000 Edges: timeout
 ### GUI:
-![GUI](https://user-images.githubusercontent.com/89586016/145229725-20bb96ed-0a35-491b-9432-f52765f2fc60.png)
+![screenshotGUI](https://user-images.githubusercontent.com/89586016/145419069-af8fdf09-f17e-4c86-ba3a-da9dd3ca721f.png)
+#### The red path shows a TSP path going through (1,25,7,5,29)
+#### The green path shows the shortest path from 12 to 10
+#### the pink Vertex represents the graphs center
 ### Class Diagram:
 ![image](https://user-images.githubusercontent.com/89586016/145232356-d7e6e0b8-a6dd-45f1-9465-1025dd380d40.png)
-
-
-
-
-
-
+### How to run:
+1. in the folder "out/artifacts/Ex2_Jar" there is a jar file
+2. open folder in terminal and type the command java -jar Ex2.jar "Graph json file path"
+####  you can find the json files inside the data folder.
+#### please notice that this jar file was compiled with open JDK 17 therefore any older version of JDK won't work.

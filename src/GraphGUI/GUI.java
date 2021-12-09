@@ -23,12 +23,14 @@ public class GUI extends JFrame implements ActionListener {
     JButton selectFile;
     JButton TSPb;
     JButton enter;
+    JButton isConnected;
     JTextField tsplist;
     JTextField src;
     JTextField dst;
     JTextField node;
     JPanel pop;
     JFrame popup;
+    JFrame connectedpop;
     MyDWG_Algo g1;
     MyDWG_Algo og;
     int source;
@@ -67,6 +69,8 @@ public class GUI extends JFrame implements ActionListener {
         shortestpathb = new JButton("Shortest Path");
         selectFile = new JButton("Load Graph");
         TSPb = new JButton("TSP");
+        isConnected = new JButton("isConnected");
+        isConnected.addActionListener(this);
         selectFile.addActionListener(this); // Adding select button to actionPreformed.
         shortestpathb.addActionListener(this);
         centerb.addActionListener(this);
@@ -86,10 +90,11 @@ public class GUI extends JFrame implements ActionListener {
         functionPanel.add(save);
         functionPanel.add(clear);
         functionPanel.add(TSPb);
+        functionPanel.add(isConnected);
         this.add(new GraphP(gr)); //// FIX
         this.setVisible(true);
         this.setTitle("Ex2 - UI");
-        this.setResizable(false);
+        this.setResizable(true);
 
 
     }
@@ -247,6 +252,7 @@ public class GUI extends JFrame implements ActionListener {
                         g2.drawString(curredge.getWeight() + "", (x1 + x2) / 2, (y1 + y2) / 2);
 
                     }
+                    g2.drawString("Shortest Path Distance: "+g1.shortestPathDist(source,destination),5,this.getWidth()-50);
                 }
                 if (tsppath != null) {
                     for (int i = 0; i < tsppath.size() - 1; i++) {
@@ -308,6 +314,10 @@ public class GUI extends JFrame implements ActionListener {
             } else {
                 int rmvnode = Integer.parseInt(node.getText());
                 this.g1.getGraph().removeNode(rmvnode);
+                if(center!=null&&center.getKey()==rmvnode){
+                    center=null;
+                    centercounter=0;
+                }
                 repaint();
             }
         } else if (e.getSource() == selectFile) {
@@ -363,6 +373,7 @@ public class GUI extends JFrame implements ActionListener {
             popup.add(enter);
             popup.add(inst);
             enter.addActionListener(this);
+            popup.setResizable(true);
             tsplist.setPreferredSize(new Dimension(150, 30));
             popup.add(tsplist);
             //popup.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -392,6 +403,35 @@ public class GUI extends JFrame implements ActionListener {
             }
             repaint();
 
+        }else if(e.getSource()==isConnected){
+            connectedpop = new JFrame();
+            Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+            connectedpop.setSize((int)d.getWidth()/3,(int)d.getHeight()/10);
+            connectedpop.setResizable(false);
+            try {
+                if(this.g1.isConnected()){
+                    JLabel message = new JLabel("This graph is strongly connected");
+                    JPanel a = new JPanel();
+                    message.setFont(new Font("Verdana", Font.BOLD, 25));
+                    connectedpop.setContentPane(a);
+                    message.setSize(400,400);
+                    connectedpop.setLocationRelativeTo(null);
+                    a.add(message);
+                }else{
+                    JLabel message = new JLabel("This graph is not strongly connected");
+                    JPanel a = new JPanel();
+                    connectedpop.setContentPane(a);
+                    message.setFont(new Font("Verdana", Font.BOLD, 25));
+                    message.setSize(400,400);
+                    connectedpop.setLocationRelativeTo(null);
+                    a.add(message);
+                }
+                connectedpop.setVisible(true);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+
         }
     }
 
@@ -413,8 +453,12 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args){
-        MyDWG_Algo alg = new MyDWG_Algo();
-        alg.load(args[0]);
-        runGUI((MyDWG)alg.getGraph());
+        if(args.length!=0){
+            MyDWG_Algo alg = new MyDWG_Algo();
+            alg.load("/home/bar/Desktop/Ex2_OOP/Ex2_OOP/data/G1.json");
+            runGUI((MyDWG)alg.getGraph());
+        }else{
+            runGUI(null);
+        }
     }
 }
