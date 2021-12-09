@@ -66,4 +66,4 @@ ______________
 2. open folder in terminal and type the command java -jar Ex2.jar "Graph json file path"
 ####  you can find the json files inside the data folder.
 ____
-#### please notice that this jar file was compiled with open JDK 17 therefore any older version of JDK won't work.
+#### please notice that this jar file was compiled with open JDK 15 therefore any older version of JDK won't work.

@@ -546,7 +546,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
                     id = g.V.get(ra.nextInt(nodes)).getKey();
                     key.add(id);
                 }
-                g.connect(a.getKey(), id, ra.nextDouble(1000));
+                g.connect(a.getKey(), id, ra.nextDouble()*1000);
             }
         }
         this.gr = g;
