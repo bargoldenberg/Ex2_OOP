@@ -53,7 +53,7 @@ ___
 ### GUI:
 ___
 ![screenshotGUI](https://user-images.githubusercontent.com/89586016/145419069-af8fdf09-f17e-4c86-ba3a-da9dd3ca721f.png)
-#### The red path shows a TSP path going through (1,25,7,5,29)
+#### The red path shows a TSP path going through (1,26,7,5,29)
 #### The green path shows the shortest path from 12 to 10
 #### the pink Vertex represents the graphs center
 ___
