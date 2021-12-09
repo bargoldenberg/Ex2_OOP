@@ -455,7 +455,7 @@ public class GUI extends JFrame implements ActionListener {
     public static void main(String[] args){
         if(args.length!=0){
             MyDWG_Algo alg = new MyDWG_Algo();
-            alg.load("/home/bar/Desktop/Ex2_OOP/Ex2_OOP/data/G1.json");
+            alg.load(args[0]);
             runGUI((MyDWG)alg.getGraph());
         }else{
             runGUI(null);
