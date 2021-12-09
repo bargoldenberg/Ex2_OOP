@@ -22,14 +22,19 @@ public class GUI extends JFrame implements ActionListener {
     JButton removenode;
     JButton selectFile;
     JButton TSPb;
+    JButton Generateb;
     JButton enter;
     JButton isConnected;
     JTextField tsplist;
     JTextField src;
     JTextField dst;
     JTextField node;
+    JTextField nodessize;
+    JButton enterNodes;
     JPanel pop;
     JFrame popup;
+    JPanel pop1;
+    JFrame popup1;
     JFrame connectedpop;
     MyDWG_Algo g1;
     MyDWG_Algo og;
@@ -68,6 +73,7 @@ public class GUI extends JFrame implements ActionListener {
         removenode = new JButton("Remove Node");
         shortestpathb = new JButton("Shortest Path");
         selectFile = new JButton("Load Graph");
+        Generateb = new JButton("Generate Graph");
         TSPb = new JButton("TSP");
         isConnected = new JButton("isConnected");
         isConnected.addActionListener(this);
@@ -78,6 +84,7 @@ public class GUI extends JFrame implements ActionListener {
         clear.addActionListener(this);
         save.addActionListener(this);
         TSPb.addActionListener(this);
+        Generateb.addActionListener(this);
         this.setLayout(new BorderLayout(1,3));
         this.add(functionPanel);
         this.add(p, BorderLayout.WEST);
@@ -92,6 +99,7 @@ public class GUI extends JFrame implements ActionListener {
         functionPanel.add(clear);
         functionPanel.add(TSPb);
         functionPanel.add(isConnected);
+        functionPanel.add(Generateb);
         this.add(new GraphP(gr)); //// FIX
         this.setVisible(true);
         this.setTitle("Ex2 - UI");
@@ -431,6 +439,43 @@ public class GUI extends JFrame implements ActionListener {
                 ex.printStackTrace();
             }
 
+
+        }else if(e.getSource()==Generateb){
+            popup1 = new JFrame("Generate Graph");
+            pop1 = new JPanel();
+            popup1.setContentPane(pop1);
+            pop1.setBackground(Color.lightGray);
+            popup1.setBackground(Color.lightGray);
+            popup1.setLocationRelativeTo(null);
+            //popup.pack();
+            Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+            popup1.setSize((int)d.getWidth()/3,(int)d.getHeight()/5);
+            popup1.setResizable(false);
+            popup1.setVisible(true);
+            nodessize = new JTextField();
+            enterNodes = new JButton("Generate");
+            enterNodes.setPreferredSize(new Dimension(400,40));
+            JLabel inst = new JLabel("Enter Vertex Size");
+            popup1.add(enterNodes);
+            popup1.add(inst);
+            enterNodes.addActionListener(this);
+            popup1.setResizable(true);
+            nodessize.setPreferredSize(new Dimension(150, 30));
+            popup1.add(nodessize);
+
+        }else if(e.getSource()==enterNodes){
+            this.center = null;
+            centercounter = 0;
+            path = null;
+            this.g1.generateGraph(Integer.parseInt(nodessize.getText()),1);
+            tsppath=null;
+            this.startpoint=null;
+            this.endpoint=null;
+            this.setVisible(false);
+            this.dispose();
+            new GUI((MyDWG) this.g1.getGraph());
+            popup1.setVisible(false);
+            popup1.dispose();
 
         }
     }

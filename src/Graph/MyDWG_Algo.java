@@ -536,18 +536,34 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         }
         for (int i = 0; i < nodes; i++) { // Generate all the edges and generate random connections to the Nodes.
             MyNode a = g.V.get(i);
-            for (int j = 0; j < 9; j++) {
-                ArrayList<Integer> key = new ArrayList<>(2);
-                key.add(a.getKey());
-                int id = g.V.get(ra.nextInt(nodes)).getKey();
-                key.add(id);
-                while (g.E.containsKey(key) || a.getKey() == id) {
-                    key.remove(1);
-                    id = g.V.get(ra.nextInt(nodes)).getKey();
+            if (nodes > 10) {
+                for (int j = 0; j < 9; j++) {
+                    ArrayList<Integer> key = new ArrayList<>(2);
+                    key.add(a.getKey());
+                    int id = g.V.get(ra.nextInt(nodes)).getKey();
                     key.add(id);
+                    while (g.E.containsKey(key) || a.getKey() == id) {
+                        key.remove(1);
+                        id = g.V.get(ra.nextInt(nodes)).getKey();
+                        key.add(id);
+                    }
+                    g.connect(a.getKey(), id, ra.nextDouble() * 1000);
                 }
-                g.connect(a.getKey(), id, ra.nextDouble()*1000);
-            }
+            }else{
+                for (int j = 0; j < nodes-1; j++) {
+                    ArrayList<Integer> key = new ArrayList<>(2);
+                    key.add(a.getKey());
+                    int id = g.V.get(ra.nextInt(nodes)).getKey();
+                    key.add(id);
+                    while (g.E.containsKey(key) || a.getKey() == id) {
+                        key.remove(1);
+                        id = g.V.get(ra.nextInt(nodes)).getKey();
+                        key.add(id);
+                    }
+                    g.connect(a.getKey(), id, ra.nextDouble() * 1000);
+                }
+        }
+
         }
         this.gr = g;
     }
