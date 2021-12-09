@@ -42,10 +42,14 @@ The Edges hold the source node key and the destination node key and the edges we
 #### 100,000 Vertices 1,000,000 Edges: timeout
 #### 1,000,000 Vertices 10,000,000 Edges: timeout
 ### GUI:
-![GUI](https://user-images.githubusercontent.com/89586016/145229725-20bb96ed-0a35-491b-9432-f52765f2fc60.png)
+![GUISCREEN](https://user-images.githubusercontent.com/89586016/145385185-72b3cfe5-db46-44d5-82dc-349d1f5566ad.png)
 ### Class Diagram:
 ![image](https://user-images.githubusercontent.com/89586016/145232356-d7e6e0b8-a6dd-45f1-9465-1025dd380d40.png)
-
+### How to run:
+1. in the folder "out/artifacts/Ex2_Jar" there is a jar file
+2. open folder in terminal and type the command java -jar Ex2.jar <Graph json file>
+####  you can find the json files inside the data folder.
+#### please notice the this jar file was compiled with open JDK 17 therefore any older version of JDK wont work.
 
 
 
