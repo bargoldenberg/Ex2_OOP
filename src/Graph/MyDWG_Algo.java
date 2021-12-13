@@ -368,7 +368,7 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
      *                              do it until no Nodes left on the list.
      *      - Upgrade: insted of choosing random Node, check All tsp from all nodes in the list, them return the best result.
      * @param cities - List of Nodes in the graph.
-     * @return List of the SAME cities, but sorted in order of the best path (where List[0] = Strating Node).
+     * @return List of a path that passes through all cities,(where List[0] = Strating Node).
      */
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
@@ -381,30 +381,30 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         try {
             //  First check if the sub graph is connected
             boolean flag = true;
-            for(int i=1; i<cities.size(); i++){
-                double pathCheck =shortestPathDist(cities.get(0).getKey() ,cities.get(i).getKey());
-                if(pathCheck <= 0.0 ){
-                    flag = false;
-                }
-            }for(int i=1; i<cities.size(); i++){
-                double pathCheck =shortestPathDist(cities.get(i).getKey() ,cities.get(0).getKey());
-                if(pathCheck <= 0.0 ){
+            for (int i = 1; i < cities.size(); i++) {
+                double pathCheck = shortestPathDist(cities.get(0).getKey(), cities.get(i).getKey());
+                if (pathCheck <= 0.0) {
                     flag = false;
                 }
             }
-            if (!flag){ //if the sub graph is not connected (flag = false) return null.
+            for (int i = 1; i < cities.size(); i++) {
+                double pathCheck = shortestPathDist(cities.get(i).getKey(), cities.get(0).getKey());
+                if (pathCheck <= 0.0) {
+                    flag = false;
+                }
+            }
+            if (!flag) { //if the sub graph is not connected (flag = false) return null.
                 return null;
-            }
-            else{// this is the TSP main function, do it every time for different start node.
-                int curr =0;
-                for(int num=0; num < cities.size();num++){
+            } else {// this is the TSP main function, do it every time for different start node.
+                int curr = 0;
+                for (int num = 0; num < cities.size(); num++) {
                     curr = num;
                     List<NodeData> rightOrder = new ArrayList<NodeData>(); // List of single path.
                     int tmp = 0, counter = 0;
                     double[] distance = new double[cities.size()];
                     NodeData ptr = cities.get(curr);    ///WE START WITH 0
                     rightOrder.add(ptr);
-                    while (counter < cities.size() && rightOrder.size() < cities.size() ) {//
+                    while (counter < cities.size() && rightOrder.size() < cities.size()) {//
                         ptr = cities.get(curr);
                         tmp = curr;
                         for (int i = 0; i < cities.size(); i++) {
@@ -429,21 +429,31 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
                                 break;
                             }
                         }
-                        if(rightOrder.size() == cities.size()){
+                        if (rightOrder.size() == cities.size()) {
                             allPaths.add(rightOrder);
                         }
                     }
                 }
-                    for (int i=0; i<allPaths.size(); i++) {
-                        myDist[i] = totalWeight(allPaths.get(i));
-                    }
-                    index = smallestDist(myDist);
+                for (int i = 0; i < allPaths.size(); i++) {
+                    myDist[i] = totalWeight(allPaths.get(i));
                 }
+                index = smallestDist(myDist);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return allPaths.get(index);
+        ArrayList<NodeData> tsppath = new ArrayList<>();
+        for (int i = 0; i < allPaths.get(index).size() - 1; i++) {
+            ArrayList<NodeData> tmp = (ArrayList) shortestPath(allPaths.get(index).get(i).getKey(), allPaths.get(index).get(i + 1).getKey());
+            if (i != allPaths.get(index).size() - 2) {
+                tmp.remove(tmp.get(tmp.size() - 1));
+            }
+            for (int k = 0; k < tmp.size(); k++) {
+                tsppath.add(tmp.get(k));
+            }
+        }
+        return tsppath;
     }
 
     /**
