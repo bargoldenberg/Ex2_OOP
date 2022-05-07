@@ -96,7 +96,6 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         while (init.hasNext()) {
             visited.put(init.next().getKey(), false);
         }
-        //boolean[] visited = new boolean[this.getGraph().nodeSize()];
         BFS(this.getGraph(), v.getKey(), visited);
         Iterator<NodeData> checkfalse = this.getGraph().nodeIter();
         while (checkfalse.hasNext()) {
@@ -120,15 +119,12 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         while (edgeiterator.hasNext()) {
             EdgeData originalEdge = edgeiterator.next();
             MyEdge reversedEdge = new MyEdge(originalEdge.getDest(), originalEdge.getWeight(), originalEdge.getSrc());
-           // boolean condition1 = reversedgraph.E.containsValue(originalEdge);
             ArrayList<Integer> key = new ArrayList<Integer>();
             key.add(reversedEdge.getSrc());
             key.add(reversedEdge.getDest());
-            //boolean condition2 = reversedgraph.E.containsKey(key);
             if (false) {
                 continue;
             } else {
-                //reversedgraph.removeEdge(originalEdge.getSrc(), originalEdge.getDest());
                 reversedgraph.connect(originalEdge.getDest(), originalEdge.getSrc(), originalEdge.getWeight());
             }
         }
@@ -277,7 +273,6 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         PriorityQueue<Integer> nodesQueue = new PriorityQueue<Integer>((a,b)-> (int) (distance.get(a)-distance.get(b)));
         HashSet<Integer> queueset = new HashSet<Integer>();
         double max = Double.MIN_VALUE;
-        //List<NodeData> path = new ArrayList<NodeData>();
 
         for (Map.Entry<Integer, MyNode> node : this.gr.V.entrySet()) {
             if (node.getKey() == src) {
@@ -445,13 +440,11 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
         }
         ArrayList<NodeData> tsppath = new ArrayList<>();
         for (int i = 0; i < allPaths.get(index).size() - 1; i++) {
-            ArrayList<NodeData> tmp = (ArrayList) shortestPath(allPaths.get(index).get(i).getKey(), allPaths.get(index).get(i + 1).getKey());
+            ArrayList<NodeData> tmp = (ArrayList<NodeData>) shortestPath(allPaths.get(index).get(i).getKey(), allPaths.get(index).get(i + 1).getKey());
             if (i != allPaths.get(index).size() - 2) {
                 tmp.remove(tmp.get(tmp.size() - 1));
             }
-            for (int k = 0; k < tmp.size(); k++) {
-                tsppath.add(tmp.get(k));
-            }
+            tsppath.addAll(tmp);
         }
         return tsppath;
     }
@@ -548,33 +541,35 @@ public class MyDWG_Algo implements DirectedWeightedGraphAlgorithms {
             MyNode a = g.V.get(i);
             if (nodes > 10) {
                 for (int j = 0; j < 9; j++) {
-                    ArrayList<Integer> key = new ArrayList<>(2);
-                    key.add(a.getKey());
-                    int id = g.V.get(ra.nextInt(nodes)).getKey();
-                    key.add(id);
-                    while (g.E.containsKey(key) || a.getKey() == id) {
-                        key.remove(1);
-                        id = g.V.get(ra.nextInt(nodes)).getKey();
-                        key.add(id);
-                    }
-                    g.connect(a.getKey(), id, ra.nextDouble() * 1000);
+                    CreateGraph(nodes, g, ra, a);
                 }
             }else{
                 for (int j = 0; j < nodes-1; j++) {
-                    ArrayList<Integer> key = new ArrayList<>(2);
-                    key.add(a.getKey());
-                    int id = g.V.get(ra.nextInt(nodes)).getKey();
-                    key.add(id);
-                    while (g.E.containsKey(key) || a.getKey() == id) {
-                        key.remove(1);
-                        id = g.V.get(ra.nextInt(nodes)).getKey();
-                        key.add(id);
-                    }
-                    g.connect(a.getKey(), id, ra.nextDouble() * 1000);
+                    CreateGraph(nodes, g, ra, a);
                 }
         }
 
         }
         this.gr = g;
+    }
+
+    /**
+     * Helper function for GenerateGraph() Method.
+     * @param nodes
+     * @param g
+     * @param ra
+     * @param a
+     */
+    private void CreateGraph(int nodes, MyDWG g, Random ra, MyNode a) {
+        ArrayList<Integer> key = new ArrayList<>(2);
+        key.add(a.getKey());
+        int id = g.V.get(ra.nextInt(nodes)).getKey();
+        key.add(id);
+        while (g.E.containsKey(key) || a.getKey() == id) {
+            key.remove(1);
+            id = g.V.get(ra.nextInt(nodes)).getKey();
+            key.add(id);
+        }
+        g.connect(a.getKey(), id, ra.nextDouble() * 1000);
     }
 }

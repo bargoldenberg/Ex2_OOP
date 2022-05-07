@@ -24,10 +24,6 @@ class Point3DTest {
     }
 
     @Test
-    void distance() {
-    }
-
-    @Test
     void testToString() {
         Point3D p1 = new Point3D(1,2,3);
         String s = "(x: 1.0, y: 2.0, z: 3.0)";

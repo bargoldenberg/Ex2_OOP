@@ -1,5 +1,5 @@
 # Ex2_OOP
-#### Contributers: Bar Goldenberg, Sappit Bohbot
+#### Author: Bar Goldenberg
 ### About the project:
 ___
 in this project we are assigned to implement a Directed Weighted

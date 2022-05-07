@@ -4,7 +4,6 @@ import api.NodeData;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,6 +12,9 @@ class MyDWG_AlgoTest {
 
 
     @Test
+    /**
+    Testing the init() function A.K.A loading the graph to the program. (checking to see that we dont raise exceptions)
+     */
     void init() {
         Point3D p1 = new Point3D(1,2,0);
         Point3D p2 = new Point3D(2,1,0);
@@ -33,7 +35,9 @@ class MyDWG_AlgoTest {
         ga.getGraph().addNode(n3);
         System.out.println(ga.getGraph());
     }
-
+    /**
+    getGraph() test, using init() to load the graph to the program and getGraph() to download graph from program.
+     */
     @Test
     void getGraph() {
         Point3D p1 = new Point3D(1,2,0);
@@ -54,6 +58,9 @@ class MyDWG_AlgoTest {
         assertEquals(g.toString(),ga.getGraph().toString());
     }
 
+    /**
+     * Testing the copy() function which creates a Deep copy of the graph.
+     */
     @Test
     void copy() {
         Point3D p1 = new Point3D(1,2,0);
@@ -72,10 +79,14 @@ class MyDWG_AlgoTest {
         MyDWG_Algo ga = new MyDWG_Algo();
         ga.init(g);
         DirectedWeightedGraph g1 = ga.copy();
-        assertNotEquals(g1,ga.getGraph());
+        assertNotEquals(g1,ga.getGraph());//this is to test the graphs are not in the same memory space.
 
     }
 
+    /**
+     * Testing isConnected() function which checks if graph is Strongly connected.
+     * @throws Exception
+     */
     @Test
     void isConnected() throws Exception {
         Point3D p1 = new Point3D(1,2,0);
@@ -128,6 +139,10 @@ class MyDWG_AlgoTest {
 //        System.out.println(g1.isConnected());
     }
 
+    /**
+     * testing shortestPathDist() function
+     * which returns the distance of the shortest path between two given nodes.
+     */
     @Test
     void shortestPathDist() {
         Point3D p0 = new Point3D(0,0,0);
@@ -177,6 +192,9 @@ class MyDWG_AlgoTest {
         assertEquals(-1,testGraphAlgo.shortestPathDist(1,0));
     }
 
+    /**
+     * Tests the shortestPath() method.
+     */
     @Test
     void shortestPath() {
         Point3D p0 = new Point3D(0,0,0);
@@ -194,7 +212,9 @@ class MyDWG_AlgoTest {
         MyNode n4 = new MyNode(p4,4);
         MyNode n5 = new MyNode(p5,5);
         MyNode n6 = new MyNode(p6,6);
-
+        /**
+         * Add Nodes to graph.
+         */
         g.addNode(n0);
         g.addNode(n1);
         g.addNode(n2);
@@ -202,7 +222,9 @@ class MyDWG_AlgoTest {
         g.addNode(n4);
         g.addNode(n5);
         g.addNode(n6);
-
+        /**
+         * Create Edges.
+         */
         g.connect(n0.getKey(),n1.getKey(),1);
         g.connect(n1.getKey(),n2.getKey(),1);
         g.connect(n2.getKey(),n1.getKey(),2);
@@ -237,6 +259,11 @@ class MyDWG_AlgoTest {
         assertEquals(null,l4);
     }
 
+    /**
+     * center of the graph - the Node whose max distance from any other node is minimal.
+     * testing the center() method.
+     * @throws Exception
+     */
     @Test
     void center() throws Exception {
         Point3D a = new Point3D(0,+
@@ -266,11 +293,6 @@ class MyDWG_AlgoTest {
         MyDWG_Algo g1 = new MyDWG_Algo();
         g1.init(testGraph);
         assertEquals(g1.center().getKey(),node3.getKey());
-//        System.out.println(g1.center());
-//        MyDWG_Algo a = new MyDWG_Algo();
-//        a.load("/home/bar/Desktop/Ex2_OOP/Ex2_OOP/data/G3.json");
-//        System.out.println(a.center());
-
     }
 
     @Test
@@ -385,7 +407,7 @@ class MyDWG_AlgoTest {
          */
         List<NodeData>nodes=new ArrayList<NodeData>();
         MyDWG_Algo givenJson = new MyDWG_Algo();
-        givenJson.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\G1.json");
+        givenJson.load("/home/bar/Desktop/Projects for Informatica/Ex2_OOP/data/G1.json");
         nodes.add(givenJson.getGraph().getNode(1));
         nodes.add(givenJson.getGraph().getNode(2));
         nodes.add(givenJson.getGraph().getNode(3));
@@ -404,7 +426,7 @@ class MyDWG_AlgoTest {
          */
         nodes.clear();
         MyDWG_Algo givenJson3 = new MyDWG_Algo();
-        givenJson.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\G3.json");
+        givenJson.load("/home/bar/Desktop/Projects for Informatica/Ex2_OOP/data/G3.json");
         nodes.add(givenJson.getGraph().getNode(1));
         nodes.add(givenJson.getGraph().getNode(2));
         nodes.add(givenJson.getGraph().getNode(3));
@@ -435,6 +457,10 @@ class MyDWG_AlgoTest {
 
      }
 
+    /**
+     * Saves Graphs to JSON files.
+     * @throws Exception
+     */
     @Test
     void save() throws Exception {
         Point3D p0 = new Point3D(0,0,0);
@@ -474,45 +500,35 @@ class MyDWG_AlgoTest {
         g.connect(n5.getKey(),n6.getKey(),12);
 
         MyDWG_Algo testGraphAlgo = new MyDWG_Algo();
-        //testGraphAlgo.init(testGraphAlgo.generateGraph(100000,1));
-//        int i =0;
-//        while(!testGraphAlgo.isConnected()){
-//            testGraphAlgo.init(testGraphAlgo.generateGraph(100000,i));
-//            i++;
-//        }
-//        System.out.println(i);
-        //testGraphAlgo.save("1000Nodes.json");
+
     }
 
+    /**
+     * Testing loading Graph's from JSON files.
+     * @throws Exception
+     */
     @Test
     void load() throws Exception {
-        // FIrst Test for loading my made small json.
-        //MyDWG graph1= new MyDWG();
+
         MyDWG_Algo testGraphAlgo1 = new MyDWG_Algo();
-        //testGraphAlgo1.init(graph1);
-//        assertEquals(false,testGraphAlgo1.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\dontExist.json"));
-//        assertEquals(true,testGraphAlgo1.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\forTest.json"));
-//        System.out.println(testGraphAlgo1.getGraph().toString());
-        testGraphAlgo1.load("1000Nodes.json");
-        //System.out.println(testGraphAlgo1.isConnected());
-        System.out.println(testGraphAlgo1.center());
-
-
-        //Second Test is for big json - that has been giving to as.
+        assertTrue(testGraphAlgo1.load("/home/bar/Desktop/Projects for Informatica/Ex2_OOP/src/Graph/1000Nodes.json"));
+        /**
+         *   Second Test is for big json - that has been giving to as.
+         */
         MyDWG graph2 = new MyDWG();
         MyDWG_Algo testGraphAlgo2 = new MyDWG_Algo();
         testGraphAlgo2.init(graph2);
-//        assertEquals(false,testGraphAlgo2.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\dontExist.json"));
-//        assertEquals(true,testGraphAlgo2.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\G1.json"));
-//        System.out.println(testGraphAlgo2.getGraph().toString());
 
-        // For Last Test, we will make a new graph, save it and reload it(The save and make of the new graph will be done in SaveTest).
-//        MyDWG graph3 = new MyDWG();
-//        MyDWG_Algo testGraphAlgo3 = new MyDWG_Algo();
-//        testGraphAlgo2.init(graph3);
-//        assertEquals(false,testGraphAlgo3.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\data\\dontExist.json"));
-//        assertEquals(true,testGraphAlgo3.load("C:\\Users\\sappi\\IdeaProjects\\Ex2_OOP\\1000Nodes.json"));
-//        System.out.println(testGraphAlgo3.getGraph().toString());
+
+        /**
+         * For Last Test, we will make a new graph, save it and reload it(The save and make of the new graph will be done in SaveTest).
+         */
+        MyDWG graph3 = new MyDWG();
+        MyDWG_Algo testGraphAlgo3 = new MyDWG_Algo();
+        testGraphAlgo2.init(graph3);
+        assertEquals(false,testGraphAlgo3.load("dontExist.json"));
+        assertEquals(true,testGraphAlgo3.load("/home/bar/Desktop/Projects for Informatica/Ex2_OOP/src/Graph/1000Nodes.json"));
+        System.out.println(testGraphAlgo3.getGraph().toString());
     }
     @Test
     void generateGraph() throws Exception {

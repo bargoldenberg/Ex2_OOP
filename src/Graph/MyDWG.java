@@ -15,18 +15,31 @@ public class MyDWG implements DirectedWeightedGraph {
     int edgeiter;
     int MC;
 
+    /**
+     * Constructor method for Directed Weighted Graph Class.
+     */
     public MyDWG(){
         V = new HashMap<Integer,MyNode>();
         E = new HashMap<ArrayList<Integer>,MyEdge>();
         this.MC=0;
     }
 
+    /**
+     * Copy Constructor for Directed Weighted Graph Class.
+     * @param g
+     */
     public  MyDWG(MyDWG g){
         this.E = new HashMap<>();
         this.V = new HashMap<>();
+        /**
+         * Copy Edges.
+         */
         for (Map.Entry<ArrayList<Integer>, MyEdge> entry: g.E.entrySet()) {
             this.E.put(entry.getKey(), new MyEdge(entry.getValue()));
         }
+        /**
+         * Copy Nodes, AND NODE NEIGHBORHOODS.
+         */
         for (Map.Entry<Integer, MyNode> entry: g.V.entrySet()) {
             this.V.put(entry.getKey(), new MyNode(entry.getValue()));
             for(int i=0; i<g.V.get(entry.getKey()).getEdgeInList().size(); i++){
@@ -35,14 +48,16 @@ public class MyDWG implements DirectedWeightedGraph {
             for(int i=0; i<g.V.get(entry.getKey()).getEdgeOutList().size(); i++){
                 this.V.get(entry.getKey()).getEdgeOutList().add(g.V.get(entry.getKey()).getEdgeOutList().get(i));
             }
-//            this.V.get(entry.getKey()).getEdgeOutList().putAll(g.V.get(entry.getKey()).getEdgeOutList());
-//            this.V.get(entry.getKey()).getEdgeInList().putAll(g.V.get(entry.getKey()).getEdgeInList());
         }
         this.edgeiter = g.edgeiter;
         this.nodeiter =g.nodeiter;
         this.MC = g.MC;
     }
 
+    /**
+     * Copy constructor from JSON parsable class.
+     * @param g
+     */
     public MyDWG(fromJsonToGraph g){
         this.MC=0;
         this.nodeiter = this.edgeiter = 0;
@@ -108,6 +123,11 @@ public class MyDWG implements DirectedWeightedGraph {
         E.put(edge.key,edge);
         this.MC++;
     }
+
+    /**
+     * Create edge given another graphs edge.
+     * @param edge
+     */
     public void connectinit(EdgeData edge){
         V.get(edge.getSrc()).addEdgelist(edge);
         V.get(edge.getDest()).addEdgelist(edge);
@@ -117,7 +137,13 @@ public class MyDWG implements DirectedWeightedGraph {
         E.put(key, (MyEdge) edge);
         this.MC++;
     }
-
+    /**
+     * This method returns an Iterator for the
+     * collection representing all the nodes in the graph.
+     * Note: if the graph was changed since the iterator was constructed - a RuntimeException should be thrown.
+     *
+     * @return Iterator<node_data>
+     */
     @Override
     public Iterator<NodeData> nodeIter(){
 
@@ -164,7 +190,12 @@ public class MyDWG implements DirectedWeightedGraph {
         };
         return it;
     }
-
+    /**
+     * This method returns an Iterator for all the edges in this graph.
+     * Note: if any of the edges going out of this node were changed since the was constructed - a RuntimeException should be thrown.
+     *
+     * @return Iterator<EdgeData>
+     */
     @Override
     public Iterator<EdgeData> edgeIter() throws Exception {
         int modecounter = this.MC;
@@ -210,7 +241,12 @@ public class MyDWG implements DirectedWeightedGraph {
         };
         return it;
     }
-
+    /**
+     * This method returns an Iterator for edges getting out of the given node (all the edges starting (source) at the given node).
+     * Note: if the graph was changed since the iterator was constructed - a RuntimeException should be thrown.
+     *
+     * @return Iterator<EdgeData>
+     */
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
         int modecounter = this.MC;
@@ -247,7 +283,14 @@ public class MyDWG implements DirectedWeightedGraph {
         };
         return it;
     }
-
+    /**
+     * Deletes the node (with the given ID) from the graph -
+     * and removes all edges which starts or ends at this node.
+     * This method should run in O(k), V.degree=k, as all the edges should be removed.
+     *
+     * @param key
+     * @return the data of the removed node (null if none).
+     */
     @Override
     public NodeData removeNode(int key) {
         int outsize = V.get(key).getEdgeOutList().size();
@@ -261,7 +304,14 @@ public class MyDWG implements DirectedWeightedGraph {
         this.MC++;
         return V.remove(key);
     }
-
+    /**
+     * Deletes the edge from the graph,
+     * Note: this method should run in O(1) time.
+     *
+     * @param src
+     * @param dest
+     * @return the data of the removed edge (null if none).
+     */
     @Override
     public EdgeData removeEdge(int src, int dest) {
         ArrayList<Integer> key=new ArrayList<Integer>(2);
@@ -272,26 +322,48 @@ public class MyDWG implements DirectedWeightedGraph {
         V.get(dest).removeEdgelist(src,dest);
         return E.remove(key);
     }
-
+    /**
+     * Returns the number of vertices (nodes) in the graph.
+     * Note: this method should run in O(1) time.
+     *
+     * @return
+     */
     @Override
     public int nodeSize() {
         return V.size();
     }
-
+    /**
+     * Returns the number of edges (assume directional graph).
+     * Note: this method should run in O(1) time.
+     *
+     * @return
+     */
     @Override
     public int edgeSize() {
         return E.size();
     }
-
+    /**
+     * Returns the Mode Count - for testing changes in the graph.
+     *
+     * @return
+     */
     @Override
     public int getMC() {
         return this.MC;
     }
 
+    /**
+     * returns edge HashMap.
+     * @return
+     */
     public HashMap<ArrayList<Integer>,MyEdge> getE(){
         return this.E;
     }
 
+    /**
+     * To String method for printing graph.
+     * @return
+     */
     public String toString(){
         String vertices = "Vertecies: ";
         String edges ="Edges: ";
